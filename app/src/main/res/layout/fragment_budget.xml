@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:dividerHeight="0dp"
+            android:divider="@null"
+            android:paddingBottom="70dp"
+            android:clipToPadding="false"
+            android:id="@+id/budget_listview"
+            />
+
+
+
+    <TextView
+        android:layout_marginTop="86dp"
+        android:id="@+id/no_budgets_textview"
+        android:layout_width="342dp"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:gravity="center_horizontal"
+        android:textSize="18sp"
+        android:text="@string/no_budgets_msg"
+        />
+
+    <Button
+        android:id="@+id/add_budget_button"
+        android:layout_width="240dp"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:textSize="22sp"
+        android:text="@string/add_budget"
+        android:textColor="#ffffff"
+        android:background="#00C8C8"
+        android:layout_marginBottom="10dp"
+
+        />
+
+    <Button
+        android:id="@+id/add_transactions_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:textSize="22sp"
+        android:text="@string/add_transactions"
+        android:textColor="#ffffff"
+        android:background="#CC00C8C8"
+        android:layout_marginBottom="10dp"
+        />
+
+
+</RelativeLayout>

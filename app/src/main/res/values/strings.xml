@@ -1,6 +1,66 @@
 <resources>
     <string name="app_name">Everything</string>
 
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
+    <string name="close_dialog">Are you sure you want to exit?</string>
+    <string name="close_yes">Yes</string>
+    <string name="close_no">No</string>
+
+
+<!-- Activity Labels -->
+    <string name="label_addacount">Add Account</string>
+    <string name="label_budgets">Budgets</string>
+    <string name="label_addbudgets">Add Budget</string>
+    <string name="label_budgetdetails">Budget Details</string>
+
+<!-- Configure Account -->
+    <string name="asset_desc"><b>Asset</b> (Bank accounts, investment/brokerage accounts, cash, etc.)</string>
+    <string name="debt_desc"><b>Debt</b> (Credit card balances, mortgages, car loans, etc.)</string>
+
+    <string name="menu_update">Update Account</string>
+    <string name="menu_delete">Delete Account</string>
+
+    <string name="configure_add_title">Add an Account</string>
+    <string name="configure_update_title">Update Account</string>
+    <string name="submit">Submit</string>
+
+
+
+<!-- Display Accounts -->
+    <string name="assets_label">Assets</string>
+    <string name="assets_value">+$0.00</string>
+    <string name="debts_label">Debts</string>
+    <string name="debts_value">-$0.00</string>
+    <string name="networth_label">Net Worth</string>
+    <string name="networth_value">$0.00</string>
+    <string name="no_accounts_msg">No accounts detected. Please add an account.</string>
+    <string name="add_account">Add Account</string>
+    <string name="last_updated">Last updated:</string>
+    <string name="account_date">January 1, 2015</string>
+    <string name="accounts_list_title">Accounts</string>
+
+
+
+<!-- Display Budgets -->
+    <string name="add_budget">Add Budget</string>
+    <string name="no_budgets_msg">No budgets detected. Please add a budget.</string>
+    <string name="budget_spent">$20</string>
+    <string name="budget_orig">$1,020</string>
+    <string name="budget_left">$1,000</string>
+    <string name="left">Left</string>
+    <string name="budget_name">Transportation</string>
+    <string name="add_transactions">Record New Transaction</string>
+    <string name="create_budget_dialog">Create New Budget</string>
+    <string name="save_budget_dialog">Save</string>
+    <string name="cancel_budget_dialog">Cancel</string>
+    <string name="error_budget_dialog">Please enter a valid name.</string>
+    <string name="error_amount_dialog">Please enter a valid amount.</string>
+    <string name="error_category_dialog">Please select a category.</string>
+    <string name="budget_name_hint">Name</string>
+    <string name="budget_amount_hint">Amount</string>
+
+    <!-- Menu Strings -->
+    <string name="edit_budget">Edit Budget</string>
+    <string name="delete_budget">Delete Budget</string>
+    <string name="delete_budget_msg">Are you sure you want to permanently remove this budget? This will also remove all transactions associated with this budget.</string>
+
 </resources>

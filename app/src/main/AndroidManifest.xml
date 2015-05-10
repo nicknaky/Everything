@@ -3,19 +3,50 @@
     package="com.mushroomrobot.everything">
 
     <application
+
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
+
         <activity
-            android:name=".MainActivity"
-            android:label="@string/app_name">
+            android:name=".account.DisplayAccountActivity"
+            android:screenOrientation="portrait"
+            android:label="@string/app_name"/>
+
+
+        <activity
+            android:name=".account.AddAccountActivity"
+            android:screenOrientation="portrait"
+            android:label="@string/label_addacount"
+            android:parentActivityName=".account.DisplayAccountActivity"/>
+
+
+        <activity
+            android:name=".budget.DisplayBudgetActivity"
+            android:screenOrientation="portrait"
+            android:label="@string/label_budgets">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".budget.BudgetDetailsActivity"
+            android:screenOrientation="portrait"
+            android:label="@string/label_budgetdetails"
+            android:parentActivityName=".budget.DisplayBudgetActivity"/>
+
+
+        <activity android:name=".budget.SimpleXYPlotActivity"
+            />
+
+
+        <provider
+            android:name=".data.EverythingProvider"
+            android:authorities="com.mushroomrobot.everything.data"/>
+
+
     </application>
 
 </manifest>

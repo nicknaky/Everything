@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:id="@+id/list_item_account"
+    >
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginLeft="10dp">
+        <TextView
+            android:id="@+id/list_item_account_name_textview"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Checkings Account"
+            android:gravity="center_vertical"
+            android:textSize="20sp"
+            />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/last_updated"
+                android:layout_marginRight="2dp"
+                android:textSize="11sp"
+                android:textStyle="italic"/>
+            <TextView
+                android:id="@+id/list_item_account_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/account_date"
+                android:textSize="11sp"
+                android:textStyle="italic"
+                />
+
+            </LinearLayout>
+
+
+
+        </LinearLayout>
+
+    <TextView
+        android:id="@+id/list_item_account_balance_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="right|center_vertical"
+        android:text="$1,337.40"
+        android:textSize="20sp"
+        android:layout_marginRight="10dp"
+        />
+
+    </LinearLayout>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="title_text">#ffffff</color>
+
+    <color name="theme">#00C8C8</color>
+    <color name="actionbar">#00C8C8</color>
+
+    <color name="light_stripe">#FAFAFA</color>
+    <color name="dark_stripe">#f0f0f0</color>
+
+    <color name="green_money">#04BF17</color>
+    <color name="red_money">#df3232</color>
+
+    <color name="textview">#646464</color>
+
+
+    <color name="light_grey">#D6D6D6</color>
+
+
+    <color name="button_text">#00C8C8</color>
+
+    <color name="test1center">#ff5a5d5a</color>
+    <color name="test2end">#ff747674</color>
+    <color name="test3start">#ff9d9e9d</color>
+    <color name="test4">#2EFE64</color>
+    <color name="test5">#2EFE64</color>
+
+</resources>

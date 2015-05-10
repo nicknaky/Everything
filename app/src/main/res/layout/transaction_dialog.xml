@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/trans_relative_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_margin="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="New Transaction"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/trans_category_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="50dp"
+        android:text="Category:"
+        android:textSize="18sp" />
+
+    <EditText
+        android:id="@+id/transaction_category_edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/trans_category_label"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="16dp"
+        android:inputType="none"
+        android:editable="false"
+        android:cursorVisible="false"
+        android:focusable="true"
+        android:hint="Select Category"
+        android:textSize="18sp" />
+
+
+    <TextView
+        android:id="@+id/trans_amount_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="105dp"
+        android:text="Amount:"
+        android:textSize="18sp" />
+
+    <EditText
+        android:id="@+id/transaction_amount_edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/trans_amount_label"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="16dp"
+        android:hint="$0.00"
+        android:imeOptions="actionDone"
+        android:inputType="numberDecimal"
+        android:textSize="22sp" />
+
+    <TextView
+        android:id="@+id/trans_date_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="160dp"
+        android:text="Date:"
+        android:textSize="18sp" />
+
+    <EditText
+        android:id="@+id/transaction_date_edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/trans_date_label"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="16dp"
+        android:inputType="none"
+        android:editable="false"
+        android:cursorVisible="false"
+        android:focusable="false"
+        android:hint="01/01/15"
+        android:textSize="22sp" />
+
+
+    <TextView
+        android:id="@+id/trans_description_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="215dp"
+        android:layout_marginLeft="16dp"
+        android:text="Description:"
+        android:textSize="18sp"/>
+
+    <EditText
+        android:id="@+id/transaction_desc_edit"
+        android:layout_width="145dp"
+        android:layout_height="wrap_content"
+        android:hint="Optional"
+        android:gravity="right"
+        android:textSize="18sp"
+        android:layout_alignBaseline="@id/trans_description_label"
+        android:layout_alignParentRight="true"
+        android:inputType="textCapSentences"
+        android:imeOptions="actionDone"
+        android:singleLine="true"
+        android:textStyle="italic"
+        android:layout_marginRight="16dp"/>
+
+
+
+    <Button
+        android:id="@+id/trans_cancel_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@+id/trans_save_button"
+        android:layout_marginRight="25dp"
+        android:layout_alignBottom="@+id/trans_save_button"
+        android:background="@null"
+        android:textStyle="bold"
+        android:textColor="#00C8C8"
+        android:text="Cancel"/>
+
+    <Button
+        android:id="@+id/trans_save_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="16dp"
+
+        android:background="@null"
+        android:textStyle="bold"
+        android:textColor="#00C8C8"
+        android:text="Save"
+        />
+
+</RelativeLayout>

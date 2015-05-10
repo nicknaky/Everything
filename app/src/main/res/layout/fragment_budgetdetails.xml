@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FAFAFA"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Monthly Budget:"
+        android:textSize="19sp"
+        android:layout_alignRight="@+id/bd_remainingtext"
+        android:layout_alignBaseline="@+id/bd_monthly_budget_value"/>
+
+    <TextView
+        android:id="@+id/bd_monthly_budget_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="85dp"
+        android:layout_marginTop="25dp"
+        android:gravity="right"
+        android:text="$500.00"
+        android:textSize="19sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="This Month's Spend:"
+        android:layout_alignRight="@+id/bd_remainingtext"
+        android:layout_marginTop="55dp"
+        android:textSize="19sp"
+        />
+
+    <TextView
+        android:id="@+id/bd_monthly_spend_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="55dp"
+        android:layout_alignRight="@id/bd_monthly_budget_value"
+        android:text="-$20.00"
+        android:textSize="19sp"/>
+
+    <TextView
+        android:id="@+id/bd_remainingtext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Remaining:"
+        android:layout_alignBaseline="@+id/bd_monthly_remaining_value"
+        android:textStyle="bold"
+        android:layout_marginLeft="86dp"
+        android:textSize="19sp"/>
+
+    <TextView
+        android:id="@+id/bd_monthly_remaining_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="85dp"
+        android:layout_alignRight="@id/bd_monthly_budget_value"
+        android:text="$20.00"
+        android:textSize="19sp"
+        android:textStyle="bold"
+        />
+
+    <ProgressBar
+        android:id="@+id/bd_vertical_progressbar"
+        style="@style/Widget.ProgressBar.Vertical"
+        android:layout_marginTop="10dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="25dp"
+        android:progressDrawable="@drawable/vertical_progressbar"
+        android:layout_width="40dp"
+        android:layout_height="105dp" />
+
+
+
+
+    <com.androidplot.xy.XYPlot
+        android:id="@+id/xy_trans_plot"
+        android:layout_width="345dp"
+        android:layout_height="170dp"
+        android:layout_marginTop="120dp"
+        android:layout_marginLeft="-5dp"
+
+        androidPlot.title="Spend per Day"
+        androidPlot.titleWidget.labelPaint.textSize="11sp"
+        androidPlot.titleWidget.labelPaint.Color="#646464"
+        androidPlot.titleWidget.paddingTop="0dp"
+
+        androidPlot.graphWidget.marginTop="10dp"
+        androidPlot.graphWidget.marginLeft="25dp"
+        androidPlot.graphWidget.marginBottom="15dp"
+        androidPlot.graphWidget.backgroundPaint.Color="#FAFAFA"
+        androidPlot.graphWidget.gridBackgroundPaint.Color="#FAFAFA"
+        androidPlot.margin="0dp"
+        androidPlot.graphWidget.rangeLabelPaint.textSize="10sp"
+        androidPlot.graphWidget.DomainLabelPaint.textSize="10sp"
+
+
+        />
+
+    <TextView
+        android:id="@+id/num_transactions_header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="150dp"
+        android:layout_marginTop="120dp"
+        android:text="Number of transactions: "
+        android:visibility="invisible"/>
+
+    <TextView
+        android:id="@+id/bd_num_trans"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/num_transactions_header"
+        android:layout_marginLeft="5dp"
+        android:layout_toRightOf="@id/num_transactions_header"
+        android:text="99"
+        android:visibility="invisible"/>
+
+
+
+
+
+
+
+
+
+
+    <TextView
+        android:id="@+id/bd_transactions_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="285dp"
+        android:text="Transactions"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/bd_dateheader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="315dp"
+
+        android:text="Date" />
+
+    <TextView
+        android:id="@+id/bd_descheader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/bd_dateheader"
+        android:layout_marginLeft="50dp"
+        android:layout_toRightOf="@id/bd_dateheader"
+        android:text="Description" />
+
+    <TextView
+        android:id="@+id/bd_amountheader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/bd_dateheader"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="16dp"
+        android:text="Amount" />
+
+
+
+        <ListView
+            android:id="@+id/bd_listview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="335dp"
+            android:paddingBottom="70dp"
+
+            android:clipToPadding="false">
+
+        </ListView>
+
+
+
+    <Button
+        android:id="@+id/bd_trans_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"
+        android:background="#CC00C8C8"
+        android:text="@string/add_transactions"
+        android:textColor="#ffffff"
+        android:textSize="22sp" />
+
+</RelativeLayout>
+
+<!-- Not used
+
+        -->
