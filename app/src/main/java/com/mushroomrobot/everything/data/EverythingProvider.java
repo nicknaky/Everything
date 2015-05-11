@@ -329,6 +329,9 @@ public class EverythingProvider extends ContentProvider {
                 id = uri.getLastPathSegment();
                 rowsDeleted = sqlDB.delete(Transactions.TABLE_NAME, TRANSACTIONS_ID + "=" + id, null);
                 getContext().getContentResolver().notifyChange(uri,null);
+                getContext().getContentResolver().notifyChange(Category.CONTENT_URI,null);
+                //Might be unnecessary as Category.CONTENT_URI should be enough, double check.
+                //getContext().getContentResolver().notifyChange(Uri.parse(Category.CONTENT_URI + "/#"),null);
                 getContext().getContentResolver().notifyChange(Transactions.CONTENT_URI_AMOUNT_BY_DAY,null);
                 break;
             default:

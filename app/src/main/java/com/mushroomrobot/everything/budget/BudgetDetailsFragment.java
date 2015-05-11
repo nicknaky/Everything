@@ -16,6 +16,7 @@ import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -65,6 +66,10 @@ public class BudgetDetailsFragment extends Fragment
     ProgressBar verticalProgress;
     SimpleCursorAdapter transactionsAdapter;
 
+    private static final int EDIT_ID = 0;
+    private static final int DELETE_ID = 1;
+
+
     int rawBudgetAmount;
 
 
@@ -109,44 +114,34 @@ public class BudgetDetailsFragment extends Fragment
             default:
                 break;
         }
-
-
         return super.onOptionsItemSelected(item);
     }
 
-    public static class DeleteBudgetDialog extends DialogFragment {
-
-
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-
-            builder.setMessage(R.string.delete_budget_msg);
-            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-
-                    Intent intent = new Intent(getActivity(), DisplayBudgetActivity.class);
-                    intent.putExtra("deleteUri", Category.CONTENT_URI + "/" + categoryId);
-                    intent.putExtra("deleteCategory", "\"" + budgetName + "\"");
-                    startActivity(intent);
-
-                    getActivity().finish();
-
-                    dialog.dismiss();
-                }
-            });
-            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                }
-            });
-            return builder.create();
-        }
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        menu.add(0, DELETE_ID, 1, R.string.menu_delete_trans);
+        menu.add(0, EDIT_ID, 0, R.string.menu_edit_trans);
     }
+
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+
+        switch (item.getItemId()){
+            case (DELETE_ID):
+                break;
+            case (EDIT_ID):
+                break;
+            default:
+                break;
+        }
+
+
+        return super.onContextItemSelected(item);
+    }
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -188,6 +183,8 @@ public class BudgetDetailsFragment extends Fragment
         amountHeader.setPaintFlags(amountHeader.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
         fillData();
+
+        registerForContextMenu(listView);
 
         return rootView;
     }
@@ -517,4 +514,59 @@ public class BudgetDetailsFragment extends Fragment
             }
         }
     };
+
+    public static class DeleteBudgetDialog extends DialogFragment {
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+            builder.setMessage(R.string.delete_budget_msg);
+            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                    Intent intent = new Intent(getActivity(), DisplayBudgetActivity.class);
+                    intent.putExtra("deleteUri", Category.CONTENT_URI + "/" + categoryId);
+                    intent.putExtra("deleteCategory", "\"" + budgetName + "\"");
+                    startActivity(intent);
+
+                    getActivity().finish();
+                    dialog.dismiss();
+                }
+            });
+            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+            return builder.create();
+        }
+    }
+
+    public static class DeleteTransDialog extends DialogFragment {
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            super.onCreateDialog(savedInstanceState);
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+            builder.setMessage(R.string.delete_trans_msg);
+            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                }
+            });
+            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+            return builder.create();
+        }
+    }
 }

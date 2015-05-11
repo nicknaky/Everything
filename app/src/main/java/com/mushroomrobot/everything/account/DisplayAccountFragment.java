@@ -107,8 +107,8 @@ public class DisplayAccountFragment extends Fragment
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
-        menu.add(0, DELETE_ID, 2, R.string.menu_delete);
-        menu.add(0, UPDATE_ID,1, R.string.menu_update);
+        menu.add(0, DELETE_ID, 2, R.string.menu_delete_acc);
+        menu.add(0, UPDATE_ID,1, R.string.menu_update_acc);
     }
 
     @Override
