@@ -38,10 +38,6 @@
             android:parentActivityName=".budget.DisplayBudgetActivity"/>
 
 
-        <activity android:name=".budget.SimpleXYPlotActivity"
-            />
-
-
         <provider
             android:name=".data.EverythingProvider"
             android:authorities="com.mushroomrobot.everything.data"/>

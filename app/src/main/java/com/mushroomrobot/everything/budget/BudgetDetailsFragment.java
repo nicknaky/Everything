@@ -23,6 +23,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -128,10 +129,25 @@ public class BudgetDetailsFragment extends Fragment
     @Override
     public boolean onContextItemSelected(MenuItem item) {
 
+        Bundle b = new Bundle();
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        b.putLong("transId",info.id);
+
+        FragmentManager fm = getFragmentManager();
+
         switch (item.getItemId()){
             case (DELETE_ID):
+                DeleteTransDialog dialog = new DeleteTransDialog();
+                dialog.setArguments(b);
+                dialog.show(fm,null);
                 break;
             case (EDIT_ID):
+                b.putStringArrayList("categoryList", categoryList);
+                b.putString("budgetName", budgetName);
+
+                AddTransactionDialog transdialog = new AddTransactionDialog();
+                transdialog.setArguments(b);
+                transdialog.show(fm,null);
                 break;
             default:
                 break;
@@ -498,6 +514,8 @@ public class BudgetDetailsFragment extends Fragment
     }
 
 
+
+
     View.OnClickListener mClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -547,9 +565,15 @@ public class BudgetDetailsFragment extends Fragment
     }
 
     public static class DeleteTransDialog extends DialogFragment {
+
+        long transactionId;
+
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             super.onCreateDialog(savedInstanceState);
+
+            transactionId = getArguments().getLong("transId");
+            Log.v("transId",String.valueOf(transactionId));
 
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
@@ -558,6 +582,10 @@ public class BudgetDetailsFragment extends Fragment
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
 
+                    Uri mUri = Uri.parse(Transactions.CONTENT_URI + "/" + transactionId);
+                    getActivity().getContentResolver().delete(mUri,null,null);
+                    Log.v("Uri",String.valueOf(mUri));
+                    dialog.dismiss();
                 }
             });
             builder.setNegativeButton("No", new DialogInterface.OnClickListener() {

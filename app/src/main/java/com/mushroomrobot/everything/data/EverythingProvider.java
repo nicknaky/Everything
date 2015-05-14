@@ -236,6 +236,10 @@ public class EverythingProvider extends ContentProvider {
                 break;
             case TRANSACTIONS: retCursor = getCategoryTransactions(selection, selectionArgs);
                 break;
+            case TRANSACTIONS_ID:
+                SQLiteDatabase db = database.getWritableDatabase();
+                retCursor =  db.query(Transactions.TABLE_NAME,null,selection,null,null,null,null);
+                break;
             case TRANSACTIONS_BY_DAY: retCursor = getCategoryTransactionsAmountByDay(selection, selectionArgs);
                 break;
             default: throw new IllegalArgumentException("Unknown URI: " + uri);
@@ -327,7 +331,7 @@ public class EverythingProvider extends ContentProvider {
                 break;
             case TRANSACTIONS_ID:
                 id = uri.getLastPathSegment();
-                rowsDeleted = sqlDB.delete(Transactions.TABLE_NAME, TRANSACTIONS_ID + "=" + id, null);
+                rowsDeleted = sqlDB.delete(Transactions.TABLE_NAME, Transactions._ID + "=" + id, null);
                 getContext().getContentResolver().notifyChange(uri,null);
                 getContext().getContentResolver().notifyChange(Category.CONTENT_URI,null);
                 //Might be unnecessary as Category.CONTENT_URI should be enough, double check.

@@ -20,6 +20,7 @@ public class DisplayBudgetActivity extends Activity {
         setContentView(R.layout.activity_budget);
 
         Intent intent = getIntent();
+        //deleteUri is Category.CONTENT_URI/CATEGORY_ID
         String deleteUri = intent.getStringExtra("deleteUri");
         String deleteCategory = intent.getStringExtra("deleteCategory");
 

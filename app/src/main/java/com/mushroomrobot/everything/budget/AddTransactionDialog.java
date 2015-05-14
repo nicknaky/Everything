@@ -6,6 +6,8 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.ContentValues;
 import android.content.DialogInterface;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -17,6 +19,7 @@ import android.widget.Toast;
 
 import com.mushroomrobot.everything.R;
 import com.mushroomrobot.everything.data.EverythingContract;
+import com.mushroomrobot.everything.data.EverythingContract.Transactions;
 import com.mushroomrobot.everything.utils.CurrencyFormatter;
 
 import java.text.ParseException;
@@ -36,6 +39,9 @@ public class AddTransactionDialog extends DialogFragment {
     String budgetName;
 
     int checkedItem;
+    long transactionId;
+
+    int editMode = 0;
 
     @Override
     public void onStart() {
@@ -78,6 +84,8 @@ public class AddTransactionDialog extends DialogFragment {
             transCatBox.setText(budgetName);
         }
 
+
+
         transCatBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -119,6 +127,31 @@ public class AddTransactionDialog extends DialogFragment {
         String currentDate = new SimpleDateFormat("MM/dd/yy", Locale.US).format(new Date());
         transDateBox.setText(currentDate);
 
+
+        //Determine if transaction is in edit mode.
+        transactionId = getArguments().getLong("transId", -99);
+        if (transactionId!=-99){
+            editMode = 1;
+            Uri mUri = Uri.parse(Transactions.CONTENT_URI + "/" + transactionId);
+            Cursor cursor = getActivity().getContentResolver().query(mUri,null, Transactions._ID + " = " + transactionId,null,null);
+            cursor.moveToFirst();
+            transAmountBox.setText(String.valueOf(cursor.getInt(cursor.getColumnIndex(Transactions.COLUMN_AMOUNT))));
+
+            long dateInMillis = cursor.getLong(cursor.getColumnIndex(Transactions.COLUMN_DATE));
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(dateInMillis);
+
+            String myFormat = "MM/dd/yy";
+            SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+            transDateBox.setText(sdf.format(calendar.getTime()));
+
+            String editDesc = cursor.getString(cursor.getColumnIndex(Transactions.COLUMN_DESCRIPTION));
+            transDescBox.setText(editDesc);
+
+            cursor.close();
+        }
+
+
         transSaveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -148,7 +181,12 @@ public class AddTransactionDialog extends DialogFragment {
                         contentValues.put("date", enterDate);
                         contentValues.put("description", enterDesc);
 
-                        getActivity().getContentResolver().insert(EverythingContract.Transactions.CONTENT_URI, contentValues);
+                        if (editMode==0) {
+                            getActivity().getContentResolver().insert(EverythingContract.Transactions.CONTENT_URI, contentValues);
+                        }
+                        else if (editMode==1){
+                            getActivity().getContentResolver().update(Uri.parse(Transactions.CONTENT_URI + "/" + transactionId),contentValues,null,null);
+                        }
 
                         transDialog.dismiss();
                     } catch (NumberFormatException e) {

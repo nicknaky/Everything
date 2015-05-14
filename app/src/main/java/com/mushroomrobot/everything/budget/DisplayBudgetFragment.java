@@ -73,8 +73,10 @@ public class DisplayBudgetFragment extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-
         View rootView = inflater.inflate(R.layout.fragment_budget, container, false);
+
+        String date =
+        getActivity().getActionBar().setTitle();
 
 
         listView = (ListView) rootView.findViewById(R.id.budget_listview);
