@@ -37,6 +37,11 @@
             android:label="@string/label_budgetdetails"
             android:parentActivityName=".budget.DisplayBudgetActivity"/>
 
+        <activity android:name=".budget.BudgetHistoryActivity"
+            android:screenOrientation="portrait"
+            android:label="@string/label_budgethistory"
+            android:parentActivityName=".budget.BudgetDetailsActivity"/>
+
 
         <provider
             android:name=".data.EverythingProvider"

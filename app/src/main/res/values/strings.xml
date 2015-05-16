@@ -11,6 +11,7 @@
     <string name="label_budgets">Budgets</string>
     <string name="label_addbudgets">Add Budget</string>
     <string name="label_budgetdetails">Budget Details</string>
+    <string name="label_budgethistory">Budget History</string>
 
 <!-- Configure Account -->
     <string name="asset_desc"><b>Asset</b> (Bank accounts, investment/brokerage accounts, cash, etc.)</string>
@@ -64,6 +65,7 @@
 
     <!-- Menu Strings -->
     <string name="edit_budget">Edit Budget</string>
+    <string name="history_budget">View History</string>
     <string name="delete_budget">Delete Budget</string>
     <string name="delete_budget_msg">Are you sure you want to permanently remove this budget? This will also remove all transactions associated with this budget.</string>
 

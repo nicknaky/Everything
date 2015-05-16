@@ -56,7 +56,8 @@ public class BudgetDetailsFragment extends Fragment
         implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static long categoryId;
-    Uri mUri;
+    private static String categoryName;
+    //Uri mUri;
     private static ArrayList categoryList;
     private static String budgetName;
     private static double budgetAmount, budgetSpent, budgetRemaining;
@@ -107,8 +108,16 @@ public class BudgetDetailsFragment extends Fragment
                 editBDialog.setArguments(bundle);
                 editBDialog.show(fm, null);
                 break;
-            case (R.id.delete_budget):
+            case (R.id.history_budget):
 
+                Intent intent = new Intent(getActivity(),BudgetHistoryActivity.class);
+                intent.putExtra("budgetName", budgetName);
+                startActivity(intent);
+
+
+
+                break;
+            case (R.id.delete_budget):
                 DeleteBudgetDialog deleteBDialog = new DeleteBudgetDialog();
                 deleteBDialog.show(fm, null);
                 break;
@@ -144,7 +153,6 @@ public class BudgetDetailsFragment extends Fragment
             case (EDIT_ID):
                 b.putStringArrayList("categoryList", categoryList);
                 b.putString("budgetName", budgetName);
-
                 AddTransactionDialog transdialog = new AddTransactionDialog();
                 transdialog.setArguments(b);
                 transdialog.show(fm,null);
@@ -175,7 +183,7 @@ public class BudgetDetailsFragment extends Fragment
 
 
         //Retrieves CATEGORY_ID uri
-        mUri = Uri.parse(getArguments().getString("uri"));
+        //mUri = Uri.parse(getArguments().getString("uri"));
 
         verticalProgress = (ProgressBar) rootView.findViewById(R.id.bd_vertical_progressbar);
 
@@ -207,10 +215,6 @@ public class BudgetDetailsFragment extends Fragment
 
     private void plotChart(ArrayList<Integer> daysList, ArrayList<Double> transList){
 
-        //plot.setBackgroundColor(Color.WHITE);
-        //plot.getGraphWidget().getBackgroundPaint().setColor(Color.parseColor("#fff3f3f3"));
-        //plot.getGraphWidget().getGridBackgroundPaint().setColor(Color.parseColor("#fff3f3f3"));
-
         plot.setBorderStyle(Plot.BorderStyle.NONE, null, null);
         plot.setPlotMargins(0, 0, 0, 0);
         plot.setPlotPadding(0, 0, 0, 0);
@@ -228,7 +232,6 @@ public class BudgetDetailsFragment extends Fragment
         plot.setDomainBoundaries(0,31,BoundaryMode.FIXED);
         plot.setDomainStep(XYStepMode.INCREMENT_BY_VAL, 5);
         plot.setDomainValueFormat(new DecimalFormat("0"));
-        //plot.setDomainStepValue(5);
 
         double maxValue = Collections.max(transList);
         Log.v("max value:", String.valueOf(maxValue));
@@ -240,9 +243,7 @@ public class BudgetDetailsFragment extends Fragment
         // Range
         plot.setRangeBoundaries(0, maxY, BoundaryMode.FIXED);
         plot.setRangeStepValue(5);
-        //mySimpleXYPlot.setRangeStep(XYStepMode.SUBDIVIDE, values.length);
         plot.setRangeValueFormat(new DecimalFormat("$#,###"));
-
 
         XYSeries series1 = new SimpleXYSeries(daysList, transList, "Series1");
 
@@ -254,7 +255,6 @@ public class BudgetDetailsFragment extends Fragment
         plot.addSeries(series1, series1Format);
 
         plot.getLayoutManager().remove(plot.getLegendWidget());
-
     }
 
     private void fillData() {
@@ -268,8 +268,6 @@ public class BudgetDetailsFragment extends Fragment
 
         //Loader to query for category overview metrics such as budget, spend, remaining
         getLoaderManager().initLoader(1, null, this);
-
-
 
         listView.setAdapter(transactionsAdapter);
 
@@ -297,12 +295,10 @@ public class BudgetDetailsFragment extends Fragment
                     default:
                         break;
                 }
-
                 return false;
             }
         });
     }
-
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
@@ -328,8 +324,8 @@ public class BudgetDetailsFragment extends Fragment
         // Querying category transactions amount by day
         if (id==2){
             String selection = "transactions.category = ?";
-
             String[] selectionArgs = {String.valueOf(categoryId)};
+
             //mUri   Retrieves CATEGORY_ID uri
             CursorLoader cursorLoader = new CursorLoader(getActivity(), Transactions.CONTENT_URI_AMOUNT_BY_DAY, null, selection, selectionArgs, null);
             return cursorLoader;
@@ -417,7 +413,11 @@ public class BudgetDetailsFragment extends Fragment
             if (data.moveToFirst()) {
 
                 budgetName = data.getString(data.getColumnIndex(Category.COLUMN_NAME));
-                getActivity().getActionBar().setTitle(budgetName + " Budget");
+                Calendar myCalendar = Calendar.getInstance();
+                SimpleDateFormat sdf =  new SimpleDateFormat("MMMM yyyy");
+                String monthYear = sdf.format(myCalendar.getTime());
+                getActivity().getActionBar().setTitle(budgetName + " Budget - " + monthYear);
+
 
                 rawBudgetAmount = data.getInt(data.getColumnIndex(Category.COLUMN_BUDGET));
                 budgetAmount = data.getDouble(data.getColumnIndex(Category.COLUMN_BUDGET))/ 100;

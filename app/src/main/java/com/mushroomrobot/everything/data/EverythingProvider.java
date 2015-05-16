@@ -17,6 +17,10 @@ import com.mushroomrobot.everything.data.EverythingContract.Accounts;
 import com.mushroomrobot.everything.data.EverythingContract.Category;
 import com.mushroomrobot.everything.data.EverythingContract.Transactions;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
+
 /**
  * Created by Nick on 4/28/2015.
  */
@@ -41,7 +45,9 @@ public class EverythingProvider extends ContentProvider {
     //All transactions
     private static final int TRANSACTIONS = 30;
 
+    private static final int TRANSACTIONS_HISTORY = 65;
     private static final int TRANSACTIONS_BY_DAY = 35;
+    private static final int TRANSACTIONS_BY_MONTH = 45;
 
     //Transaction details
     private static final int TRANSACTIONS_ID = 31;
@@ -67,7 +73,8 @@ public class EverythingProvider extends ContentProvider {
 
         sUriMatcher.addURI(AUTHORITY, EverythingContract.PATH_TRANSACTIONS, TRANSACTIONS);
         sUriMatcher.addURI(AUTHORITY, EverythingContract.PATH_TRANSACTIONS + "/BY_DAY", TRANSACTIONS_BY_DAY);
-
+        sUriMatcher.addURI(AUTHORITY, EverythingContract.PATH_TRANSACTIONS + "/BY_MONTH", TRANSACTIONS_BY_MONTH);
+        sUriMatcher.addURI(AUTHORITY, EverythingContract.PATH_TRANSACTIONS + "/HISTORY", TRANSACTIONS_HISTORY);
 
         sUriMatcher.addURI(AUTHORITY, EverythingContract.PATH_TRANSACTIONS + "/#", TRANSACTIONS_ID);
     }
@@ -88,31 +95,7 @@ public class EverythingProvider extends ContentProvider {
         group by name;
     */
 
-    private Cursor getBudgets(String selection){
 
-        SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
-        queryBuilder.setTables("category LEFT JOIN transactions on (category.name = transactions.category)");
-
-        //TODO: will need to add an appendWhere to query only for current month.
-        //queryBuilder.appendWhere();
-        SQLiteDatabase db = database.getWritableDatabase();
-
-        String sum_amount = "total(transactions.amount) as spent";
-        String sum_remaining = "(budget - total(transactions.amount)) as remaining";
-        String sum_percent = "(total(transactions.amount)/budget*100) as percent";
-
-        //To prevent ambigious column name error since transactions table has _id column as well.
-        String categoryID = "category._id";
-        String[] projection = {categoryID,Category.COLUMN_NAME,Category.COLUMN_BUDGET,sum_amount, sum_remaining,sum_percent};
-        String groupBy = "category.name";
-
-        Cursor cursor = queryBuilder.query(db,projection,selection,null,groupBy,null,null);
-
-        String getBudgetCursor = cursor.getColumnName(1);
-        Log.v("getBudgetCursor", getBudgetCursor);
-
-        return cursor;
-    }
 
     private Cursor getAccounts(Uri uri, String[] projection,String selection,String[] selectionArgs, String sortOrder){
 
@@ -131,26 +114,66 @@ public class EverythingProvider extends ContentProvider {
         return cursor;
     }
 
-    private Cursor getCategoryTransactions(String selection, String[]selectionArgs){
+    private Cursor getAllTransactions(){
 
-        //This is Category Table Query Method
-/*
         SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
-        queryBuilder.setTables("category left join transactions on (category.name = transactions.category)");
+        queryBuilder.setTables(Transactions.TABLE_NAME);
 
-        String sum_amount = "total(transactions.amount) as spent";
+        String[] projection = {Transactions._ID,Transactions.COLUMN_CATEGORY,Transactions.COLUMN_AMOUNT,Transactions.COLUMN_DATE,Transactions.COLUMN_DESCRIPTION};
+
+        SQLiteDatabase db = database.getWritableDatabase();
+        Cursor cursor = queryBuilder.query(db,projection,null,null,null,null,null);
+
+        return cursor;
+    }
+
+    private Cursor getBudgets(String selection){
+
+        SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
+
+        Calendar myCalendar = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM", Locale.US);
+        String monthYear = sdf.format(myCalendar.getTime());
+
+
+
+        //This is set to query for only the current month, note that we are not using a WHERE clause as that will filter out the entire category
+        //when there are no transactions (ie. when a category is first set up)
+        //http://stackoverflow.com/questions/4752455/left-join-with-where-clause
+        queryBuilder.setTables("category LEFT JOIN transactions on (category.name = transactions.category) and (strftime('%Y-%m', transactions.date/1000, 'unixepoch', 'localtime') = '" + monthYear + "')");
+
+        SQLiteDatabase db = database.getWritableDatabase();
+
+        String sum_amount = "(total(transactions.amount)) as spent";
         String sum_remaining = "(budget - total(transactions.amount)) as remaining";
         String sum_percent = "(total(transactions.amount)/budget*100) as percent";
 
-        String[] projection = {"category._id","category.name","category.budget","transactions._id as transid","transactions.amount",
-                                "transactions.date","transactions.description"};
-        String orderBy = Transactions.COLUMN_DATE + " desc, " + "transactions._id desc";
+        //To prevent ambigious column name error since transactions table has _id column as well.
+        String categoryID = "category._id";
+        String[] projection = {categoryID,Category.COLUMN_NAME,Category.COLUMN_BUDGET,sum_amount, sum_remaining,sum_percent};
+        String groupBy = "category.name";
+
+        Cursor cursor = queryBuilder.query(db, projection, selection, null, groupBy, null, null);
+
+        String getBudgetCursor = cursor.getColumnName(1);
+        Log.v("getBudgetCursor", getBudgetCursor);
+
+        return cursor;
+    }
+
+    public Budget getBudgetById(int budgetId){
 
         SQLiteDatabase db = database.getWritableDatabase();
-        Cursor cursor = queryBuilder.query(db, projection, selection,selectionArgs,null,null,orderBy);
-        return cursor;
-*/
-        //Below is the Transaction Table Query Method
+        Cursor cursor = db.query(Category.TABLE_NAME,null,Category._ID + "=?",new String[] {String.valueOf(budgetId)},null,null,null);
+        if (cursor.moveToFirst()){
+            Log.v("getBudgetById method", "works");
+            return new Budget(cursor.getInt(0),cursor.getString(1),cursor.getDouble(2));
+
+        }
+        return null;
+    }
+
+    private Cursor getCategoryTransactions(String selection, String[]selectionArgs){
 
         //Remember, the selectionArgs is not the category name but rather the category ID, which transaction table does not have.
         int categoryId = Integer.valueOf(selectionArgs[0]);
@@ -163,6 +186,12 @@ public class EverythingProvider extends ContentProvider {
 
         SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
         queryBuilder.setTables(Transactions.TABLE_NAME );
+
+        Calendar myCalendar = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM", Locale.US);
+        String monthYear = sdf.format(myCalendar.getTime());
+        queryBuilder.appendWhere("strftime('%Y-%m', date/1000, 'unixepoch', 'localtime') = '" + monthYear + "'");
+
 
         String[] projection = {Transactions._ID,Transactions.COLUMN_CATEGORY,Transactions.COLUMN_AMOUNT,Transactions.COLUMN_DATE,Transactions.COLUMN_DESCRIPTION};
         String orderBy = Transactions.COLUMN_DATE + " desc, " + Transactions._ID + " desc";
@@ -183,38 +212,19 @@ public class EverythingProvider extends ContentProvider {
         SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
         queryBuilder.setTables(Transactions.TABLE_NAME);
 
+        Calendar myCalendar = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM", Locale.US);
+        String monthYear = sdf.format(myCalendar.getTime());
+        queryBuilder.appendWhere("strftime('%Y-%m', date/1000, 'unixepoch', 'localtime') = '" + monthYear + "'");
+
+
         String[] projection = {Transactions._ID, Transactions.COLUMN_DATE, "sum(amount)"};
         String groupBy = Transactions.COLUMN_DATE;
         String orderBy = Transactions.COLUMN_DATE + " asc";
 
 
         SQLiteDatabase db = database.getWritableDatabase();
-        Cursor cursor = queryBuilder.query(db,projection,selection,parsedArgs,groupBy,null,orderBy);
-
-        return cursor;
-    }
-
-    public Budget getBudgetById(int budgetId){
-
-        SQLiteDatabase db = database.getWritableDatabase();
-        Cursor cursor = db.query(Category.TABLE_NAME,null,Category._ID + "=?",new String[] {String.valueOf(budgetId)},null,null,null);
-        if (cursor.moveToFirst()){
-            Log.v("getBudgetById method", "works");
-            return new Budget(cursor.getInt(0),cursor.getString(1),cursor.getDouble(2));
-
-        }
-        return null;
-    }
-
-    private Cursor getAllTransactions(){
-
-        SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
-        queryBuilder.setTables(Transactions.TABLE_NAME);
-
-        String[] projection = {Transactions._ID,Transactions.COLUMN_CATEGORY,Transactions.COLUMN_AMOUNT,Transactions.COLUMN_DATE,Transactions.COLUMN_DESCRIPTION};
-
-        SQLiteDatabase db = database.getWritableDatabase();
-        Cursor cursor = queryBuilder.query(db,projection,null,null,null,null,null);
+        Cursor cursor = queryBuilder.query(db, projection, selection, parsedArgs, groupBy, null, orderBy);
 
         return cursor;
     }
@@ -242,16 +252,45 @@ public class EverythingProvider extends ContentProvider {
                 break;
             case TRANSACTIONS_BY_DAY: retCursor = getCategoryTransactionsAmountByDay(selection, selectionArgs);
                 break;
+            case TRANSACTIONS_BY_MONTH: retCursor = getHistoryTransactionsAmountByMonth(selection);
+                break;
+            case TRANSACTIONS_HISTORY: retCursor = getHistoryTransactions(selection);
+                break;
             default: throw new IllegalArgumentException("Unknown URI: " + uri);
         }
-
         String getRetCursor = retCursor.getColumnName(1);
         Log.v("getRetCursor", getRetCursor);
-
         //Make sure that potential listeners are getting notified
         retCursor.setNotificationUri(getContext().getContentResolver(),uri);
 
         return retCursor;
+    }
+
+    private Cursor getHistoryTransactions(String selection){
+
+        SQLiteDatabase db = database.getWritableDatabase();
+
+        SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
+        builder.setTables(Transactions.TABLE_NAME);
+
+        String orderBy = Transactions.COLUMN_DATE + " desc, " + Transactions._ID + " desc" ;
+        Cursor cursor = builder.query(db,null,selection,null,null,null,orderBy);
+
+        return cursor;
+    }
+    private Cursor getHistoryTransactionsAmountByMonth(String selection){
+
+        SQLiteDatabase db = database.getWritableDatabase();
+
+        SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
+        builder.setTables(Transactions.TABLE_NAME);
+        //REMEMBER TO DIVIDE THE DATE BY 1000. JAVA RECORDS IN MILLISECONDS, BUT SQLITE VIES IT AS SECONDS!!!
+        String[] projections = {"_id", "strftime('%Y-%m',date/1000,'unixepoch','localtime') as year_month", "total(amount) as monthly_total"};
+
+        String groupBy = "year_month";
+        String orderBy = "year_month asc";
+        Cursor cursor = builder.query(db,projections,selection,null,groupBy,null,orderBy);
+        return cursor;
     }
 
     @Override

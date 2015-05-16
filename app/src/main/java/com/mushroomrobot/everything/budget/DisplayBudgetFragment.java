@@ -25,7 +25,10 @@ import android.widget.TextView;
 import com.mushroomrobot.everything.R;
 import com.mushroomrobot.everything.data.EverythingContract.Category;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Locale;
 
 /**
  * Created by Nick.
@@ -75,8 +78,13 @@ public class DisplayBudgetFragment extends Fragment
 
         View rootView = inflater.inflate(R.layout.fragment_budget, container, false);
 
-        String date =
-        getActivity().getActionBar().setTitle();
+        Calendar myCalendar = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("MMMM yyyy", Locale.US);
+        String monthYear = sdf.format(myCalendar.getTime());
+        getActivity().getActionBar().setTitle("Budgets - " + monthYear);
+
+
+
 
 
         listView = (ListView) rootView.findViewById(R.id.budget_listview);
@@ -103,6 +111,9 @@ public class DisplayBudgetFragment extends Fragment
                 Uri uri = Uri.parse(Category.CONTENT_URI + "/" + id);
                 long categoryId = id;
 
+                Cursor cursor = getActivity().getContentResolver().query(Category.CONTENT_URI,new String[]{Category.COLUMN_NAME},"category._id = " + String.valueOf(categoryId),null,null);
+                cursor.moveToFirst();
+                String categoryName = cursor.getString(cursor.getColumnIndex(Category.COLUMN_NAME));
 
                 Intent intent = new Intent(getActivity(),BudgetDetailsActivity.class);
 
@@ -110,6 +121,7 @@ public class DisplayBudgetFragment extends Fragment
                 //Thus we'll need to pass in the Uri as a string, and then retrieve and parse it into a Uri later.
                 intent.putExtra("uri", uri.toString());
                 intent.putExtra("categoryId", categoryId);
+                intent.putExtra("categoryName", categoryName);
                 intent.putExtra("categoryList",categoryList);
 
                 startActivity(intent);

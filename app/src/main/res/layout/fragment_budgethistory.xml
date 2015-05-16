@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FAFAFA"
+    android:orientation="vertical">
+
+    <com.androidplot.xy.XYPlot
+        android:id="@+id/xy_history_plot"
+        android:layout_width="385dp"
+        android:layout_height="170dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="-5dp"
+        androidPlot.title="Spend per Month"
+        androidPlot.titleWidget.labelPaint.textSize="11sp"
+        androidPlot.titleWidget.labelPaint.Color="#646464"
+        androidPlot.titleWidget.paddingTop="0dp"
+        androidPlot.graphWidget.marginTop="10dp"
+        androidPlot.graphWidget.marginLeft="25dp"
+        androidPlot.graphWidget.marginRight="25dp"
+        androidPlot.graphWidget.marginBottom="15dp"
+        androidPlot.graphWidget.backgroundPaint.Color="#FAFAFA"
+        androidPlot.graphWidget.gridBackgroundPaint.Color="#FAFAFA"
+        androidPlot.margin="0dp"
+        androidPlot.graphWidget.rangeLabelPaint.textSize="10sp"
+        androidPlot.graphWidget.DomainLabelPaint.textSize="10sp"
+        />
+
+    <TextView
+        android:id="@+id/history_spend_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:text="Total Lifetime Spend:"
+        android:layout_marginTop="180dp"
+        android:textStyle="bold"
+        android:textSize="19sp"
+        />
+
+    <TextView
+        android:id="@+id/history_spend_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="55dp"
+        android:layout_alignBaseline="@id/history_spend_label"
+        android:layout_toRightOf="@id/history_spend_label"
+        android:layout_marginLeft="5dp"
+        android:textStyle="bold"
+        android:text="$2,000.00"
+        android:textSize="19sp"/>
+
+    <TextView
+        android:id="@+id/history_transactions_header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_alignParentBottom="true"
+        android:text="Number of transactions: "
+        android:visibility="invisible"/>
+
+    <TextView
+        android:id="@+id/history_num_trans"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/history_transactions_header"
+        android:layout_marginLeft="5dp"
+        android:layout_toRightOf="@id/history_transactions_header"
+        android:text="99"
+        android:visibility="invisible"/>
+
+
+    <TextView
+        android:id="@+id/history_transactions_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="250dp"
+        android:text="Transactions"
+        android:textSize="18sp"
+        android:visibility="invisible"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/history_dateheader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="220dp"
+        android:text="Date" />
+
+    <TextView
+        android:id="@+id/history_descheader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/history_dateheader"
+        android:layout_marginLeft="50dp"
+        android:layout_toRightOf="@id/history_dateheader"
+        android:text="Description" />
+
+    <TextView
+        android:id="@+id/history_amountheader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/history_dateheader"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="16dp"
+        android:text="Amount" />
+
+    <ListView
+        android:id="@+id/history_listview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="240dp"
+        android:paddingBottom="70dp"
+        android:clipToPadding="false">
+    </ListView>
+
+</RelativeLayout>
+
+    <!-- Not used
+
+            -->

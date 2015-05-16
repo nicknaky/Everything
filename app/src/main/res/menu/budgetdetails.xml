@@ -4,9 +4,13 @@
     <item android:id="@+id/edit_budget"
         android:title="@string/edit_budget"
         android:showAsAction="never"/>
+    <item android:id="@+id/history_budget"
+        android:title="@string/history_budget"
+        android:showAsAction="never"/>
     <item android:id="@+id/delete_budget"
         android:title="@string/delete_budget"
         android:showAsAction="never"
         />
+
 
 </menu>
