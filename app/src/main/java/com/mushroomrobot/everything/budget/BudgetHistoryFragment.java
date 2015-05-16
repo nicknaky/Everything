@@ -1,17 +1,27 @@
 package com.mushroomrobot.everything.budget;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.app.LoaderManager;
 import android.content.CursorLoader;
+import android.content.DialogInterface;
 import android.content.Loader;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
@@ -47,12 +57,87 @@ import java.util.Locale;
 public class BudgetHistoryFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private String budgetName;
+    private static ArrayList categoryList;
 
     XYPlot historyPlot;
     TextView historySpend, numTrans;
     ListView historyList;
 
+    Button addTransaction;
+
     SimpleCursorAdapter historyAdapter;
+
+    private static final int EDIT_ID = 0;
+    private static final int DELETE_ID = 1;
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        menu.add(0, DELETE_ID, 1, R.string.menu_delete_trans);
+        menu.add(0, EDIT_ID, 0, R.string.menu_edit_trans);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+
+        Bundle b = new Bundle();
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        b.putLong("transId",info.id);
+
+        FragmentManager fm = getFragmentManager();
+
+        switch (item.getItemId()){
+            case (DELETE_ID):
+                DeleteTransDialog dialog = new DeleteTransDialog();
+                dialog.setArguments(b);
+                dialog.show(fm,null);
+                break;
+            case (EDIT_ID):
+                b.putStringArrayList("categoryList", categoryList);
+                b.putString("budgetName", budgetName);
+                AddTransactionDialog transdialog = new AddTransactionDialog();
+                transdialog.setArguments(b);
+                transdialog.show(fm,null);
+                break;
+            default:
+                break;
+        }
+        return super.onContextItemSelected(item);
+    }
+
+    public static class DeleteTransDialog extends DialogFragment {
+
+        long transactionId;
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            super.onCreateDialog(savedInstanceState);
+
+            transactionId = getArguments().getLong("transId");
+            Log.v("transId",String.valueOf(transactionId));
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+            builder.setMessage(R.string.delete_trans_msg);
+            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                    Uri mUri = Uri.parse(Transactions.CONTENT_URI + "/" + transactionId);
+                    getActivity().getContentResolver().delete(mUri,null,null);
+                    Log.v("Uri",String.valueOf(mUri));
+                    dialog.dismiss();
+                }
+            });
+            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+            return builder.create();
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -61,6 +146,9 @@ public class BudgetHistoryFragment extends Fragment implements LoaderManager.Loa
 
         Bundle bundle = getArguments();
         budgetName = bundle.getString("budgetName");
+
+        categoryList = new ArrayList<String>();
+        categoryList = bundle.getStringArrayList("categoryList");
 
         historyPlot = (XYPlot) rootView.findViewById(R.id.xy_history_plot);
         //This will query Transactions table for monthly Transaction amounts to populate chart
@@ -74,7 +162,8 @@ public class BudgetHistoryFragment extends Fragment implements LoaderManager.Loa
         numTrans = (TextView) rootView.findViewById(R.id.history_num_trans);
         historyList = (ListView) rootView.findViewById(R.id.history_listview);
 
-
+        addTransaction = (Button) rootView.findViewById(R.id.history_trans_button);
+        addTransaction.setOnClickListener(mClickListener);
 
         TextView dateHeader = (TextView) rootView.findViewById(R.id.history_dateheader);
         TextView descHeader = (TextView) rootView.findViewById(R.id.history_descheader);
@@ -86,8 +175,27 @@ public class BudgetHistoryFragment extends Fragment implements LoaderManager.Loa
 
         fillData();
 
+        registerForContextMenu(historyList);
+
         return rootView;
     }
+
+    View.OnClickListener mClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+
+            if (v == addTransaction) {
+                Bundle bundle = new Bundle();
+                bundle.putStringArrayList("categoryList", categoryList);
+                bundle.putString("budgetName", budgetName);
+
+                FragmentManager fm = getFragmentManager();
+                AddTransactionDialog dialog = new AddTransactionDialog();
+                dialog.setArguments(bundle);
+                dialog.show(fm, null);
+            }
+        }
+    };
 
     private void fillData() {
 

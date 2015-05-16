@@ -115,6 +115,18 @@
         android:clipToPadding="false">
     </ListView>
 
+    <Button
+        android:id="@+id/history_trans_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"
+        android:background="#CC00C8C8"
+        android:text="@string/add_transactions"
+        android:textColor="#ffffff"
+        android:textSize="22sp" />
+
 </RelativeLayout>
 
     <!-- Not used

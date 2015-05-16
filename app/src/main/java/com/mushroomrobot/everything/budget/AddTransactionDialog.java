@@ -18,7 +18,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.mushroomrobot.everything.R;
-import com.mushroomrobot.everything.data.EverythingContract;
 import com.mushroomrobot.everything.data.EverythingContract.Transactions;
 import com.mushroomrobot.everything.utils.CurrencyFormatter;
 
@@ -182,7 +181,7 @@ public class AddTransactionDialog extends DialogFragment {
                         contentValues.put("description", enterDesc);
 
                         if (editMode==0) {
-                            getActivity().getContentResolver().insert(EverythingContract.Transactions.CONTENT_URI, contentValues);
+                            getActivity().getContentResolver().insert(Transactions.CONTENT_URI, contentValues);
                         }
                         else if (editMode==1){
                             getActivity().getContentResolver().update(Uri.parse(Transactions.CONTENT_URI + "/" + transactionId),contentValues,null,null);

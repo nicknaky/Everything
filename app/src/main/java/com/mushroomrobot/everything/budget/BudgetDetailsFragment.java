@@ -112,6 +112,7 @@ public class BudgetDetailsFragment extends Fragment
 
                 Intent intent = new Intent(getActivity(),BudgetHistoryActivity.class);
                 intent.putExtra("budgetName", budgetName);
+                intent.putExtra("categoryList",categoryList);
                 startActivity(intent);
 
 

@@ -327,6 +327,8 @@ public class EverythingProvider extends ContentProvider {
                     returnUri = Transactions.buildTransactionsUri(id);
                     getContext().getContentResolver().notifyChange(Category.CONTENT_URI, null);
                     getContext().getContentResolver().notifyChange(Transactions.CONTENT_URI_AMOUNT_BY_DAY,null);
+                    getContext().getContentResolver().notifyChange(Transactions.CONTENT_URI_AMOUNT_BY_MONTH,null);
+                    getContext().getContentResolver().notifyChange(Transactions.CONTENT_URI_HISTORY,null);
                 }
                 else
                     throw new SQLException("Failed to insert transaction into row: " + uri);
@@ -376,6 +378,8 @@ public class EverythingProvider extends ContentProvider {
                 //Might be unnecessary as Category.CONTENT_URI should be enough, double check.
                 //getContext().getContentResolver().notifyChange(Uri.parse(Category.CONTENT_URI + "/#"),null);
                 getContext().getContentResolver().notifyChange(Transactions.CONTENT_URI_AMOUNT_BY_DAY,null);
+                getContext().getContentResolver().notifyChange(Transactions.CONTENT_URI_AMOUNT_BY_MONTH,null);
+                getContext().getContentResolver().notifyChange(Transactions.CONTENT_URI_HISTORY,null);
                 break;
             default:
                 throw new IllegalArgumentException("Unknown URI: " + uri);
@@ -406,14 +410,10 @@ public class EverythingProvider extends ContentProvider {
                     rowsUpdated = sqlDB.update(Accounts.TABLE_NAME, values, Accounts._ID + "=" + id + " and " + selection, selectionArgs);
                 }
                 break;
-
-
             case CATEGORY:
                 rowsUpdated = sqlDB.update(Category.TABLE_NAME,values,selection,selectionArgs);
                 updateCategoryTransactions(values, selectionArgs);
                 break;
-
-
 
             case TRANSACTIONS:
                 rowsUpdated = sqlDB.update(Transactions.TABLE_NAME,values,selection,selectionArgs);
@@ -429,6 +429,12 @@ public class EverythingProvider extends ContentProvider {
             case TRANSACTIONS_ID:
                 id = uri.getLastPathSegment();
                 rowsUpdated = sqlDB.update(Transactions.TABLE_NAME, values, Transactions._ID + "=" + id, null);
+
+                getContext().getContentResolver().notifyChange(Category.CONTENT_URI,null);
+                getContext().getContentResolver().notifyChange(Transactions.CONTENT_URI_AMOUNT_BY_DAY,null);
+                getContext().getContentResolver().notifyChange(Transactions.CONTENT_URI_AMOUNT_BY_MONTH,null);
+                getContext().getContentResolver().notifyChange(Transactions.CONTENT_URI_HISTORY,null);
+
                 break;
             default:
                 throw new IllegalArgumentException("Unknown URI: " + uri);
