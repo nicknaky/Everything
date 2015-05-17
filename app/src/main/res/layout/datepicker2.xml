@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/container_datepicker"
-    android:layout_width="260dp"
-    android:layout_height="wrap_content"
-    >
 
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
     <DatePicker
+
         android:id="@+id/datepicker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -15,35 +16,39 @@
 
     </DatePicker>
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center_vertical"
+        android:gravity="center_vertical"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="76dp">
+
     <Button
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/cancel_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/save_button"
-        android:layout_marginRight="25dp"
-        android:layout_toLeftOf="@+id/save_button"
+
         android:background="@null"
         android:text="Cancel"
         android:textColor="#00C8C8"
-        android:textStyle="bold"
-        android:fontFamily="sans-serif-light"/>
+        android:textStyle="bold" />
 
     <Button
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/save_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignRight="@id/datepicker"
-        android:layout_below="@id/datepicker"
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="36dp"
+
         android:background="@null"
         android:text="Save"
         android:textColor="#00C8C8"
-        android:textStyle="bold"
-        android:fontFamily="sans-serif-light"/>
-
-</RelativeLayout>
+        android:textStyle="bold" />
+    </LinearLayout>
 
 
+</LinearLayout>
 

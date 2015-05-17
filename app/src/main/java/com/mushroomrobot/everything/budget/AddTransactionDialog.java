@@ -6,15 +6,19 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.ContentValues;
 import android.content.DialogInterface;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mushroomrobot.everything.R;
@@ -116,13 +120,100 @@ public class AddTransactionDialog extends DialogFragment {
                 transDateBox.setText(sdf.format(myCalendar.getTime()));
             }
         };
+
         transDateBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new DatePickerDialog(getActivity(), date, myCalendar.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+
+/*
+                DateDialog dateDialog = new DateDialog();
+                FragmentManager fm = getFragmentManager();
+
+                Bundle bundle = new Bundle();
+
+                dateDialog.show(fm,null);
+  */
+
+
+                final DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(), date, myCalendar.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                        myCalendar.get(Calendar.DAY_OF_MONTH));
+
+
+                LayoutInflater inflater2 = getActivity().getLayoutInflater();
+                View view = inflater2.inflate(R.layout.datepicker, null);
+
+                final DatePicker datePicker = (DatePicker) view.findViewById(R.id.datepicker);
+                ViewGroup childPicker = (ViewGroup)datePicker.findViewById(R.id.datepicker);
+
+                TextView month = (TextView)childPicker.findViewById(Resources.getSystem().getIdentifier("date_picker_month","id","android"));// month widget
+                TextView day = (TextView) childPicker.findViewById(Resources.getSystem().getIdentifier("date_picker_day","id","android"));
+                month.setTextColor(getActivity().getResources().getColor(R.color.theme));
+                day.setTextColor(getActivity().getResources().getColor(R.color.theme));
+
+                Button save = (Button) view.findViewById(R.id.save_button);
+                Button cancel = (Button) view.findViewById(R.id.cancel_button);
+
+                View.OnClickListener mClickListener = new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        switch (v.getId()){
+                            case R.id.save_button:
+                                date.onDateSet(datePicker,datePicker.getYear(),datePicker.getMonth(),datePicker.getDayOfMonth());
+                                datePickerDialog.dismiss();
+                            case R.id.cancel_button:
+                                datePickerDialog.dismiss();
+                            default:
+                                break;
+                        }
+                    }
+                };
+
+                save.setOnClickListener(mClickListener);
+                cancel.setOnClickListener(mClickListener);
+
+                DialogInterface.OnClickListener dListener = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        date.onDateSet(datePicker,datePicker.getYear(),datePicker.getMonth(),datePicker.getDayOfMonth());
+                    }
+                };
+                datePickerDialog.setButton(DialogInterface.BUTTON_POSITIVE,"Save",dListener);
+                datePickerDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel", dListener);
+
+                view.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+
+                datePickerDialog.setView(view);
+                datePickerDialog.show();
+
+                //http://stackoverflow.com/questions/14439538/how-can-i-change-the-color-of-alertdialog-title-and-the-color-of-the-line-under
+                //https://chromium.googlesource.com/android_tools/+/704c8ddee726aabe0e78bb88545972d2cf298190/sdk/platforms/android-16/data/res/layout/alert_dialog.xml
+                ViewGroup buttonPanel = (ViewGroup) datePickerDialog.findViewById(Resources.getSystem().getIdentifier("buttonPanel", "id", "android"));
+                buttonPanel.setVisibility(ViewGroup.GONE);
+                ViewGroup contentPanel = (ViewGroup) datePickerDialog.findViewById(Resources.getSystem().getIdentifier("contentPanel", "id", "android"));
+                contentPanel.setVisibility(ViewGroup.GONE);
+                ViewGroup topPanel = (ViewGroup) datePickerDialog.findViewById(Resources.getSystem().getIdentifier("topPanel", "id", "android"));
+                topPanel.setVisibility(ViewGroup.GONE);
+
+                float d = getActivity().getResources().getDisplayMetrics().density;
+                int width = 292;
+
+                int dialogWidth = (int) (d * width + 0.5f);
+
+                datePickerDialog.getWindow().setLayout(dialogWidth, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+
+                //datePickerDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+
+                /*
+                Button bPos = datePickerDialog.getButton(DialogInterface.BUTTON_POSITIVE);
+                Button bNeg = datePickerDialog.getButton(DialogInterface.BUTTON_NEGATIVE);
+
+                bPos.setVisibility(Button.GONE);
+                bNeg.setVisibility(Button.GONE);
+*/
             }
         });
+
         String currentDate = new SimpleDateFormat("MM/dd/yy", Locale.US).format(new Date());
         transDateBox.setText(currentDate);
 
