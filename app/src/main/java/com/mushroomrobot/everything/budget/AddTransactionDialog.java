@@ -107,8 +107,22 @@ public class AddTransactionDialog extends DialogFragment {
 
         transAmountBox.addTextChangedListener(new CurrencyFormatter(transAmountBox));
 
+/*
+        String dateString = transDateBox.getText().toString();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yy",Locale.US);
+        final Calendar editCalendar = Calendar.getInstance();
+
+        try {
+            editCalendar.setTime(simpleDateFormat.parse(dateString));
+        }catch (ParseException e){
+            Toast.makeText(getActivity(),"Unable to parse date",Toast.LENGTH_SHORT).show();
+        }
+
+        */
+
         //Implementing date dialog within a dialog: http://stackoverflow.com/questions/14933330/datepicker-how-to-popup-datepicker-when-click-on-edittext
         final Calendar myCalendar = Calendar.getInstance();
+
         final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
@@ -125,19 +139,12 @@ public class AddTransactionDialog extends DialogFragment {
             @Override
             public void onClick(View v) {
 
-/*
-                DateDialog dateDialog = new DateDialog();
-                FragmentManager fm = getFragmentManager();
+                Calendar newCalendar = myCalendar;
 
-                Bundle bundle = new Bundle();
-
-                dateDialog.show(fm,null);
-  */
-
-
-                final DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(), date, myCalendar.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-                        myCalendar.get(Calendar.DAY_OF_MONTH));
-
+                final DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(), date,
+                        newCalendar.get(Calendar.YEAR),
+                        newCalendar.get(Calendar.MONTH),
+                        newCalendar.get(Calendar.DAY_OF_MONTH));
 
                 LayoutInflater inflater2 = getActivity().getLayoutInflater();
                 View view = inflater2.inflate(R.layout.datepicker, null);
