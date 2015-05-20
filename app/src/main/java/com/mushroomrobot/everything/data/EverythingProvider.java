@@ -55,6 +55,7 @@ public class EverythingProvider extends ContentProvider {
     private static final String AUTHORITY = "com.mushroomrobot.everything.data";
 
 
+    private static final int CATEGORY_OVERVIEW = 255;
 
     public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/accounts";
     public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/accounts";
@@ -77,6 +78,8 @@ public class EverythingProvider extends ContentProvider {
         sUriMatcher.addURI(AUTHORITY, EverythingContract.PATH_TRANSACTIONS + "/HISTORY", TRANSACTIONS_HISTORY);
 
         sUriMatcher.addURI(AUTHORITY, EverythingContract.PATH_TRANSACTIONS + "/#", TRANSACTIONS_ID);
+
+        sUriMatcher.addURI(AUTHORITY, EverythingContract.PATH_CATEGORY + "/OVERVIEW", CATEGORY_OVERVIEW);
     }
 
 
@@ -197,11 +200,12 @@ public class EverythingProvider extends ContentProvider {
         String orderBy = Transactions.COLUMN_DATE + " desc, " + Transactions._ID + " desc";
 
         SQLiteDatabase db = database.getWritableDatabase();
-        Cursor cursor = queryBuilder.query(db,projection,selection,parsedArgs,null,null,orderBy);
+        Cursor cursor = queryBuilder.query(db, projection, selection, parsedArgs, null, null, orderBy);
 
         return cursor;
     }
 
+    // For specific category
     private Cursor getCategoryTransactionsAmountByDay(String selection, String[] selectionArgs){
         int categoryId = Integer.valueOf(selectionArgs[0]);
         Budget budget = getBudgetById(categoryId);
@@ -222,9 +226,29 @@ public class EverythingProvider extends ContentProvider {
         String groupBy = Transactions.COLUMN_DATE;
         String orderBy = Transactions.COLUMN_DATE + " asc";
 
-
         SQLiteDatabase db = database.getWritableDatabase();
         Cursor cursor = queryBuilder.query(db, projection, selection, parsedArgs, groupBy, null, orderBy);
+
+        return cursor;
+    }
+
+    //For all categories
+    private Cursor getCategoryTransactionsAmountByDay(){
+
+        SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
+        queryBuilder.setTables(Transactions.TABLE_NAME);
+
+        Calendar myCalendar = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM", Locale.US);
+        String monthYear = sdf.format(myCalendar.getTime());
+        queryBuilder.appendWhere("strftime('%Y-%m', date/1000, 'unixepoch', 'localtime') = '" + monthYear + "'");
+
+        String[] projection = {Transactions._ID, Transactions.COLUMN_DATE, "sum(amount)"};
+        String groupBy = Transactions.COLUMN_DATE;
+        String orderBy = Transactions.COLUMN_DATE + " asc";
+
+        SQLiteDatabase db = database.getWritableDatabase();
+        Cursor cursor = queryBuilder.query(db, projection, null, null, groupBy, null, orderBy);
 
         return cursor;
     }
@@ -250,7 +274,10 @@ public class EverythingProvider extends ContentProvider {
                 SQLiteDatabase db = database.getWritableDatabase();
                 retCursor =  db.query(Transactions.TABLE_NAME,null,selection,null,null,null,null);
                 break;
-            case TRANSACTIONS_BY_DAY: retCursor = getCategoryTransactionsAmountByDay(selection, selectionArgs);
+            case TRANSACTIONS_BY_DAY:
+                if (selection != null){
+                    retCursor = getCategoryTransactionsAmountByDay(selection, selectionArgs);
+                }else retCursor = getCategoryTransactionsAmountByDay();
                 break;
             case TRANSACTIONS_BY_MONTH: retCursor = getHistoryTransactionsAmountByMonth(selection);
                 break;
@@ -316,8 +343,10 @@ public class EverythingProvider extends ContentProvider {
                 break;
             case CATEGORY:
                 id = sqlDB.insert(Category.TABLE_NAME,null,values);
-                if (id > 0)
+                if (id > 0){
                     returnUri = Category.buildCategoryUri(id);
+                    getContext().getContentResolver().notifyChange(Transactions.CONTENT_URI_AMOUNT_BY_DAY,null);
+                }
                 else
                     throw new SQLException("Failed to insert category into row: " + uri);
                 break;
@@ -413,6 +442,7 @@ public class EverythingProvider extends ContentProvider {
             case CATEGORY:
                 rowsUpdated = sqlDB.update(Category.TABLE_NAME,values,selection,selectionArgs);
                 updateCategoryTransactions(values, selectionArgs);
+                getContext().getContentResolver().notifyChange(Transactions.CONTENT_URI_AMOUNT_BY_DAY, null);
                 break;
 
             case TRANSACTIONS:

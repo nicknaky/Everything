@@ -16,6 +16,7 @@ public class EverythingContract {
     public static final String PATH_CATEGORY = "category";
     public static final String PATH_TRANSACTIONS = "transactions";
 
+
     public static final class Accounts implements BaseColumns{
 
         public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_ACCOUNTS).build();
@@ -37,6 +38,8 @@ public class EverythingContract {
     }
 
     public static final class Category implements BaseColumns{
+
+        public static final Uri CONTENT_URI_OVERVIEW = BASE_CONTENT_URI.buildUpon().appendPath("OVERVIEW").build();
 
         public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_CATEGORY).build();
 

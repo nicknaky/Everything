@@ -96,8 +96,6 @@
         androidPlot.margin="0dp"
         androidPlot.graphWidget.rangeLabelPaint.textSize="10sp"
         androidPlot.graphWidget.DomainLabelPaint.textSize="10sp"
-
-
         />
 
     <TextView

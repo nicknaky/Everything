@@ -121,6 +121,7 @@
         android:background="@null"
         android:textStyle="bold"
         android:textColor="#00C8C8"
+        android:fontFamily="sans-serif-light"
         android:text="Cancel"/>
 
     <Button
@@ -130,10 +131,10 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_marginRight="16dp"
-
         android:background="@null"
         android:textStyle="bold"
         android:textColor="#00C8C8"
+        android:fontFamily="sans-serif-light"
         android:text="Save"
         />
 
