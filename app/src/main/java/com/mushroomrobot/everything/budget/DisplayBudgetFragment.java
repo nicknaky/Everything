@@ -51,7 +51,9 @@ public class DisplayBudgetFragment extends Fragment
         implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final int LOADER_CATEGORIES = 1;
-    private static final int LOADER_TRENDING_SPEND = 2;
+    private static final int LOADER_TOTAL_BUDGET_SPEND = 2;
+    private static final int LOADER_TRENDING_SPEND = 3;
+
 
     private static ArrayList<String> categoryList;
 
@@ -106,6 +108,7 @@ public class DisplayBudgetFragment extends Fragment
         getActivity().getActionBar().setTitle("Budgets - " + monthYear);
 
         transTrendingPlot = (XYPlot) rootView.findViewById(R.id.trans_trending_plot);
+        prepChart();
 
         listView = (ListView) rootView.findViewById(R.id.budget_listview);
 
@@ -195,6 +198,11 @@ public class DisplayBudgetFragment extends Fragment
             CursorLoader cursorLoader = new CursorLoader(getActivity(), Category.CONTENT_URI, null, null, null, null);
             return cursorLoader;
         }
+
+        if (id == LOADER_TOTAL_BUDGET_SPEND){
+            CursorLoader cursorLoader = new CursorLoader(getActivity(), Category.CONTENT_URI_)
+        }
+
         if (id == LOADER_TRENDING_SPEND) {
             CursorLoader cursorLoader = new CursorLoader(getActivity(), Transactions.CONTENT_URI_AMOUNT_BY_DAY, null, null, null, null);
             return cursorLoader;
@@ -230,11 +238,19 @@ public class DisplayBudgetFragment extends Fragment
                     totalSpent += (data.getDouble(data.getColumnIndex(Category.COLUMN_SPENT)) / 100);
                 }
 
-                getLoaderManager().initLoader(LOADER_TRENDING_SPEND, null, this);
-
             }
         }
+
+        if (loader.getId() == LOADER_TOTAL_BUDGET_SPEND){
+
+            totalBudgetSet =
+            totalSpent =
+            getLoaderManager().initLoader(LOADER_TRENDING_SPEND, null, this);
+        }
+
         if (loader.getId() == LOADER_TRENDING_SPEND) {
+
+
             onTrendingSpendLoaded(data);
         }
     }
@@ -280,8 +296,7 @@ public class DisplayBudgetFragment extends Fragment
         transTrendingPlot.redraw();
     }
 
-    private void plotChart(ArrayList<Integer> daysList, ArrayList<Double> trendingList) {
-
+    private void prepChart(){
         transTrendingPlot.setBorderStyle(Plot.BorderStyle.NONE, null, null);
         transTrendingPlot.setPlotMargins(0, 0, 0, 0);
         transTrendingPlot.setPlotPadding(0, 0, 0, 0);
@@ -297,6 +312,25 @@ public class DisplayBudgetFragment extends Fragment
         SizeMetrics sm = new SizeMetrics(0, SizeLayoutType.FILL, 0, SizeLayoutType.FILL);
         transTrendingPlot.getGraphWidget().setSize(sm);
         transTrendingPlot.getGraphWidget().position(0, XLayoutStyle.RELATIVE_TO_RIGHT, 0, YLayoutStyle.RELATIVE_TO_BOTTOM);
+    }
+
+    private void plotChart(ArrayList<Integer> daysList, ArrayList<Double> trendingList) {
+        transTrendingPlot.setBorderStyle(Plot.BorderStyle.NONE, null, null);
+        transTrendingPlot.setPlotMargins(0, 0, 0, 0);
+        transTrendingPlot.setPlotPadding(0, 0, 0, 0);
+        transTrendingPlot.setGridPadding(0, 0, 0, 0);
+
+        transTrendingPlot.getGraphWidget().getDomainLabelPaint().setColor(Color.BLACK);
+        transTrendingPlot.getGraphWidget().getRangeLabelPaint().setColor(Color.BLACK);
+
+        transTrendingPlot.getGraphWidget().getDomainOriginLabelPaint().setColor(Color.BLACK);
+        transTrendingPlot.getGraphWidget().getDomainOriginLinePaint().setColor(Color.BLACK);
+        transTrendingPlot.getGraphWidget().getRangeOriginLinePaint().setColor(Color.BLACK);
+
+        SizeMetrics sm = new SizeMetrics(0, SizeLayoutType.FILL, 0, SizeLayoutType.FILL);
+        transTrendingPlot.getGraphWidget().setSize(sm);
+        transTrendingPlot.getGraphWidget().position(0, XLayoutStyle.RELATIVE_TO_RIGHT, 0, YLayoutStyle.RELATIVE_TO_BOTTOM);
+
 
         // Domain
         transTrendingPlot.setDomainBoundaries(0, daysList.size(), BoundaryMode.FIXED);

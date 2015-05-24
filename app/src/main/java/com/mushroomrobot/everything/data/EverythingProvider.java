@@ -253,6 +253,16 @@ public class EverythingProvider extends ContentProvider {
         return cursor;
     }
 
+    private Cursor getBudgetsOverview(){
+
+        SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
+        queryBuilder.setTables()
+
+        Cursor cursor =
+
+        return cursor;
+    }
+
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
 
@@ -268,6 +278,10 @@ public class EverythingProvider extends ContentProvider {
                 break;
             case CATEGORY_ID: retCursor = getBudgets(selection);
                 break;
+
+            case CATEGORY_OVERVIEW: retCursor = getBudgetsOverview();
+                braek;
+
             case TRANSACTIONS: retCursor = getCategoryTransactions(selection, selectionArgs);
                 break;
             case TRANSACTIONS_ID:
@@ -283,6 +297,7 @@ public class EverythingProvider extends ContentProvider {
                 break;
             case TRANSACTIONS_HISTORY: retCursor = getHistoryTransactions(selection);
                 break;
+
             default: throw new IllegalArgumentException("Unknown URI: " + uri);
         }
         String getRetCursor = retCursor.getColumnName(1);
