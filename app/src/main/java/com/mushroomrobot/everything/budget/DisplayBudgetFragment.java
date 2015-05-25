@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.graphics.Color;
+import android.graphics.DashPathEffect;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,16 +25,19 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.androidplot.Plot;
-import com.androidplot.ui.SizeLayoutType;
-import com.androidplot.ui.SizeMetrics;
 import com.androidplot.ui.XLayoutStyle;
+import com.androidplot.ui.XPositionMetric;
 import com.androidplot.ui.YLayoutStyle;
+import com.androidplot.ui.YPositionMetric;
+import com.androidplot.util.PixelUtils;
 import com.androidplot.xy.BoundaryMode;
 import com.androidplot.xy.LineAndPointFormatter;
 import com.androidplot.xy.SimpleXYSeries;
+import com.androidplot.xy.XValueMarker;
 import com.androidplot.xy.XYPlot;
 import com.androidplot.xy.XYSeries;
 import com.androidplot.xy.XYStepMode;
+import com.androidplot.xy.YValueMarker;
 import com.mushroomrobot.everything.R;
 import com.mushroomrobot.everything.data.EverythingContract.Category;
 import com.mushroomrobot.everything.data.EverythingContract.Transactions;
@@ -62,12 +66,12 @@ public class DisplayBudgetFragment extends Fragment
     TextView noBudgetsTextView;
     ProgressBar budgetProgress;
 
-    XYPlot transTrendingPlot;
+    private XYPlot transTrendingPlot;
+
 
     double totalBudgetSet = 0;
     double totalSpent = 0;
 
-    private double budget_set, budget_spent, budget_left;
 
     BudgetsAdapter budgetsListAdapter;
 
@@ -108,7 +112,8 @@ public class DisplayBudgetFragment extends Fragment
         getActivity().getActionBar().setTitle("Budgets - " + monthYear);
 
         transTrendingPlot = (XYPlot) rootView.findViewById(R.id.trans_trending_plot);
-        prepChart();
+
+        setUpChart();
 
         listView = (ListView) rootView.findViewById(R.id.budget_listview);
 
@@ -126,6 +131,11 @@ public class DisplayBudgetFragment extends Fragment
 
         addTransactionsButton = (Button) rootView.findViewById(R.id.add_transactions_button);
         addTransactionsButton.setOnClickListener(mClickListener);
+
+
+        View headerView = inflater.inflate(R.layout.list_item_budget_graph, null);
+
+        listView.addHeaderView(headerView);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -187,6 +197,7 @@ public class DisplayBudgetFragment extends Fragment
 
         budgetsListAdapter = new BudgetsAdapter(getActivity(), R.layout.list_item_budget, null, list_from, list_to, 0);
         getLoaderManager().initLoader(LOADER_CATEGORIES, null, this);
+        //getLoaderManager().initLoader(LOADER_TOTAL_BUDGET_SPEND, null, this);
 
         listView.setAdapter(budgetsListAdapter);
     }
@@ -199,14 +210,18 @@ public class DisplayBudgetFragment extends Fragment
             return cursorLoader;
         }
 
+        /*
         if (id == LOADER_TOTAL_BUDGET_SPEND){
-            CursorLoader cursorLoader = new CursorLoader(getActivity(), Category.CONTENT_URI_)
+            CursorLoader cursorLoader = new CursorLoader(getActivity(), Category.CONTENT_URI_OVERVIEW, null, null, null, null);
+            return cursorLoader;
         }
 
         if (id == LOADER_TRENDING_SPEND) {
             CursorLoader cursorLoader = new CursorLoader(getActivity(), Transactions.CONTENT_URI_AMOUNT_BY_DAY, null, null, null, null);
             return cursorLoader;
-        } else return null;
+        }
+        */
+        else return null;
     }
 
     @Override
@@ -219,40 +234,37 @@ public class DisplayBudgetFragment extends Fragment
         Log.v("getDataCursor", getDataCursor);
 
         if (loader.getId() == LOADER_CATEGORIES) {
+
+            categoryList.clear();
+            while (data.moveToNext()) {
+                categoryList.add(data.getString(data.getColumnIndex(Category.COLUMN_NAME)));
+            }
+
             budgetsListAdapter.swapCursor(data);
 
             if (!budgetsListAdapter.getCursor().moveToFirst()) {
                 noBudgetsTextView.setVisibility(TextView.VISIBLE);
                 addBudgetButton.setVisibility(Button.VISIBLE);
                 addTransactionsButton.setVisibility(Button.INVISIBLE);
-            } else {
-
-                //Clear old values otherwise they end up being added up with the new batch of values
-                categoryList.clear();
-                totalBudgetSet = 0;
-                totalSpent = 0;
-                while (data.moveToNext()) {
-                    categoryList.add(data.getString(data.getColumnIndex(Category.COLUMN_NAME)));
-
-                    totalBudgetSet += (data.getDouble(data.getColumnIndex(Category.COLUMN_BUDGET)) / 100);
-                    totalSpent += (data.getDouble(data.getColumnIndex(Category.COLUMN_SPENT)) / 100);
-                }
-
             }
         }
+        transTrendingPlot.clear();
+        setUpChart();
+        transTrendingPlot.redraw();
 
+        /*
         if (loader.getId() == LOADER_TOTAL_BUDGET_SPEND){
 
-            totalBudgetSet =
-            totalSpent =
+            if (!data.moveToFirst()){
+                totalBudgetSet = data.getDouble(data.getColumnIndex("total_budget")) / 100;
+                totalSpent = data.getDouble(data.getColumnIndex("total_spent")) / 100;
+            }
             getLoaderManager().initLoader(LOADER_TRENDING_SPEND, null, this);
         }
-
         if (loader.getId() == LOADER_TRENDING_SPEND) {
-
-
             onTrendingSpendLoaded(data);
         }
+        */
     }
 
     @Override
@@ -260,13 +272,31 @@ public class DisplayBudgetFragment extends Fragment
         budgetsListAdapter.swapCursor(null);
     }
 
+    private void setUpChart() {
+        Cursor cursorCat = getActivity().getContentResolver().query(Category.CONTENT_URI_OVERVIEW,null,null,null,null);
+
+        if (cursorCat.moveToFirst()) {
+            totalBudgetSet = cursorCat.getDouble(cursorCat.getColumnIndex("total_budget")) / 100;
+            totalSpent = cursorCat.getDouble(cursorCat.getColumnIndex("total_spent")) / 100;
+
+            Log.v("budget set", String.valueOf(totalBudgetSet));
+            Log.v("total spent", String.valueOf(totalSpent));
+        }
+
+        Cursor cursorTran = getActivity().getContentResolver().query(Transactions.CONTENT_URI_AMOUNT_BY_DAY,null,null,null,null);
+        onTrendingSpendLoaded(cursorTran);
+    }
+
     private void onTrendingSpendLoaded(Cursor cursor) {
+
+
 
         int daysInMonth = Calendar.getInstance().getActualMaximum(Calendar.DAY_OF_MONTH);
 
         ArrayList<Integer> numDays = new ArrayList<>();
-        for (int i = 0; i < daysInMonth; i++) {
+        for (int i = 0; i < daysInMonth + 1; i++) {
             numDays.add(i, i);
+            Log.v("numDays", String.valueOf(numDays.get(i)));
         }
         ArrayList<Double> transList = new ArrayList<>();
         for (int i = 0; i < numDays.size(); i++) {
@@ -283,6 +313,8 @@ public class DisplayBudgetFragment extends Fragment
             double amount = cursor.getDouble(cursor.getColumnIndex("sum(amount)")) / 100;
 
             transList.set(day, amount);
+
+            Log.v("transList", String.valueOf(transList.get(day)));
         }
         ArrayList<Double> transTrending = new ArrayList<>();
 
@@ -291,28 +323,12 @@ public class DisplayBudgetFragment extends Fragment
             transTrending.add(i, 0.0);
             transTrending.set(i, transList.get(i) + transTrending.get(i - 1));
         }
-        transTrendingPlot.clear();
+
         plotChart(numDays, transTrending);
-        transTrendingPlot.redraw();
+
+
     }
 
-    private void prepChart(){
-        transTrendingPlot.setBorderStyle(Plot.BorderStyle.NONE, null, null);
-        transTrendingPlot.setPlotMargins(0, 0, 0, 0);
-        transTrendingPlot.setPlotPadding(0, 0, 0, 0);
-        transTrendingPlot.setGridPadding(0, 0, 0, 0);
-
-        transTrendingPlot.getGraphWidget().getDomainLabelPaint().setColor(Color.BLACK);
-        transTrendingPlot.getGraphWidget().getRangeLabelPaint().setColor(Color.BLACK);
-
-        transTrendingPlot.getGraphWidget().getDomainOriginLabelPaint().setColor(Color.BLACK);
-        transTrendingPlot.getGraphWidget().getDomainOriginLinePaint().setColor(Color.BLACK);
-        transTrendingPlot.getGraphWidget().getRangeOriginLinePaint().setColor(Color.BLACK);
-
-        SizeMetrics sm = new SizeMetrics(0, SizeLayoutType.FILL, 0, SizeLayoutType.FILL);
-        transTrendingPlot.getGraphWidget().setSize(sm);
-        transTrendingPlot.getGraphWidget().position(0, XLayoutStyle.RELATIVE_TO_RIGHT, 0, YLayoutStyle.RELATIVE_TO_BOTTOM);
-    }
 
     private void plotChart(ArrayList<Integer> daysList, ArrayList<Double> trendingList) {
         transTrendingPlot.setBorderStyle(Plot.BorderStyle.NONE, null, null);
@@ -327,9 +343,9 @@ public class DisplayBudgetFragment extends Fragment
         transTrendingPlot.getGraphWidget().getDomainOriginLinePaint().setColor(Color.BLACK);
         transTrendingPlot.getGraphWidget().getRangeOriginLinePaint().setColor(Color.BLACK);
 
-        SizeMetrics sm = new SizeMetrics(0, SizeLayoutType.FILL, 0, SizeLayoutType.FILL);
-        transTrendingPlot.getGraphWidget().setSize(sm);
-        transTrendingPlot.getGraphWidget().position(0, XLayoutStyle.RELATIVE_TO_RIGHT, 0, YLayoutStyle.RELATIVE_TO_BOTTOM);
+        //SizeMetrics sm = new SizeMetrics(0, SizeLayoutType.FILL, 0, SizeLayoutType.FILL);
+        //transTrendingPlot.getGraphWidget().setSize(sm);
+        //transTrendingPlot.getGraphWidget().position(0, XLayoutStyle.RELATIVE_TO_RIGHT, 0, YLayoutStyle.RELATIVE_TO_BOTTOM);
 
 
         // Domain
@@ -358,6 +374,78 @@ public class DisplayBudgetFragment extends Fragment
                 Color.TRANSPARENT, null);
 
         transTrendingPlot.addSeries(series1, series1Format);
+
+        ArrayList<Double> budgetLine = new ArrayList<>();
+        for (int i=0; i<daysList.size(); i++){
+            budgetLine.add(0, totalBudgetSet);
+        }
+        /*
+        //http://stackoverflow.com/questions/16951292/androidplot-support-for-graphing-a-dashed-line
+        Paint dashPaint = new Paint();
+        dashPaint.setColor(getResources().getColor(R.color.red_money));
+        dashPaint.setStyle(Paint.Style.STROKE);
+        dashPaint.setStrokeWidth(3);
+        dashPaint.setPathEffect(new DashPathEffect(new float[]{40, 20}, 0));
+        LineAndPointFormatter redDash = new LineAndPointFormatter(dashPaint.getColor(),null, null,null);
+        redDash.setLinePaint(dashPaint);
+        XYSeries series2 = new SimpleXYSeries(daysList, budgetLine, "Series2");
+        transTrendingPlot.addSeries(series2, redDash);
+*/
+
+
+        Calendar calendar = Calendar.getInstance();
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        XValueMarker currentDayMarker = new XValueMarker(
+                day,
+                "",
+                new YPositionMetric(
+                        PixelUtils.dpToPix(5),
+                        YLayoutStyle.ABSOLUTE_FROM_TOP),
+                getActivity().getResources().getColor(R.color.theme),
+                getActivity().getResources().getColor(R.color.textview) );
+        //currentDayMarker.getLinePaint().setPathEffect(dpe2);
+        currentDayMarker.getLinePaint().setStrokeWidth(1);
+        transTrendingPlot.addMarker(currentDayMarker);
+
+
+        YValueMarker budgetSetMarker = new YValueMarker(
+                totalBudgetSet,                                        // y-val to mark
+                "",                                           // marker label
+                new XPositionMetric(                        // object instance to set text positioning on the marker
+                        PixelUtils.dpToPix(15),              // 5dp offset
+                        XLayoutStyle.ABSOLUTE_FROM_RIGHT),  // offset origin
+                getActivity().getResources().getColor(R.color.textview), // line paint color
+                getActivity().getResources().getColor(R.color.textview) ); // text paint color
+
+        budgetSetMarker.getTextPaint().setTextSize(PixelUtils.dpToPix(12));
+        DashPathEffect dpe = new DashPathEffect(
+                new float[]{PixelUtils.dpToPix(14), PixelUtils.dpToPix(7)}, 0);
+        budgetSetMarker.getLinePaint().setPathEffect(dpe);
+        budgetSetMarker.getLinePaint().setStrokeWidth(2);
+        transTrendingPlot.addMarker(budgetSetMarker);
+
+
+        /*
+        YValueMarker budgetSpentMarker = new YValueMarker(
+                totalSpent,                                        // y-val to mark
+                "",                      // marker label
+                new XPositionMetric(                        // object instance to set text positioning on the marker
+                        PixelUtils.dpToPix(5),              // 5dp offset
+                        XLayoutStyle.ABSOLUTE_FROM_RIGHT),  // offset origin
+                getActivity().getResources().getColor(R.color.textview), // line paint color
+                getActivity().getResources().getColor(R.color.textview) ); // text paint color
+
+        budgetSpentMarker.getTextPaint().setTextSize(PixelUtils.dpToPix(12));
+        DashPathEffect dpe2 = new DashPathEffect(
+                new float[]{PixelUtils.dpToPix(14), PixelUtils.dpToPix(7)}, 0);
+        budgetSpentMarker.getLinePaint().setPathEffect(dpe2);
+        budgetSpentMarker.getLinePaint().setStrokeWidth(2);
+        transTrendingPlot.addMarker(budgetSpentMarker);
+        */
+
+
+
+
         transTrendingPlot.getLayoutManager().remove(transTrendingPlot.getLegendWidget());
 
     }

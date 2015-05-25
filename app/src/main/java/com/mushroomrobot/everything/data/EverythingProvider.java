@@ -253,12 +253,17 @@ public class EverythingProvider extends ContentProvider {
         return cursor;
     }
 
-    private Cursor getBudgetsOverview(){
+    public Cursor getBudgetsOverview(){
 
-        SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
-        queryBuilder.setTables()
+        Calendar myCalendar = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM", Locale.US);
+        String monthYear = sdf.format(myCalendar.getTime());
 
-        Cursor cursor =
+
+        SQLiteDatabase db = database.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery("select total(transactions.amount) as total_spent, transactions._id, (select sum(budget) from category) as total_budget from transactions where strftime('%Y-%m', date/1000, 'unixepoch', 'localtime') = '" + monthYear + "'", null);
+
 
         return cursor;
     }
@@ -280,7 +285,7 @@ public class EverythingProvider extends ContentProvider {
                 break;
 
             case CATEGORY_OVERVIEW: retCursor = getBudgetsOverview();
-                braek;
+                break;
 
             case TRANSACTIONS: retCursor = getCategoryTransactions(selection, selectionArgs);
                 break;

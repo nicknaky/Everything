@@ -5,30 +5,41 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-
-
-    <com.androidplot.xy.XYPlot
-        android:id="@+id/trans_trending_plot"
-        android:layout_width="345dp"
-        android:layout_height="190dp"
+    <android.support.v7.widget.CardView
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/card_view"
+        android:layout_centerHorizontal="true"
+        android:layout_width="340dp"
+        android:layout_height="200dp"
         android:layout_marginTop="10dp"
-        android:layout_marginLeft="-5dp"
+        card_view:cardCornerRadius="0dp">
 
-        androidPlot.title="Current Spend"
-        androidPlot.titleWidget.labelPaint.textSize="11sp"
-        androidPlot.titleWidget.labelPaint.Color="#646464"
-        androidPlot.titleWidget.paddingTop="0dp"
+        <com.androidplot.xy.XYPlot
+            android:id="@+id/trans_trending_plot"
+            android:layout_width="335dp"
+            android:layout_height="190dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="-5dp"
 
-        androidPlot.graphWidget.marginTop="20dp"
-        androidPlot.graphWidget.paddingTop="0dp"
-        androidPlot.graphWidget.marginLeft="25dp"
-        androidPlot.graphWidget.marginBottom="15dp"
-        androidPlot.graphWidget.backgroundPaint.Color="#FAFAFA"
-        androidPlot.graphWidget.gridBackgroundPaint.Color="#FAFAFA"
-        androidPlot.margin="0dp"
-        androidPlot.graphWidget.rangeLabelPaint.textSize="10sp"
-        androidPlot.graphWidget.DomainLabelPaint.textSize="10sp"
-        />
+            androidPlot.title="Current Spend"
+            androidPlot.titleWidget.labelPaint.textSize="11sp"
+            androidPlot.titleWidget.labelPaint.Color="#646464"
+            androidPlot.titleWidget.paddingTop="0dp"
+
+            androidPlot.graphWidget.marginTop="20dp"
+            androidPlot.graphWidget.paddingTop="0dp"
+            androidPlot.graphWidget.marginLeft="25dp"
+            androidPlot.graphWidget.marginBottom="15dp"
+            androidPlot.graphWidget.backgroundPaint.Color="#FAFAFA"
+            androidPlot.graphWidget.gridBackgroundPaint.Color="#FAFAFA"
+            androidPlot.margin="0dp"
+            androidPlot.graphWidget.rangeLabelPaint.textSize="10sp"
+            androidPlot.graphWidget.DomainLabelPaint.textSize="10sp"
+            />
+    </android.support.v7.widget.CardView>
+
+
+
 
 
 
