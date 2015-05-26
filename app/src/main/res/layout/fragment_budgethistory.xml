@@ -46,7 +46,7 @@
         android:layout_toRightOf="@id/history_spend_label"
         android:layout_marginLeft="5dp"
         android:textStyle="bold"
-        android:text="$2,000.00"
+        android:text="$0.00"
         android:textSize="19sp"/>
 
     <TextView

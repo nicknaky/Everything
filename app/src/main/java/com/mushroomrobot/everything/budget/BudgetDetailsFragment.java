@@ -246,6 +246,10 @@ public class BudgetDetailsFragment extends Fragment
         plot.setRangeStepValue(5);
         plot.setRangeValueFormat(new DecimalFormat("$#,###"));
 
+        if (maxValue < 10){
+            plot.setRangeValueFormat(new DecimalFormat("$#,###.##"));
+        }
+
         XYSeries series1 = new SimpleXYSeries(daysList, transList, "Series1");
 
         LineAndPointFormatter series1Format = new LineAndPointFormatter(

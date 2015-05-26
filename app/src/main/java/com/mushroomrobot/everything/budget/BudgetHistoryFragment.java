@@ -151,8 +151,10 @@ public class BudgetHistoryFragment extends Fragment implements LoaderManager.Loa
         categoryList = bundle.getStringArrayList("categoryList");
 
         historyPlot = (XYPlot) rootView.findViewById(R.id.xy_history_plot);
+        historyPlot.setVisibility(View.INVISIBLE);
         //This will query Transactions table for monthly Transaction amounts to populate chart
         getLoaderManager().initLoader(1, null, this);
+
 
 
 
@@ -240,17 +242,20 @@ public class BudgetHistoryFragment extends Fragment implements LoaderManager.Loa
 
     private void plotChart(final ArrayList<String> labelsList, ArrayList<Double> monthsList) {
 
+        historyPlot.setVisibility(View.VISIBLE);
+
         historyPlot.setBorderStyle(Plot.BorderStyle.NONE, null, null);
         historyPlot.setPlotMargins(0, 0, 0, 0);
         historyPlot.setPlotPadding(0, 0, 0, 0);
         historyPlot.setGridPadding(0, 0, 0, 0);
 
-        historyPlot.getGraphWidget().getDomainLabelPaint().setColor(Color.BLACK);
-        historyPlot.getGraphWidget().getRangeLabelPaint().setColor(Color.BLACK);
+        int colorText = getActivity().getResources().getColor(R.color.textview);
+        historyPlot.getGraphWidget().getDomainLabelPaint().setColor(colorText);
+        historyPlot.getGraphWidget().getRangeLabelPaint().setColor(colorText);
 
-        historyPlot.getGraphWidget().getDomainOriginLabelPaint().setColor(Color.BLACK);
-        historyPlot.getGraphWidget().getDomainOriginLinePaint().setColor(Color.BLACK);
-        historyPlot.getGraphWidget().getRangeOriginLinePaint().setColor(Color.BLACK);
+        historyPlot.getGraphWidget().getDomainOriginLabelPaint().setColor(colorText);
+        historyPlot.getGraphWidget().getDomainOriginLinePaint().setColor(colorText);
+        historyPlot.getGraphWidget().getRangeOriginLinePaint().setColor(colorText);
 
         // Domain
         Log.v("monthsList Size", String.valueOf(monthsList.size()));
@@ -303,6 +308,10 @@ public class BudgetHistoryFragment extends Fragment implements LoaderManager.Loa
         historyPlot.setRangeStepValue(5);
         historyPlot.setRangeValueFormat(new DecimalFormat("$#,###"));
 
+        if (maxValue < 10){
+            historyPlot.setRangeValueFormat(new DecimalFormat("$#,###.##"));
+        }
+
         XYSeries series1 = new SimpleXYSeries(monthsList, SimpleXYSeries.ArrayFormat.Y_VALS_ONLY, "Series1");
 
         LineAndPointFormatter series1Format = new LineAndPointFormatter(
@@ -353,74 +362,90 @@ public class BudgetHistoryFragment extends Fragment implements LoaderManager.Loa
 
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM", Locale.US);
             SimpleDateFormat sdf2 = new SimpleDateFormat("MMM' '''yy", Locale.US);
-            try {
-                data.moveToFirst();
-                Calendar startCalendar = Calendar.getInstance();
-                String startDate = data.getString(data.getColumnIndex("year_month"));
-                Log.v("startDate", startDate);
-                Date start = sdf.parse(startDate);
-                startCalendar.setTime(start);
+            if (data.moveToFirst()) {
+                try {
 
-                data.moveToLast();
-                Calendar endCalendar = Calendar.getInstance();
-                String endDate = data.getString(data.getColumnIndex("year_month"));
-                Log.v("endDate", endDate);
-                Date end = sdf.parse(endDate);
-                endCalendar.setTime(end);
+                    Calendar startCalendar = Calendar.getInstance();
+                    String startDate = data.getString(data.getColumnIndex("year_month"));
+                    Log.v("startDate", startDate);
+                    Date start = sdf.parse(startDate);
+                    startCalendar.setTime(start);
 
-                int diffYear = endCalendar.get(Calendar.YEAR) - startCalendar.get(Calendar.YEAR);
-                Log.v("diffYear", String.valueOf(diffYear));
-                diffMonth = diffYear * 12 + endCalendar.get(Calendar.MONTH) - startCalendar.get(Calendar.MONTH);
-                Log.v("diffMonth", String.valueOf(diffMonth));
-                ArrayList<Double> monthsList = new ArrayList<>();
+                    data.moveToLast();
+                    Calendar endCalendar = Calendar.getInstance();
+                    String endDate = data.getString(data.getColumnIndex("year_month"));
+                    Log.v("endDate", endDate);
+                    Date end = sdf.parse(endDate);
+                    endCalendar.setTime(end);
 
-                ArrayList<String> labelsList = new ArrayList<>();
+                    int diffYear = endCalendar.get(Calendar.YEAR) - startCalendar.get(Calendar.YEAR);
+                    Log.v("diffYear", String.valueOf(diffYear));
+                    diffMonth = diffYear * 12 + endCalendar.get(Calendar.MONTH) - startCalendar.get(Calendar.MONTH);
+                    Log.v("diffMonth", String.valueOf(diffMonth));
+                    ArrayList<Double> monthsList = new ArrayList<>();
 
-                String labelDate;
-                Calendar labelCalendar = Calendar.getInstance();
-                labelCalendar.setTime(start);
+                    ArrayList<String> labelsList = new ArrayList<>();
 
-                for (int i=0; i<diffMonth +1; i++){
-                    monthsList.add(i,0.0);
+                    String labelDate;
+                    Calendar labelCalendar = Calendar.getInstance();
+                    labelCalendar.setTime(start);
 
-                    labelDate = sdf2.format(labelCalendar.getTime());
-                    labelsList.add(i, labelDate);
-                    labelCalendar.add(Calendar.MONTH,1);
+                    for (int i = 0; i < diffMonth + 1; i++) {
+                        monthsList.add(i, 0.0);
 
+                        labelDate = sdf2.format(labelCalendar.getTime());
+                        labelsList.add(i, labelDate);
+                        labelCalendar.add(Calendar.MONTH, 1);
+
+                    }
+
+                    Log.v("monthlist size", String.valueOf(monthsList.size()));
+                    data.moveToFirst();
+                    monthsList.set(0, data.getDouble(data.getColumnIndex("monthly_total")) / 100);
+
+                    while (data.moveToNext()) {
+                        Calendar nextCalendar = Calendar.getInstance();
+                        String nextDate = data.getString(data.getColumnIndex("year_month"));
+                        Date next = sdf.parse(nextDate);
+                        nextCalendar.setTime(next);
+
+                        Log.v("next date", sdf.format(next));
+
+                        diffYear = nextCalendar.get(Calendar.YEAR) - startCalendar.get(Calendar.YEAR);
+                        Log.v("diffYear index", String.valueOf(diffYear));
+                        diffMonth = diffYear * 12 + nextCalendar.get(Calendar.MONTH) - startCalendar.get(Calendar.MONTH);
+                        Log.v("diffMonth index", String.valueOf(diffMonth));
+                        monthsList.set(diffMonth, data.getDouble(data.getColumnIndex("monthly_total")) / 100);
+                    }
+                    double sum = 0;
+                    for (double d : monthsList) {
+                        sum += d;
+                    }
+
+                    //If we only have one month of data, then we need to append a previous month as a dummy holder to plot the chart
+                    if (monthsList.size() == 1) {
+                        monthsList.add(0, 0.0);
+                        //We subtract two months here, one to backtrack the add() in the for loop, and another to get the previous month
+                        labelCalendar.add(Calendar.MONTH, -2);
+                        labelDate = sdf2.format(labelCalendar.getTime());
+                        labelsList.add(0, labelDate);
+                    }
+
+                    String formattedSum = NumberFormat.getCurrencyInstance().format(sum);
+                    historySpend.setText(formattedSum);
+                    Log.v("monthlist max", String.valueOf(Collections.max(monthsList)));
+                    historyPlot.clear();
+                    plotChart(labelsList, monthsList);
+                    historyPlot.redraw();
+
+                } catch (ParseException e) {
+
+                    Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_SHORT);
+                    System.err.print(e);
                 }
-
-                Log.v("monthlist size", String.valueOf(monthsList.size()));
-                data.moveToFirst();
-                monthsList.set(0, data.getDouble(data.getColumnIndex("monthly_total"))/100);
-
-                while(data.moveToNext()){
-                    Calendar nextCalendar = Calendar.getInstance();
-                    String nextDate = data.getString(data.getColumnIndex("year_month"));
-                    Date next = sdf.parse(nextDate);
-                    nextCalendar.setTime(next);
-
-                    Log.v("next date", sdf.format(next));
-
-                    diffYear = nextCalendar.get(Calendar.YEAR) - startCalendar.get(Calendar.YEAR);
-                    Log.v("diffYear index", String.valueOf(diffYear));
-                    diffMonth = diffYear * 12 + nextCalendar.get(Calendar.MONTH) - startCalendar.get(Calendar.MONTH);
-                    Log.v("diffMonth index", String.valueOf(diffMonth));
-                    monthsList.set(diffMonth, data.getDouble(data.getColumnIndex("monthly_total")) / 100);
-                }
-                double sum = 0;
-                for (double d : monthsList){
-                    sum += d;
-                }
-                String formattedSum = NumberFormat.getCurrencyInstance().format(sum);
-                historySpend.setText(formattedSum);
-                Log.v("monthlist max", String.valueOf(Collections.max(monthsList)));
-                historyPlot.clear();
-                plotChart(labelsList,monthsList);
-                historyPlot.redraw();
-
-            } catch (ParseException e) {
-                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_SHORT);
-                System.err.print(e);
+            }else {
+                historySpend.setText("$0.00");
+                historyPlot.setVisibility(View.INVISIBLE);
             }
         }
     }
