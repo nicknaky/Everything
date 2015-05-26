@@ -1,4 +1,4 @@
-package com.mushroomrobot.everything.budget;
+package com.mushroomrobot.finwiz.budget;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -38,9 +38,9 @@ import com.androidplot.xy.XYPlot;
 import com.androidplot.xy.XYSeries;
 import com.androidplot.xy.XYStepMode;
 import com.androidplot.xy.YValueMarker;
-import com.mushroomrobot.everything.R;
-import com.mushroomrobot.everything.data.EverythingContract.Category;
-import com.mushroomrobot.everything.data.EverythingContract.Transactions;
+import com.mushroomrobot.finwiz.R;
+import com.mushroomrobot.finwiz.data.EverythingContract.Category;
+import com.mushroomrobot.finwiz.data.EverythingContract.Transactions;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -62,6 +62,7 @@ public class DisplayBudgetFragment extends Fragment
 
     private static ArrayList<String> categoryList;
 
+    View headerView;
     ListView listView;
     Button addBudgetButton, addTransactionsButton;
     TextView noBudgetsTextView, budgetSetTextView, spentTextView, remainingTextView;
@@ -114,7 +115,7 @@ public class DisplayBudgetFragment extends Fragment
         getActivity().getActionBar().setTitle("Budgets - " + monthYear);
 
 
-        View headerView = inflater.inflate(R.layout.list_item_budget_graph, null, false);
+        headerView = inflater.inflate(R.layout.list_item_budget_graph, null, false);
         transTrendingPlot = (XYPlot) headerView.findViewById(R.id.list_item_plot_cardview);
         budgetSetTextView = (TextView) headerView.findViewById(R.id.budget_header_value);
         spentTextView = (TextView) headerView.findViewById(R.id.spent_header_value);
@@ -124,6 +125,8 @@ public class DisplayBudgetFragment extends Fragment
 
         listView = (ListView) rootView.findViewById(R.id.budget_listview);
         listView.addHeaderView(headerView);
+
+        headerView.setVisibility(View.INVISIBLE);
 
         noBudgetsTextView = (TextView) rootView.findViewById(R.id.no_budgets_textview);
         addBudgetButton = (Button) rootView.findViewById(R.id.add_budget_button);
@@ -236,6 +239,7 @@ public class DisplayBudgetFragment extends Fragment
         noBudgetsTextView.setVisibility(TextView.INVISIBLE);
         addBudgetButton.setVisibility(Button.INVISIBLE);
         addTransactionsButton.setVisibility(TextView.VISIBLE);
+        headerView.setVisibility(View.VISIBLE);
 
         String getDataCursor = data.getColumnName(1);
         Log.v("getDataCursor", getDataCursor);
@@ -253,6 +257,7 @@ public class DisplayBudgetFragment extends Fragment
                 noBudgetsTextView.setVisibility(TextView.VISIBLE);
                 addBudgetButton.setVisibility(Button.VISIBLE);
                 addTransactionsButton.setVisibility(Button.INVISIBLE);
+                headerView.setVisibility(View.INVISIBLE);
             }
         }
         transTrendingPlot.clear();
@@ -381,6 +386,9 @@ public class DisplayBudgetFragment extends Fragment
         transTrendingPlot.setRangeStepValue(5);
 
         transTrendingPlot.setRangeValueFormat(new DecimalFormat("$#,###"));
+        if (totalBudgetSet < 10){
+            transTrendingPlot.setRangeValueFormat(new DecimalFormat("$#,###.##"));
+        }
 
         XYSeries series1 = new SimpleXYSeries(daysList, trendingList, "Series1");
 

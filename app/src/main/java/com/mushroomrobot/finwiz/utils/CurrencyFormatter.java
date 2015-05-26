@@ -1,4 +1,4 @@
-package com.mushroomrobot.everything.utils;
+package com.mushroomrobot.finwiz.utils;
 
 import android.text.Editable;
 import android.text.TextWatcher;

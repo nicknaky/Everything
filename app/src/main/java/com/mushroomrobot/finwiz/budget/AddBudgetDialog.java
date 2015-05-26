@@ -1,9 +1,10 @@
-package com.mushroomrobot.everything.budget;
+package com.mushroomrobot.finwiz.budget;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.ContentValues;
+import android.database.sqlite.SQLiteConstraintException;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,9 +13,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.mushroomrobot.everything.R;
-import com.mushroomrobot.everything.data.EverythingContract.Category;
-import com.mushroomrobot.everything.utils.CurrencyFormatter;
+import com.mushroomrobot.finwiz.R;
+import com.mushroomrobot.finwiz.data.EverythingContract.Category;
+import com.mushroomrobot.finwiz.utils.CurrencyFormatter;
 
 /**
  * Created by Nick.
@@ -75,13 +76,19 @@ public class AddBudgetDialog extends DialogFragment {
                         if (editMode == 1) {
                             String catSelection = Category.COLUMN_NAME + " = ?";
                             String[] catSelectionArgs = {passedBudgetName};
-
-                            getActivity().getContentResolver().update(Category.CONTENT_URI, catContentValues, catSelection, catSelectionArgs);
-
-                            budgetDialog.dismiss();
+                            try {
+                                getActivity().getContentResolver().update(Category.CONTENT_URI, catContentValues, catSelection, catSelectionArgs);
+                                budgetDialog.dismiss();
+                            } catch (SQLiteConstraintException e){
+                                Toast.makeText(getActivity(), R.string.budget_name_exists, Toast.LENGTH_SHORT).show();
+                            }
                         } else if (editMode == 0) {
-                            getActivity().getContentResolver().insert(Category.CONTENT_URI, catContentValues);
-                            budgetDialog.dismiss();
+                            try {
+                                getActivity().getContentResolver().insert(Category.CONTENT_URI, catContentValues);
+                                budgetDialog.dismiss();
+                            }catch (SQLiteConstraintException e ){
+                                Toast.makeText(getActivity(), R.string.budget_name_exists, Toast.LENGTH_SHORT).show();
+                            }
                         }
                     } catch (NumberFormatException e){
                         Toast.makeText(getActivity(),R.string.error_amount_dialog, Toast.LENGTH_SHORT).show();

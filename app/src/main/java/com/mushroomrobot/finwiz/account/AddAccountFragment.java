@@ -1,4 +1,4 @@
-package com.mushroomrobot.everything.account;
+package com.mushroomrobot.finwiz.account;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -25,9 +25,9 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.mushroomrobot.everything.R;
-import com.mushroomrobot.everything.data.EverythingContract.Accounts;
-import com.mushroomrobot.everything.data.EverythingDbHelper;
+import com.mushroomrobot.finwiz.R;
+import com.mushroomrobot.finwiz.data.EverythingContract.Accounts;
+import com.mushroomrobot.finwiz.data.EverythingDbHelper;
 
 import java.math.BigDecimal;
 import java.text.DateFormatSymbols;

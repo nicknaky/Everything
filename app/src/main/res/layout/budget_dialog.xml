@@ -49,10 +49,6 @@
         android:layout_marginTop="180dp"
         android:layout_alignParentRight="true"
         android:layout_marginRight="50dp"
-        android:background="@null"
-        android:textStyle="bold"
-        android:textColor="#00C8C8"
-        android:fontFamily="sans-serif-light"
         android:text="Save"
         />
 
@@ -64,10 +60,6 @@
         android:layout_toLeftOf="@+id/budget_save_button"
         android:layout_marginRight="25dp"
         android:layout_alignBottom="@+id/budget_save_button"
-        android:background="@null"
-        android:textStyle="bold"
-        android:textColor="#00C8C8"
-        android:fontFamily="sans-serif-light"
         android:text="Cancel"/>
 
 

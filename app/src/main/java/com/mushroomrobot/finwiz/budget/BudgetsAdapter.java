@@ -1,4 +1,4 @@
-package com.mushroomrobot.everything.budget;
+package com.mushroomrobot.finwiz.budget;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -8,8 +8,8 @@ import android.widget.ProgressBar;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
-import com.mushroomrobot.everything.R;
-import com.mushroomrobot.everything.data.EverythingContract;
+import com.mushroomrobot.finwiz.R;
+import com.mushroomrobot.finwiz.data.EverythingContract;
 
 import java.text.NumberFormat;
 

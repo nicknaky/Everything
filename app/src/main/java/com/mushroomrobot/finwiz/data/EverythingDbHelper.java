@@ -1,12 +1,12 @@
-package com.mushroomrobot.everything.data;
+package com.mushroomrobot.finwiz.data;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.mushroomrobot.everything.data.EverythingContract.Accounts;
-import com.mushroomrobot.everything.data.EverythingContract.Category;
-import com.mushroomrobot.everything.data.EverythingContract.Transactions;
+import com.mushroomrobot.finwiz.data.EverythingContract.Accounts;
+import com.mushroomrobot.finwiz.data.EverythingContract.Category;
+import com.mushroomrobot.finwiz.data.EverythingContract.Transactions;
 
 /**
  * Created by Nick on 4/27/2015.

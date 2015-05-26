@@ -1,19 +1,25 @@
 <resources>
-    <string name="app_name">Everything</string>
+    <string name="app_name">FinWiz</string>
 
     <string name="close_dialog">Are you sure you want to exit?</string>
     <string name="close_yes">Yes</string>
     <string name="close_no">No</string>
 
+    <!-- Button Labels -->
+    <string name="button_delete">Delete</string>
+    <string name="button_cancel">Cancel</string>
 
-<!-- Activity Labels -->
+    <!-- Delete Dialog -->
+    <string name="delete_dialog_desc">This will also permanently remove all transactions associated with this budget.</string>
+
+    <!-- Activity Labels -->
     <string name="label_addacount">Add Account</string>
     <string name="label_budgets">Budgets</string>
     <string name="label_addbudgets">Add Budget</string>
     <string name="label_budgetdetails">Budget Details</string>
     <string name="label_budgethistory">Budget History</string>
 
-<!-- Configure Account -->
+    <!-- Configure Account -->
     <string name="asset_desc"><b>Asset</b> (Bank accounts, investment/brokerage accounts, cash, etc.)</string>
     <string name="debt_desc"><b>Debt</b> (Credit card balances, mortgages, car loans, etc.)</string>
 
@@ -25,8 +31,7 @@
     <string name="submit">Submit</string>
 
 
-
-<!-- Display Accounts -->
+    <!-- Display Accounts -->
     <string name="assets_label">Assets</string>
     <string name="assets_value">+$0.00</string>
     <string name="debts_label">Debts</string>
@@ -40,8 +45,7 @@
     <string name="accounts_list_title">Accounts</string>
 
 
-
-<!-- Display Budgets -->
+    <!-- Display Budgets -->
     <string name="add_budget">Add Budget</string>
     <string name="no_budgets_msg">No budgets detected. Please add a budget.</string>
     <string name="budget_spent">$20</string>
@@ -55,6 +59,7 @@
     <string name="cancel_budget_dialog">Cancel</string>
     <string name="error_budget_dialog">Please enter a valid name.</string>
     <string name="error_amount_dialog">Please enter a valid amount.</string>
+    <string name="budget_name_exists">This budget name already exists.</string>
     <string name="error_category_dialog">Please select a category.</string>
     <string name="budget_name_hint">Name</string>
     <string name="budget_amount_hint">Amount</string>

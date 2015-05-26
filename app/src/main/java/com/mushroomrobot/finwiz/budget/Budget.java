@@ -1,4 +1,4 @@
-package com.mushroomrobot.everything.budget;
+package com.mushroomrobot.finwiz.budget;
 
 /**
  * Created by Nick.

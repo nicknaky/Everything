@@ -1,4 +1,4 @@
-package com.mushroomrobot.everything.account;
+package com.mushroomrobot.finwiz.account;
 
 import android.app.Activity;
 import android.app.Fragment;
@@ -9,8 +9,8 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 
-import com.mushroomrobot.everything.R;
-import com.mushroomrobot.everything.data.EverythingProvider;
+import com.mushroomrobot.finwiz.R;
+import com.mushroomrobot.finwiz.data.EverythingProvider;
 
 /**
  * Created by Nick.

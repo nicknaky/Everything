@@ -5,8 +5,8 @@ android {
     buildToolsVersion "22.0.1"
 
     defaultConfig {
-        applicationId "com.mushroomrobot.everything"
-        minSdkVersion 16
+        applicationId "com.mushroomrobot.finwiz"
+        minSdkVersion 21
         targetSdkVersion 22
         versionCode 1
         versionName "1.0"

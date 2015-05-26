@@ -1,4 +1,4 @@
-package com.mushroomrobot.everything.data;
+package com.mushroomrobot.finwiz.data;
 
 import android.content.ContentProvider;
 import android.content.ContentResolver;
@@ -12,10 +12,10 @@ import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.mushroomrobot.everything.budget.Budget;
-import com.mushroomrobot.everything.data.EverythingContract.Accounts;
-import com.mushroomrobot.everything.data.EverythingContract.Category;
-import com.mushroomrobot.everything.data.EverythingContract.Transactions;
+import com.mushroomrobot.finwiz.budget.Budget;
+import com.mushroomrobot.finwiz.data.EverythingContract.Accounts;
+import com.mushroomrobot.finwiz.data.EverythingContract.Category;
+import com.mushroomrobot.finwiz.data.EverythingContract.Transactions;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -52,7 +52,7 @@ public class EverythingProvider extends ContentProvider {
     //Transaction details
     private static final int TRANSACTIONS_ID = 31;
 
-    private static final String AUTHORITY = "com.mushroomrobot.everything.data";
+    private static final String AUTHORITY = "com.mushroomrobot.finwiz.data";
 
 
     private static final int CATEGORY_OVERVIEW = 255;
@@ -362,7 +362,7 @@ public class EverythingProvider extends ContentProvider {
                     throw new SQLException("Failed to insert account into row: " + uri);
                 break;
             case CATEGORY:
-                id = sqlDB.insert(Category.TABLE_NAME,null,values);
+                id = sqlDB.insertOrThrow(Category.TABLE_NAME,null,values);
                 if (id > 0){
                     returnUri = Category.buildCategoryUri(id);
                     getContext().getContentResolver().notifyChange(Transactions.CONTENT_URI_AMOUNT_BY_DAY,null);

@@ -1,4 +1,4 @@
-package com.mushroomrobot.everything.budget;
+package com.mushroomrobot.finwiz.budget;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -19,9 +19,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.mushroomrobot.everything.R;
-import com.mushroomrobot.everything.data.EverythingContract.Transactions;
-import com.mushroomrobot.everything.utils.CurrencyFormatter;
+import com.mushroomrobot.finwiz.R;
+import com.mushroomrobot.finwiz.data.EverythingContract.Transactions;
+import com.mushroomrobot.finwiz.utils.CurrencyFormatter;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

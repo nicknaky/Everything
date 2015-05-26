@@ -1,4 +1,4 @@
-package com.mushroomrobot.everything.budget;
+package com.mushroomrobot.finwiz.budget;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -37,9 +37,9 @@ import com.androidplot.xy.SimpleXYSeries;
 import com.androidplot.xy.XYPlot;
 import com.androidplot.xy.XYSeries;
 import com.androidplot.xy.XYStepMode;
-import com.mushroomrobot.everything.R;
-import com.mushroomrobot.everything.data.EverythingContract.Category;
-import com.mushroomrobot.everything.data.EverythingContract.Transactions;
+import com.mushroomrobot.finwiz.R;
+import com.mushroomrobot.finwiz.data.EverythingContract.Category;
+import com.mushroomrobot.finwiz.data.EverythingContract.Transactions;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -108,18 +108,22 @@ public class BudgetDetailsFragment extends Fragment
                 editBDialog.setArguments(bundle);
                 editBDialog.show(fm, null);
                 break;
-            case (R.id.history_budget):
 
+            case (R.id.history_budget):
                 Intent intent = new Intent(getActivity(),BudgetHistoryActivity.class);
                 intent.putExtra("budgetName", budgetName);
                 intent.putExtra("categoryList",categoryList);
                 startActivity(intent);
-
-
-
                 break;
+
             case (R.id.delete_budget):
+
+                Bundle deleteBundle = new Bundle();
+                deleteBundle.putLong("categoryId", categoryId);
+                deleteBundle.putString("budgetName", budgetName);
+
                 DeleteBudgetDialog deleteBDialog = new DeleteBudgetDialog();
+                deleteBDialog.setArguments(deleteBundle);
                 deleteBDialog.show(fm, null);
                 break;
             default:
@@ -246,7 +250,7 @@ public class BudgetDetailsFragment extends Fragment
         plot.setRangeStepValue(5);
         plot.setRangeValueFormat(new DecimalFormat("$#,###"));
 
-        if (maxValue < 10){
+        if (budgetAmount < 10){
             plot.setRangeValueFormat(new DecimalFormat("$#,###.##"));
         }
 
@@ -501,14 +505,11 @@ public class BudgetDetailsFragment extends Fragment
                 i++;
             }
 
-
             //Append a "day 0" slot to show a cleaner chart format
             daysList.add(0,0);
             transList.add(0,0.0);
 
             plotChart(daysList, transList);
-
-
         }
 
     }
@@ -517,9 +518,6 @@ public class BudgetDetailsFragment extends Fragment
     public void onLoaderReset(Loader<Cursor> loader) {
         transactionsAdapter.swapCursor(null);
     }
-
-
-
 
     View.OnClickListener mClickListener = new View.OnClickListener() {
         @Override
@@ -537,37 +535,6 @@ public class BudgetDetailsFragment extends Fragment
             }
         }
     };
-
-    public static class DeleteBudgetDialog extends DialogFragment {
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-
-            builder.setMessage(R.string.delete_budget_msg);
-            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-
-                    Intent intent = new Intent(getActivity(), DisplayBudgetActivity.class);
-                    intent.putExtra("deleteUri", Category.CONTENT_URI + "/" + categoryId);
-                    intent.putExtra("deleteCategory", "\"" + budgetName + "\"");
-                    startActivity(intent);
-
-                    getActivity().finish();
-                    dialog.dismiss();
-                }
-            });
-            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                }
-            });
-            return builder.create();
-        }
-    }
 
     public static class DeleteTransDialog extends DialogFragment {
 

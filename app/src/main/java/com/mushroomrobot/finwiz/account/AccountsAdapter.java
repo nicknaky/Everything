@@ -1,4 +1,4 @@
-package com.mushroomrobot.everything.account;
+package com.mushroomrobot.finwiz.account;
 
 import android.content.Context;
 import android.database.Cursor;

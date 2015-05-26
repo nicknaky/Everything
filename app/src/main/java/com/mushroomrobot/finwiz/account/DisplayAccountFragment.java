@@ -1,4 +1,4 @@
-package com.mushroomrobot.everything.account;
+package com.mushroomrobot.finwiz.account;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
@@ -25,8 +25,8 @@ import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
-import com.mushroomrobot.everything.R;
-import com.mushroomrobot.everything.data.EverythingContract.Accounts;
+import com.mushroomrobot.finwiz.R;
+import com.mushroomrobot.finwiz.data.EverythingContract.Accounts;
 
 import java.text.NumberFormat;
 

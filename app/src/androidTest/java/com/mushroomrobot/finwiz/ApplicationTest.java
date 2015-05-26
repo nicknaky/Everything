@@ -1,4 +1,4 @@
-package com.mushroomrobot.everything;
+package com.mushroomrobot.finwiz;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

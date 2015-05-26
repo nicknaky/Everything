@@ -1,4 +1,4 @@
-package com.mushroomrobot.everything.budget;
+package com.mushroomrobot.finwiz.budget;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -34,9 +34,9 @@ import com.androidplot.xy.SimpleXYSeries;
 import com.androidplot.xy.XYPlot;
 import com.androidplot.xy.XYSeries;
 import com.androidplot.xy.XYStepMode;
-import com.mushroomrobot.everything.R;
-import com.mushroomrobot.everything.data.EverythingContract;
-import com.mushroomrobot.everything.data.EverythingContract.Transactions;
+import com.mushroomrobot.finwiz.R;
+import com.mushroomrobot.finwiz.data.EverythingContract;
+import com.mushroomrobot.finwiz.data.EverythingContract.Transactions;
 
 import java.text.DecimalFormat;
 import java.text.FieldPosition;

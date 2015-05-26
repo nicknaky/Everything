@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/delete_dialog_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:paddingLeft="24dp"
+        android:paddingTop="24dp"
+        android:paddingRight="24dp"
+        tools:text="Delete Alcohol Budget?" />
+
+    <TextView
+        android:id="@+id/delete_dialog_desc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/delete_dialog_title"
+        android:paddingLeft="24dp"
+        android:paddingTop="20dp"
+        android:paddingRight="24dp"
+        android:paddingBottom="24dp"
+        android:text="@string/delete_dialog_desc" />
+
+    <Button
+        android:id="@+id/delete_yes_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/delete_dialog_desc"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="8dp"
+        android:text="@string/button_delete"
+        />
+
+    <Button
+        android:id="@+id/delete_no_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@id/delete_yes_button"
+        android:layout_alignBaseline="@id/delete_yes_button"
+        android:layout_marginRight="25dp"
+        android:text="@string/button_cancel" />
+
+
+
+
+
+        />
+
+</RelativeLayout>

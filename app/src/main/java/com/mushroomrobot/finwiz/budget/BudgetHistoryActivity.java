@@ -1,10 +1,10 @@
-package com.mushroomrobot.everything.budget;
+package com.mushroomrobot.finwiz.budget;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.mushroomrobot.everything.R;
+import com.mushroomrobot.finwiz.R;
 
 /**
  * Created by Nick.

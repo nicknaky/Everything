@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.mushroomrobot.everything">
+    package="com.mushroomrobot.finwiz">
 
     <application
 
@@ -10,42 +10,42 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:name=".account.DisplayAccountActivity"
+            android:name="com.mushroomrobot.finwiz.account.DisplayAccountActivity"
             android:screenOrientation="portrait"
             android:label="@string/app_name"/>
 
 
         <activity
-            android:name=".account.AddAccountActivity"
+            android:name="com.mushroomrobot.finwiz.account.AddAccountActivity"
             android:screenOrientation="portrait"
             android:label="@string/label_addacount"
-            android:parentActivityName=".account.DisplayAccountActivity"/>
+            android:parentActivityName="com.mushroomrobot.finwiz.account.DisplayAccountActivity"/>
 
 
         <activity
-            android:name=".budget.DisplayBudgetActivity"
+            android:name="com.mushroomrobot.finwiz.budget.DisplayBudgetActivity"
             android:screenOrientation="portrait"
-            android:label="@string/label_budgets">
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <activity android:name=".budget.BudgetDetailsActivity"
+        <activity android:name="com.mushroomrobot.finwiz.budget.BudgetDetailsActivity"
             android:screenOrientation="portrait"
             android:label="@string/label_budgetdetails"
-            android:parentActivityName=".budget.DisplayBudgetActivity"/>
+            android:parentActivityName="com.mushroomrobot.finwiz.budget.DisplayBudgetActivity"/>
 
-        <activity android:name=".budget.BudgetHistoryActivity"
+        <activity android:name="com.mushroomrobot.finwiz.budget.BudgetHistoryActivity"
             android:screenOrientation="portrait"
             android:label="@string/label_budgethistory"
-            android:parentActivityName=".budget.BudgetDetailsActivity"/>
+            android:parentActivityName="com.mushroomrobot.finwiz.budget.BudgetDetailsActivity"/>
 
 
         <provider
-            android:name=".data.EverythingProvider"
-            android:authorities="com.mushroomrobot.everything.data"/>
+            android:name="com.mushroomrobot.finwiz.data.EverythingProvider"
+            android:authorities="com.mushroomrobot.finwiz.data"/>
 
 
     </application>

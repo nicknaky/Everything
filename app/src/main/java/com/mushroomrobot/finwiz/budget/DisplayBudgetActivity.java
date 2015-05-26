@@ -1,4 +1,4 @@
-package com.mushroomrobot.everything.budget;
+package com.mushroomrobot.finwiz.budget;
 
 import android.app.Activity;
 import android.app.ActivityManager;
@@ -10,7 +10,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.mushroomrobot.everything.R;
+import com.mushroomrobot.finwiz.R;
 
 /**
  * Created by Nick.

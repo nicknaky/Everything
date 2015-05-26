@@ -1,4 +1,4 @@
-package com.mushroomrobot.everything.data;
+package com.mushroomrobot.finwiz.data;
 
 import android.content.ContentUris;
 import android.net.Uri;
@@ -9,7 +9,7 @@ import android.provider.BaseColumns;
  */
 public class EverythingContract {
 
-    public static final String CONTENT_AUTHORITY = "com.mushroomrobot.everything.data";
+    public static final String CONTENT_AUTHORITY = "com.mushroomrobot.finwiz.data";
     public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
 
     public static final String PATH_ACCOUNTS = "accounts";
