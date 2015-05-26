@@ -1,7 +1,10 @@
 package com.mushroomrobot.everything.budget;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
@@ -18,6 +21,11 @@ public class DisplayBudgetActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_budget);
+
+        Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher);
+        ActivityManager.TaskDescription td = new ActivityManager.TaskDescription(null, bm, getResources().getColor(R.color.white));
+        setTaskDescription(td);
+        bm.recycle();
 
         Intent intent = getIntent();
         //deleteUri is Category.CONTENT_URI/CATEGORY_ID

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -9,25 +10,26 @@
         android:id="@+id/list_item_cardview"
         android:layout_centerHorizontal="true"
         android:layout_width="340dp"
-        android:layout_height="200dp"
-        android:layout_marginTop="10dp"
-        card_view:cardCornerRadius="0dp">
+        android:layout_height="260dp"
+        android:layout_marginTop="7dp"
+        card_view:cardCornerRadius="0dp"
+        card_view:cardUseCompatPadding="true"
+        card_view:cardElevation="4sp">
+
 
         <com.androidplot.xy.XYPlot
             android:id="@+id/list_item_plot_cardview"
             android:layout_width="335dp"
             android:layout_height="190dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="60dp"
             android:layout_marginLeft="-5dp"
-
-            androidPlot.title="Current Spend"
             androidPlot.titleWidget.labelPaint.textSize="11sp"
             androidPlot.titleWidget.labelPaint.Color="#646464"
             androidPlot.titleWidget.paddingTop="0dp"
-
             androidPlot.graphWidget.marginTop="20dp"
             androidPlot.graphWidget.paddingTop="0dp"
             androidPlot.graphWidget.marginLeft="25dp"
+            androidPlot.graphWidget.marginRight="10dp"
             androidPlot.graphWidget.marginBottom="15dp"
             androidPlot.graphWidget.backgroundPaint.Color="#FAFAFA"
             androidPlot.graphWidget.gridBackgroundPaint.Color="#FAFAFA"
@@ -35,6 +37,79 @@
             androidPlot.graphWidget.rangeLabelPaint.textSize="10sp"
             androidPlot.graphWidget.DomainLabelPaint.textSize="10sp"
             />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="Current Spend"
+            android:textSize="20sp"
+            android:background="@color/theme"
+            android:textColor="@color/white"/>
+
+        <TextView
+            android:id="@+id/budget_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="35dp"
+            android:layout_marginLeft="16dp"
+            android:text="TOTAL BUDGET"
+            android:textSize="12sp"/>
+
+        <TextView
+            android:id="@+id/budget_header_value"
+            android:layout_width="90dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:layout_marginLeft="16dp"
+            android:gravity="center"
+            android:textStyle="bold"
+            tools:text="$12,000"/>
+
+
+        <TextView
+            android:id="@+id/spent_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="35dp"
+            android:layout_gravity="center_horizontal"
+            android:text="SPENT"
+            android:textSize="12sp"/>
+
+        <TextView
+            android:id="@+id/spent_header_value"
+            android:layout_width="90dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            android:textStyle="bold"
+            tools:text="$12,000"
+            />
+
+
+        <TextView
+            android:id="@+id/remaining_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="35dp"
+            android:layout_gravity="right"
+            android:layout_marginRight="16dp"
+            android:text="REMAINING"
+            android:textSize="12sp"/>
+
+        <TextView
+            android:id="@+id/remaining_header_value"
+            android:layout_width="90dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:layout_gravity="right"
+            android:layout_marginRight="10dp"
+            android:gravity="center"
+            android:textStyle="bold"
+            tools:text="$12,000"
+            />
+
     </android.support.v7.widget.CardView>
 
 </RelativeLayout>

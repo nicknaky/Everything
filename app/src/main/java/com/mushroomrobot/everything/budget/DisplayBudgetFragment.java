@@ -43,6 +43,7 @@ import com.mushroomrobot.everything.data.EverythingContract.Category;
 import com.mushroomrobot.everything.data.EverythingContract.Transactions;
 
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -63,7 +64,7 @@ public class DisplayBudgetFragment extends Fragment
 
     ListView listView;
     Button addBudgetButton, addTransactionsButton;
-    TextView noBudgetsTextView;
+    TextView noBudgetsTextView, budgetSetTextView, spentTextView, remainingTextView;
     ProgressBar budgetProgress;
 
     private XYPlot transTrendingPlot;
@@ -71,6 +72,7 @@ public class DisplayBudgetFragment extends Fragment
 
     double totalBudgetSet = 0;
     double totalSpent = 0;
+    double totalRemaining = totalBudgetSet - totalSpent;
 
 
     BudgetsAdapter budgetsListAdapter;
@@ -111,11 +113,17 @@ public class DisplayBudgetFragment extends Fragment
         String monthYear = sdf.format(myCalendar.getTime());
         getActivity().getActionBar().setTitle("Budgets - " + monthYear);
 
-        transTrendingPlot = (XYPlot) rootView.findViewById(R.id.trans_trending_plot);
+
+        View headerView = inflater.inflate(R.layout.list_item_budget_graph, null, false);
+        transTrendingPlot = (XYPlot) headerView.findViewById(R.id.list_item_plot_cardview);
+        budgetSetTextView = (TextView) headerView.findViewById(R.id.budget_header_value);
+        spentTextView = (TextView) headerView.findViewById(R.id.spent_header_value);
+        remainingTextView = (TextView) headerView.findViewById(R.id.remaining_header_value);
 
         setUpChart();
 
         listView = (ListView) rootView.findViewById(R.id.budget_listview);
+        listView.addHeaderView(headerView);
 
         noBudgetsTextView = (TextView) rootView.findViewById(R.id.no_budgets_textview);
         addBudgetButton = (Button) rootView.findViewById(R.id.add_budget_button);
@@ -133,32 +141,31 @@ public class DisplayBudgetFragment extends Fragment
         addTransactionsButton.setOnClickListener(mClickListener);
 
 
-        View headerView = inflater.inflate(R.layout.list_item_budget_graph, null);
 
-        listView.addHeaderView(headerView);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                Uri uri = Uri.parse(Category.CONTENT_URI + "/" + id);
-                long categoryId = id;
+                if (position > 0) {
+                    Uri uri = Uri.parse(Category.CONTENT_URI + "/" + id);
+                    long categoryId = id;
 
-                Cursor cursor = getActivity().getContentResolver().query(Category.CONTENT_URI, new String[]{Category.COLUMN_NAME}, "category._id = " + String.valueOf(categoryId), null, null);
-                cursor.moveToFirst();
-                String categoryName = cursor.getString(cursor.getColumnIndex(Category.COLUMN_NAME));
+                    Cursor cursor = getActivity().getContentResolver().query(Category.CONTENT_URI, new String[]{Category.COLUMN_NAME}, "category._id = " + String.valueOf(categoryId), null, null);
+                    cursor.moveToFirst();
+                    String categoryName = cursor.getString(cursor.getColumnIndex(Category.COLUMN_NAME));
 
-                Intent intent = new Intent(getActivity(), BudgetDetailsActivity.class);
+                    Intent intent = new Intent(getActivity(), BudgetDetailsActivity.class);
 
-                //Remember, while putExtra allows passing in Uri's, we aren't able to retrieve them with getExtra.
-                //Thus we'll need to pass in the Uri as a string, and then retrieve and parse it into a Uri later.
-                intent.putExtra("uri", uri.toString());
-                intent.putExtra("categoryId", categoryId);
-                intent.putExtra("categoryName", categoryName);
-                intent.putExtra("categoryList", categoryList);
+                    //Remember, while putExtra allows passing in Uri's, we aren't able to retrieve them with getExtra.
+                    //Thus we'll need to pass in the Uri as a string, and then retrieve and parse it into a Uri later.
+                    intent.putExtra("uri", uri.toString());
+                    intent.putExtra("categoryId", categoryId);
+                    intent.putExtra("categoryName", categoryName);
+                    intent.putExtra("categoryList", categoryList);
 
-                startActivity(intent);
-
+                    startActivity(intent);
+                }
             }
         });
 
@@ -279,6 +286,13 @@ public class DisplayBudgetFragment extends Fragment
             totalBudgetSet = cursorCat.getDouble(cursorCat.getColumnIndex("total_budget")) / 100;
             totalSpent = cursorCat.getDouble(cursorCat.getColumnIndex("total_spent")) / 100;
 
+            totalRemaining = totalBudgetSet - totalSpent;
+
+            budgetSetTextView.setText(NumberFormat.getCurrencyInstance().format(totalBudgetSet));
+            spentTextView.setText(NumberFormat.getCurrencyInstance().format(totalSpent));
+            remainingTextView.setText(NumberFormat.getCurrencyInstance().format(totalRemaining));
+
+
             Log.v("budget set", String.valueOf(totalBudgetSet));
             Log.v("total spent", String.valueOf(totalSpent));
         }
@@ -336,12 +350,14 @@ public class DisplayBudgetFragment extends Fragment
         transTrendingPlot.setPlotPadding(0, 0, 0, 0);
         transTrendingPlot.setGridPadding(0, 0, 0, 0);
 
-        transTrendingPlot.getGraphWidget().getDomainLabelPaint().setColor(Color.BLACK);
-        transTrendingPlot.getGraphWidget().getRangeLabelPaint().setColor(Color.BLACK);
 
-        transTrendingPlot.getGraphWidget().getDomainOriginLabelPaint().setColor(Color.BLACK);
-        transTrendingPlot.getGraphWidget().getDomainOriginLinePaint().setColor(Color.BLACK);
-        transTrendingPlot.getGraphWidget().getRangeOriginLinePaint().setColor(Color.BLACK);
+        int colorText = getActivity().getResources().getColor(R.color.textview);
+        transTrendingPlot.getGraphWidget().getDomainLabelPaint().setColor(colorText);
+        transTrendingPlot.getGraphWidget().getRangeLabelPaint().setColor(colorText);
+
+        transTrendingPlot.getGraphWidget().getDomainOriginLabelPaint().setColor(colorText);
+        transTrendingPlot.getGraphWidget().getDomainOriginLinePaint().setColor(colorText);
+        transTrendingPlot.getGraphWidget().getRangeOriginLinePaint().setColor(colorText);
 
         //SizeMetrics sm = new SizeMetrics(0, SizeLayoutType.FILL, 0, SizeLayoutType.FILL);
         //transTrendingPlot.getGraphWidget().setSize(sm);
