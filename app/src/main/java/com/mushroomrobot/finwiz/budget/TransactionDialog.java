@@ -34,7 +34,7 @@ import java.util.Locale;
  * Created by Nick.
  */
 
-public class AddTransactionDialog extends DialogFragment {
+public class TransactionDialog extends DialogFragment {
 
     ArrayList categoryList;
     String budgetName;
@@ -65,6 +65,7 @@ public class AddTransactionDialog extends DialogFragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.transaction_dialog, null);
 
+        TextView titleView = (TextView) dialogView.findViewById(R.id.trans_dialog_title);
         final EditText transCatBox = (EditText) dialogView.findViewById(R.id.transaction_category_edit);
         final EditText transAmountBox = (EditText) dialogView.findViewById(R.id.transaction_amount_edit);
         final EditText transDateBox = (EditText) dialogView.findViewById(R.id.transaction_date_edit);
@@ -109,9 +110,10 @@ public class AddTransactionDialog extends DialogFragment {
         transDateBox.setText(currentDate);
 
         //Determine if transaction is in edit mode.
-        transactionId = getArguments().getLong("transId", -99);
+        transactionId = getArguments().getLong("transactionId", -99);
         if (transactionId!=-99){
             editMode = 1;
+            titleView.setText(getActivity().getResources().getString(R.string.edit_transaction_title));
             Uri mUri = Uri.parse(Transactions.CONTENT_URI + "/" + transactionId);
             Cursor cursor = getActivity().getContentResolver().query(mUri,null, Transactions._ID + " = " + transactionId,null,null);
             cursor.moveToFirst();

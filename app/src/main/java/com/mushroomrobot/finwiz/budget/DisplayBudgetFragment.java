@@ -188,7 +188,7 @@ public class DisplayBudgetFragment extends Fragment
                 bundle.putStringArrayList("categoryList", categoryList);
 
                 FragmentManager fm = getFragmentManager();
-                AddTransactionDialog dialog = new AddTransactionDialog();
+                TransactionDialog dialog = new TransactionDialog();
                 dialog.setArguments(bundle);
                 dialog.show(fm, null);
             }

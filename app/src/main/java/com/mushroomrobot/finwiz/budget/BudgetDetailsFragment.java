@@ -156,7 +156,7 @@ public class BudgetDetailsFragment extends Fragment
             case (EDIT_ID):
                 b.putStringArrayList("categoryList", categoryList);
                 b.putString("budgetName", budgetName);
-                AddTransactionDialog transdialog = new AddTransactionDialog();
+                TransactionDialog transdialog = new TransactionDialog();
                 transdialog.setArguments(b);
                 transdialog.show(fm,null);
                 break;
@@ -523,7 +523,7 @@ public class BudgetDetailsFragment extends Fragment
                 bundle.putString("budgetName", budgetName);
 
                 FragmentManager fm = getFragmentManager();
-                AddTransactionDialog dialog = new AddTransactionDialog();
+                TransactionDialog dialog = new TransactionDialog();
                 dialog.setArguments(bundle);
                 dialog.show(fm, null);
             }

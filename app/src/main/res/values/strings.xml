@@ -12,6 +12,10 @@
     <!-- Delete Dialog -->
     <string name="delete_budget_dialog_desc">This will also permanently remove all transactions associated with this budget.</string>
 
+    <!-- Transaction Dialog -->
+    <string name="new_transaction_title">New Transaction</string>
+    <string name="edit_transaction_title">Edit Transaction</string>
+
 
     <!-- Activity Labels -->
     <string name="label_addacount">Add Account</string>
