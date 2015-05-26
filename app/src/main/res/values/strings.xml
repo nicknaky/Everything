@@ -10,7 +10,8 @@
     <string name="button_cancel">Cancel</string>
 
     <!-- Delete Dialog -->
-    <string name="delete_dialog_desc">This will also permanently remove all transactions associated with this budget.</string>
+    <string name="delete_budget_dialog_desc">This will also permanently remove all transactions associated with this budget.</string>
+
 
     <!-- Activity Labels -->
     <string name="label_addacount">Add Account</string>

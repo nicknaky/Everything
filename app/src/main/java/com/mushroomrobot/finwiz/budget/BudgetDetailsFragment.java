@@ -1,13 +1,9 @@
 package com.mushroomrobot.finwiz.budget;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.LoaderManager;
 import android.content.CursorLoader;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
@@ -119,10 +115,11 @@ public class BudgetDetailsFragment extends Fragment
             case (R.id.delete_budget):
 
                 Bundle deleteBundle = new Bundle();
+                deleteBundle.putInt("deleteType",1);
                 deleteBundle.putLong("categoryId", categoryId);
                 deleteBundle.putString("budgetName", budgetName);
 
-                DeleteBudgetDialog deleteBDialog = new DeleteBudgetDialog();
+                DeleteDialog deleteBDialog = new DeleteDialog();
                 deleteBDialog.setArguments(deleteBundle);
                 deleteBDialog.show(fm, null);
                 break;
@@ -145,13 +142,14 @@ public class BudgetDetailsFragment extends Fragment
 
         Bundle b = new Bundle();
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-        b.putLong("transId",info.id);
+        b.putLong("transactionId",info.id);
 
         FragmentManager fm = getFragmentManager();
 
         switch (item.getItemId()){
             case (DELETE_ID):
-                DeleteTransDialog dialog = new DeleteTransDialog();
+                DeleteDialog dialog = new DeleteDialog();
+                b.putInt("deleteType",2);
                 dialog.setArguments(b);
                 dialog.show(fm,null);
                 break;
@@ -397,7 +395,6 @@ public class BudgetDetailsFragment extends Fragment
             i++;
         }
 
-
         //Append a "day 0" slot to show a cleaner chart format
         daysList.add(0,0);
         transList.add(0,0.0);
@@ -478,8 +475,6 @@ public class BudgetDetailsFragment extends Fragment
             Log.v("first index should be 0", String.valueOf(transList.get(0)));
             Log.v("last index should be 0", String.valueOf(transList.get(transList.size() - 1)));
 
-
-
             while (data.moveToNext()){
 
                 //Retrieve date in milliseconds and convert to day of month
@@ -511,7 +506,6 @@ public class BudgetDetailsFragment extends Fragment
 
             plotChart(daysList, transList);
         }
-
     }
 
     @Override
@@ -535,38 +529,4 @@ public class BudgetDetailsFragment extends Fragment
             }
         }
     };
-
-    public static class DeleteTransDialog extends DialogFragment {
-
-        long transactionId;
-
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            super.onCreateDialog(savedInstanceState);
-
-            transactionId = getArguments().getLong("transId");
-            Log.v("transId",String.valueOf(transactionId));
-
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-
-            builder.setMessage(R.string.delete_trans_msg);
-            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-
-                    Uri mUri = Uri.parse(Transactions.CONTENT_URI + "/" + transactionId);
-                    getActivity().getContentResolver().delete(mUri,null,null);
-                    Log.v("Uri",String.valueOf(mUri));
-                    dialog.dismiss();
-                }
-            });
-            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                }
-            });
-            return builder.create();
-        }
-    }
 }

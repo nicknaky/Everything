@@ -25,7 +25,8 @@
         android:paddingTop="20dp"
         android:paddingRight="24dp"
         android:paddingBottom="24dp"
-        android:text="@string/delete_dialog_desc" />
+        android:textSize="16dp"
+        tools:text="@string/delete_budget_dialog_desc" />
 
     <Button
         android:id="@+id/delete_yes_button"
