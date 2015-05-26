@@ -344,10 +344,7 @@ public class DisplayBudgetFragment extends Fragment
         }
 
         plotChart(numDays, transTrending);
-
-
     }
-
 
     private void plotChart(ArrayList<Integer> daysList, ArrayList<Double> trendingList) {
         transTrendingPlot.setBorderStyle(Plot.BorderStyle.NONE, null, null);
@@ -379,6 +376,13 @@ public class DisplayBudgetFragment extends Fragment
             maxY = totalSpent;
         }
         int roundUp = (((int)maxY + 499) / 500) * 500;
+
+        if (maxY < 100){
+            roundUp = (((int)maxY + 99) / 100) * 100;
+        }
+        if (roundUp == 0){
+            roundUp = 1;
+        }
 
         // Range
         transTrendingPlot.setRangeBoundaries(0, roundUp, BoundaryMode.FIXED);
