@@ -1,6 +1,5 @@
 package com.mushroomrobot.finwiz.account;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -12,13 +11,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.mushroomrobot.finwiz.R;
+import com.mushroomrobot.finwiz.navigation.NavDrawerActivity;
 
 
-public class DisplayAccountActivity extends Activity {
+public class DisplayAccountActivity extends NavDrawerActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        currentOption = ACCOUNTS_OPTION;
         setContentView(R.layout.activity_account);
         getFragmentManager().beginTransaction().add(R.id.container_account,new DisplayAccountFragment(), "Account").commit();
     }

@@ -5,6 +5,10 @@
     <string name="close_yes">Yes</string>
     <string name="close_no">No</string>
 
+    <!-- Drawer Lables -->
+    <string name="drawer_open">Open</string>
+    <string name="drawer_close">Close</string>
+
     <!-- Button Labels -->
     <string name="button_delete">Delete</string>
     <string name="button_cancel">Cancel</string>
@@ -18,6 +22,7 @@
 
 
     <!-- Activity Labels -->
+    <string name="label_accounts">Accounts</string>
     <string name="label_addacount">Add Account</string>
     <string name="label_budgets">Budgets</string>
     <string name="label_addbudgets">Add Budget</string>

@@ -1,6 +1,5 @@
 package com.mushroomrobot.finwiz.budget;
 
-import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -11,15 +10,18 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.mushroomrobot.finwiz.R;
+import com.mushroomrobot.finwiz.navigation.NavDrawerActivity;
 
 /**
  * Created by Nick.
  */
-public class DisplayBudgetActivity extends Activity {
+public class DisplayBudgetActivity extends NavDrawerActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        currentOption = BUDGETS_OPTION;
         setContentView(R.layout.activity_budget);
 
         Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher);

@@ -12,7 +12,7 @@
         <activity
             android:name="com.mushroomrobot.finwiz.account.DisplayAccountActivity"
             android:screenOrientation="portrait"
-            android:label="@string/app_name"/>
+            android:label="@string/label_accounts"/>
 
 
         <activity
