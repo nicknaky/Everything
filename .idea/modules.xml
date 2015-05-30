@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/Everything.iml" filepath="$PROJECT_DIR$/Everything.iml" />
       <module fileurl="file://$PROJECT_DIR$/androidplot-core-0.6.1/androidplot-core-0.6.1.iml" filepath="$PROJECT_DIR$/androidplot-core-0.6.1/androidplot-core-0.6.1.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mpandroidchartlibrary-2-1-0/mpandroidchartlibrary-2-1-0.iml" filepath="$PROJECT_DIR$/mpandroidchartlibrary-2-1-0/mpandroidchartlibrary-2-1-0.iml" />
     </modules>
   </component>
 </project>

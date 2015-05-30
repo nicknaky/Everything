@@ -12,7 +12,8 @@
         <activity
             android:name="com.mushroomrobot.finwiz.account.DisplayAccountActivity"
             android:screenOrientation="portrait"
-            android:label="@string/label_accounts"/>
+            android:label="@string/label_accounts"
+            android:parentActivityName=".budget.DisplayBudgetActivity"/>
 
 
         <activity
@@ -41,6 +42,12 @@
             android:screenOrientation="portrait"
             android:label="@string/label_budgethistory"
             android:parentActivityName="com.mushroomrobot.finwiz.budget.BudgetDetailsActivity"/>
+
+        <activity android:name="com.mushroomrobot.finwiz.reports.ReportsActivity"
+            android:screenOrientation="portrait"
+            android:label="Report"
+            android:parentActivityName=".budget.DisplayBudgetActivity"
+            />
 
 
         <provider

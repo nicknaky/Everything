@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.MenuItem;
@@ -16,6 +17,7 @@ import android.widget.ListView;
 import com.mushroomrobot.finwiz.R;
 import com.mushroomrobot.finwiz.account.DisplayAccountActivity;
 import com.mushroomrobot.finwiz.budget.DisplayBudgetActivity;
+import com.mushroomrobot.finwiz.reports.ReportsActivity;
 
 import java.util.ArrayList;
 
@@ -24,6 +26,7 @@ import java.util.ArrayList;
  */
 public class NavDrawerActivity extends Activity {
 
+    DrawerLayout mDrawerLayout;
     protected ActionBarDrawerToggle mDrawerToggle;
     private String[] navOptions = new String[]{"Budgets", "Reports", "Accounts", "Settings"};
 
@@ -64,6 +67,21 @@ public class NavDrawerActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onBackPressed() {
+        if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+            mDrawerLayout.closeDrawers();
+        } else if (currentOption == 0) {
+            Intent intent = new Intent(Intent.ACTION_MAIN);
+            intent.addCategory(Intent.CATEGORY_HOME);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        } else {
+            Intent intent = new Intent(NavDrawerActivity.this, DisplayBudgetActivity.class);
+            startActivity(intent);
+            finish();
+        }
+    }
 
     @Override
     public void setContentView(int layoutResID) {
@@ -71,7 +89,7 @@ public class NavDrawerActivity extends Activity {
 
         LinearLayout activityContent = (LinearLayout) fullLayout.findViewById(R.id.container_content);
 
-        final DrawerLayout mDrawerLayout = (DrawerLayout) fullLayout.findViewById(R.id.drawer_layout);
+        mDrawerLayout = (DrawerLayout) fullLayout.findViewById(R.id.drawer_layout);
         final ListView mDrawerList = (ListView) fullLayout.findViewById(R.id.nav_drawer);
 
         items.add(new EntryItem("Budgets"));
@@ -106,15 +124,24 @@ public class NavDrawerActivity extends Activity {
                                     public void run() {
                                         // Do something after 5s = 5000ms
                                         startActivity(intent);
+
                                     }
                                 }, 250);
-
                                 break;
+                            case REPORTS_OPTION:
+                                intent = new Intent(NavDrawerActivity.this, ReportsActivity.class);
+                                mDrawerList.setItemChecked(position, true);
+                                mDrawerLayout.closeDrawer(mDrawerList);
+                                startActivity(intent);
+                                break;
+
                             case ACCOUNTS_OPTION:
                                 intent = new Intent(NavDrawerActivity.this, DisplayAccountActivity.class);
                                 mDrawerList.setItemChecked(position, true);
                                 mDrawerLayout.closeDrawer(mDrawerList);
                                 startActivity(intent);
+                                break;
+                            default:
                                 break;
                         }
                     }

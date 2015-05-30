@@ -130,7 +130,7 @@ public class EverythingProvider extends ContentProvider {
         return cursor;
     }
 
-    private Cursor getBudgets(String selection){
+    private Cursor getBudgets(String selection, String sort){
 
         SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
 
@@ -138,7 +138,10 @@ public class EverythingProvider extends ContentProvider {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM", Locale.US);
         String monthYear = sdf.format(myCalendar.getTime());
 
-
+        String sortOrder = null;
+        if (sort != null){
+            sortOrder = sort;
+        }
 
         //This is set to query for only the current month, note that we are not using a WHERE clause as that will filter out the entire category
         //when there are no transactions (ie. when a category is first set up)
@@ -156,7 +159,7 @@ public class EverythingProvider extends ContentProvider {
         String[] projection = {categoryID,Category.COLUMN_NAME,Category.COLUMN_BUDGET,sum_amount, sum_remaining,sum_percent};
         String groupBy = "category.name";
 
-        Cursor cursor = queryBuilder.query(db, projection, selection, null, groupBy, null, null);
+        Cursor cursor = queryBuilder.query(db, projection, selection, null, groupBy, null, sortOrder);
 
         String getBudgetCursor = cursor.getColumnName(1);
         Log.v("getBudgetCursor", getBudgetCursor);
@@ -268,6 +271,7 @@ public class EverythingProvider extends ContentProvider {
         return cursor;
     }
 
+
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
 
@@ -279,9 +283,9 @@ public class EverythingProvider extends ContentProvider {
                 break;
             case ACCOUNTS_ID: retCursor = getAccounts(uri,projection,selection,selectionArgs,sortOrder);
                 break;
-            case CATEGORY: retCursor = getBudgets(selection);
+            case CATEGORY: retCursor = getBudgets(selection, sortOrder);
                 break;
-            case CATEGORY_ID: retCursor = getBudgets(selection);
+            case CATEGORY_ID: retCursor = getBudgets(selection, sortOrder);
                 break;
 
             case CATEGORY_OVERVIEW: retCursor = getBudgetsOverview();

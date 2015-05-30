@@ -107,7 +107,7 @@ public class DisplayBudgetFragment extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(R.layout.fragment_budget_v3draft, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_budget, container, false);
 
         Calendar myCalendar = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("MMMM yyyy", Locale.US);
