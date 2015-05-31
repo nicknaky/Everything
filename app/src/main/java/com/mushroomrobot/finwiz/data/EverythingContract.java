@@ -42,6 +42,7 @@ public class EverythingContract {
         public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_CATEGORY).build();
 
         public static final Uri CONTENT_URI_OVERVIEW = CONTENT_URI.buildUpon().appendPath("OVERVIEW").build();
+        public static final Uri CONTENT_URI_FREQUENCY = CONTENT_URI.buildUpon().appendPath("FREQUENCY").build();
 
         public static final String TABLE_NAME = "category";
         public static final String COLUMN_NAME = "name";

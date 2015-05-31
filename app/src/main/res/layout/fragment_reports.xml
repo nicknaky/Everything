@@ -1,65 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <android.support.v7.widget.CardView
-        xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/pie_chart_cardview"
-        android:layout_centerHorizontal="true"
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:layout_marginTop="7dp"
-        card_view:cardCornerRadius="0dp"
-        card_view:cardUseCompatPadding="true"
-        card_view:cardElevation="4sp">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <com.github.mikephil.charting.charts.PieChart
-            android:id="@+id/reports_pichart"
+        <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/pie_chart_cardview"
             android:layout_width="match_parent"
-            android:layout_height="280dp"
-            android:layout_marginTop="26dp"
-            />
+            android:layout_height="300dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="7dp"
+            card_view:cardCornerRadius="0dp"
+            card_view:cardElevation="4sp"
+            card_view:cardUseCompatPadding="true">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:text="Top Spend by Category"
-            android:textSize="20sp"
-            android:background="@color/theme"
-            android:textColor="@color/white"/>
+            <com.github.mikephil.charting.charts.PieChart
+                android:id="@+id/reports_pichart"
+                android:layout_width="match_parent"
+                android:layout_height="280dp"
+                android:layout_marginTop="26dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/theme"
+                android:gravity="center_horizontal"
+                android:text="Top Spend by Category"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
         </android.support.v7.widget.CardView>
 
-    <android.support.v7.widget.CardView
-        xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/bar_graph_cardview"
-        android:layout_centerHorizontal="true"
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:layout_below="@id/pie_chart_cardview"
-        android:layout_marginTop="7dp"
-        card_view:cardCornerRadius="0dp"
-        card_view:cardUseCompatPadding="true"
-        card_view:cardElevation="4sp">
-
-        <com.github.mikephil.charting.charts.HorizontalBarChart
-            android:id="@+id/reports_barchart"
+        <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/bar_graph_cardview"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            />
+            android:layout_height="225dp"
+            android:layout_below="@id/pie_chart_cardview"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="7dp"
+            card_view:cardCornerRadius="0dp"
+            card_view:cardElevation="4sp"
+            card_view:cardUseCompatPadding="true">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:text="Most Frequent Purchases"
-            android:textSize="20sp"
-            android:background="@color/theme"
-            android:textColor="@color/white"/>
-    </android.support.v7.widget.CardView>
+            <com.github.mikephil.charting.charts.HorizontalBarChart
+                android:id="@+id/reports_barchart"
+                android:layout_width="match_parent"
+                android:layout_height="190dp"
+                android:layout_marginTop="20dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/theme"
+                android:gravity="center_horizontal"
+                android:text="Most Frequent Purchases"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
+        </android.support.v7.widget.CardView>
 
 
-</RelativeLayout>
+
+
+
+    </RelativeLayout>
+</ScrollView>

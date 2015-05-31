@@ -1,6 +1,11 @@
 package com.mushroomrobot.finwiz.navigation;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
+import android.app.FragmentManager;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -17,6 +22,7 @@ import android.widget.ListView;
 import com.mushroomrobot.finwiz.R;
 import com.mushroomrobot.finwiz.account.DisplayAccountActivity;
 import com.mushroomrobot.finwiz.budget.DisplayBudgetActivity;
+import com.mushroomrobot.finwiz.data.Demo;
 import com.mushroomrobot.finwiz.reports.ReportsActivity;
 
 import java.util.ArrayList;
@@ -26,9 +32,9 @@ import java.util.ArrayList;
  */
 public class NavDrawerActivity extends Activity {
 
-    DrawerLayout mDrawerLayout;
+    static DrawerLayout mDrawerLayout;
     protected ActionBarDrawerToggle mDrawerToggle;
-    private String[] navOptions = new String[]{"Budgets", "Reports", "Accounts", "Settings"};
+    private String[] navOptions = new String[]{"Budgets", "Reports", "Accounts", "Settings", "Demo"};
 
     private ArrayList<Item> items = new ArrayList<Item>();
 
@@ -37,6 +43,7 @@ public class NavDrawerActivity extends Activity {
     protected final int ACCOUNTS_OPTION = 2;
     //protected final int DIVIDER = 3;
     protected final int SETTINGS_OPTION = 4;
+    protected final int DEMO_OPTION = 5;
 
     String savedTitle;
 
@@ -97,6 +104,7 @@ public class NavDrawerActivity extends Activity {
         items.add(new EntryItem("Accounts"));
         items.add(new DividerItem());
         items.add(new EntryItem("Settings"));
+        items.add(new EntryItem("Demo"));
 
 
         NavDrawerAdapter adapter = new NavDrawerAdapter(NavDrawerActivity.this, items);
@@ -141,6 +149,13 @@ public class NavDrawerActivity extends Activity {
                                 mDrawerLayout.closeDrawer(mDrawerList);
                                 startActivity(intent);
                                 break;
+
+                            case DEMO_OPTION:
+                                if (currentOption == 0) {
+                                    FragmentManager fm = getFragmentManager();
+                                    DialogFragment dialog = new DemoDialog();
+                                    dialog.show(fm, "Demo");
+                                }
                             default:
                                 break;
                         }
@@ -207,5 +222,32 @@ public class NavDrawerActivity extends Activity {
         getLayoutInflater().inflate(layoutResID, activityContent, true);
 
         super.setContentView(fullLayout);
+    }
+    public static class DemoDialog extends DialogFragment {
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setMessage("Initiate demo?");
+            builder.setPositiveButton(R.string.close_yes, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Demo demo = new Demo();
+                    demo.demoSetUp(getActivity());
+                    dialog.dismiss();
+                    mDrawerLayout.closeDrawers();
+                }
+            });
+            builder.setNegativeButton(R.string.close_no, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+
+            return builder.create();
+
+        }
     }
 }

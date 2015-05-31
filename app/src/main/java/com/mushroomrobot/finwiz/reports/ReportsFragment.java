@@ -16,6 +16,11 @@ import android.view.ViewGroup;
 import com.github.mikephil.charting.charts.HorizontalBarChart;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
@@ -23,6 +28,7 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 import com.github.mikephil.charting.utils.PercentFormatter;
 import com.mushroomrobot.finwiz.R;
 import com.mushroomrobot.finwiz.data.EverythingContract;
+import com.mushroomrobot.finwiz.utils.MPCustomNumberFormatter;
 
 import java.util.ArrayList;
 
@@ -31,7 +37,8 @@ import java.util.ArrayList;
  */
 public class ReportsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    private final int LOADER_CATEGORY = 0;
+    private final int LOADER_PIE = 0;
+    private final int LOADER_BAR = 1;
 
     ArrayList<Entry> entries;
     ArrayList<String> labels;
@@ -52,7 +59,8 @@ public class ReportsFragment extends Fragment implements LoaderManager.LoaderCal
         barChart.setDescription("");
 
 
-        getLoaderManager().initLoader(LOADER_CATEGORY, null, this);
+        getLoaderManager().initLoader(LOADER_PIE, null, this);
+        getLoaderManager().initLoader(LOADER_BAR, null, this);
 
         return rootView;
     }
@@ -61,15 +69,20 @@ public class ReportsFragment extends Fragment implements LoaderManager.LoaderCal
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
-        if (id == LOADER_CATEGORY) {
+        if (id == LOADER_PIE) {
             CursorLoader cursorLoader = new CursorLoader(getActivity(), EverythingContract.Category.CONTENT_URI, null, null, null, "spent desc");
             return cursorLoader;
-        } else return null;
+        }
+        else if (id == LOADER_BAR) {
+            CursorLoader cursorLoader = new CursorLoader(getActivity(), EverythingContract.Category.CONTENT_URI_FREQUENCY, null, null, null, null);
+            return cursorLoader;
+        }
+        else return null;
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        if (loader.getId() == LOADER_CATEGORY) {
+        if (loader.getId() == LOADER_PIE) {
 
             entries = new ArrayList<>();
             labels = new ArrayList<>();
@@ -143,15 +156,69 @@ public class ReportsFragment extends Fragment implements LoaderManager.LoaderCal
             pieData.setValueTextColor(getActivity().getResources().getColor(R.color.textview));
             pieData.setValueTypeface(Typeface.SANS_SERIF);
 
-
-
-
             pieChart.setUsePercentValues(true);
             pieChart.setDrawSliceText(true);
             pieChart.setData(pieData);
             pieChart.animateX(1800);
 
             pieChart.getLegend().setPosition(Legend.LegendPosition.BELOW_CHART_CENTER);
+
+        }
+        else if (loader.getId() == LOADER_BAR){
+
+            ArrayList<String> labels = new ArrayList<>();
+            ArrayList<BarEntry> entries = new ArrayList<>();
+
+            String name = "";
+            int value = 0;
+            int i = 0;
+            data.moveToLast();
+            //We need to go backwards due to library's Entry xIndex
+            while (data.moveToPrevious()){
+
+                name = data.getString(data.getColumnIndex("category"));
+                labels.add(name);
+
+                value = data.getInt(data.getColumnIndex("number_transactions"));
+                entries.add(new BarEntry(value, i));
+                i++;
+            }
+            BarDataSet dataSet = new BarDataSet(entries, "Data Set");
+            dataSet.setBarSpacePercent(25f);
+
+
+            BarData barData = new BarData(labels, dataSet);
+            barData.setValueTextColor(getActivity().getResources().getColor(R.color.textview));
+            barData.setValueTextSize(10f);
+            barData.setValueTypeface(Typeface.SANS_SERIF);
+            barData.setValueFormatter(new MPCustomNumberFormatter());
+
+
+            barChart.setDrawBarShadow(false);
+            barChart.setTouchEnabled(false);
+
+            barChart.getLegend().setEnabled(false);
+            barChart.setDrawGridBackground(false);
+
+            YAxis leftAxis = barChart.getAxisLeft();
+            leftAxis.setEnabled(false);
+            leftAxis.setDrawAxisLine(false);
+
+            YAxis rightAxis = barChart.getAxisRight();
+            rightAxis.setTextColor(getActivity().getResources().getColor(R.color.textview));
+            rightAxis.setDrawGridLines(false);
+            rightAxis.setEnabled(false);
+            rightAxis.setDrawAxisLine(false);
+
+            XAxis xAxis = barChart.getXAxis();
+            xAxis.setDrawGridLines(false);
+            xAxis.setTextColor(getActivity().getResources().getColor(R.color.textview));
+            xAxis.setDrawAxisLine(false);
+
+
+            barChart.setDrawValueAboveBar(true);
+            barChart.setData(barData);
+            barChart.animateY(3000);
 
 
 

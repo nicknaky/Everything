@@ -56,6 +56,7 @@ public class EverythingProvider extends ContentProvider {
 
 
     private static final int CATEGORY_OVERVIEW = 255;
+    private static final int CATEGORY_FREQUENCY = 355;
 
     public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/accounts";
     public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/accounts";
@@ -80,6 +81,7 @@ public class EverythingProvider extends ContentProvider {
         sUriMatcher.addURI(AUTHORITY, EverythingContract.PATH_TRANSACTIONS + "/#", TRANSACTIONS_ID);
 
         sUriMatcher.addURI(AUTHORITY, EverythingContract.PATH_CATEGORY + "/OVERVIEW", CATEGORY_OVERVIEW);
+        sUriMatcher.addURI(AUTHORITY, EverythingContract.PATH_CATEGORY + "/FREQUENCY", CATEGORY_FREQUENCY);
     }
 
 
@@ -291,6 +293,9 @@ public class EverythingProvider extends ContentProvider {
             case CATEGORY_OVERVIEW: retCursor = getBudgetsOverview();
                 break;
 
+            case CATEGORY_FREQUENCY: retCursor = getCategoryFrequency();
+                break;
+
             case TRANSACTIONS: retCursor = getCategoryTransactions(selection, selectionArgs);
                 break;
             case TRANSACTIONS_ID:
@@ -453,7 +458,7 @@ public class EverythingProvider extends ContentProvider {
 
         switch (uriType){
             case ACCOUNTS:
-                rowsUpdated = sqlDB.update(Accounts.TABLE_NAME,values,selection,selectionArgs);
+                rowsUpdated = sqlDB.update(Accounts.TABLE_NAME, values, selection, selectionArgs);
                 break;
             case ACCOUNTS_ID:
                 id = uri.getLastPathSegment();
@@ -470,7 +475,7 @@ public class EverythingProvider extends ContentProvider {
                 break;
 
             case TRANSACTIONS:
-                rowsUpdated = sqlDB.update(Transactions.TABLE_NAME,values,selection,selectionArgs);
+                rowsUpdated = sqlDB.update(Transactions.TABLE_NAME, values, selection, selectionArgs);
                 break;
             case CATEGORY_ID:
                 id = uri.getLastPathSegment();
@@ -509,4 +514,22 @@ public class EverythingProvider extends ContentProvider {
         db.update(Transactions.TABLE_NAME,contentValues,Transactions.COLUMN_CATEGORY + " = ?",new String[]{oldCategory});
         getContext().getContentResolver().notifyChange(Transactions.CONTENT_URI,null);
     }
+
+    private Cursor getCategoryFrequency(){
+
+        Calendar myCalendar = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM", Locale.US);
+        String monthYear = sdf.format(myCalendar.getTime());
+
+        SQLiteDatabase db = database.getWritableDatabase();
+
+        Cursor cursor = db.rawQuery("select transactions.category, count(transactions.category) as number_transactions from transactions " +
+                "where strftime('%Y-%m', date/1000, 'unixepoch', 'localtime') = '" + monthYear + "' " +
+                "group by transactions.category " +
+                "order by number_transactions desc " +
+                "limit 5", null);
+
+        return cursor;
+    }
+
 }
