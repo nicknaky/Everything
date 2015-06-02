@@ -120,37 +120,53 @@ public class NavDrawerActivity extends Activity {
                     if (position == currentOption) {
                         mDrawerLayout.closeDrawer(mDrawerList);
                     } else {
+                        final Handler handler = new Handler();
                         switch (position) {
                             case BUDGETS_OPTION:
                                 intent = new Intent(NavDrawerActivity.this, DisplayBudgetActivity.class);
                                 mDrawerList.setItemChecked(position, true);
                                 mDrawerLayout.closeDrawer(mDrawerList);
 
-                                final Handler handler = new Handler();
                                 handler.postDelayed(new Runnable() {
                                     @Override
                                     public void run() {
                                         // Do something after 5s = 5000ms
                                         startActivity(intent);
-
+                                        finish();
                                     }
                                 }, 250);
-                                finish();
+
                                 break;
                             case REPORTS_OPTION:
                                 intent = new Intent(NavDrawerActivity.this, ReportsActivity.class);
                                 mDrawerList.setItemChecked(position, true);
                                 mDrawerLayout.closeDrawer(mDrawerList);
-                                startActivity(intent);
-                                finish();
+
+                                handler.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        // Do something after 5s = 5000ms
+                                        startActivity(intent);
+                                        finish();
+                                    }
+                                }, 250);
+
                                 break;
 
                             case ACCOUNTS_OPTION:
                                 intent = new Intent(NavDrawerActivity.this, DisplayAccountActivity.class);
                                 mDrawerList.setItemChecked(position, true);
                                 mDrawerLayout.closeDrawer(mDrawerList);
-                                startActivity(intent);
-                                finish();
+
+                                handler.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        // Do something after 5s = 5000ms
+                                        startActivity(intent);
+                                        finish();
+                                    }
+                                }, 250);
+
                                 break;
 
                             case DEMO_OPTION:

@@ -54,7 +54,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/green_money"
-                        android:text="@string/assets_value"
+                        tools:text="@string/assets_value"
                         android:textSize="20sp"/>
 
                 </LinearLayout>
@@ -78,7 +78,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/red_money"
-                        android:text="@string/debts_value"
+                        tools:text="@string/debts_value"
                         android:textSize="20sp"/>
 
                 </LinearLayout>
@@ -112,7 +112,7 @@
                 android:gravity="center"
                 android:fontFamily="sans-serif"
                 android:textColor="@color/green_money"
-                android:text="@string/networth_value"
+                tools:text="@string/networth_value"
                 android:textSize="32sp"
                 />
 
@@ -173,7 +173,6 @@
                 android:layout_below="@id/no_accounts_textview"
                 android:layout_marginTop="16dp"
                 android:paddingBottom="25dp"
-
                 android:background="#00C8C8"
                 android:text="@string/add_account"
                 android:textColor="#ffffff"

@@ -7,11 +7,8 @@ import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
-import android.database.CursorIndexOutOfBoundsException;
-import android.database.DatabaseUtils;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -85,19 +82,13 @@ public class DisplayAccountFragment extends Fragment
         networthTextView = (TextView) rootView.findViewById(R.id.networth_textview);
 
         noAccountsTextView = (TextView) rootView.findViewById(R.id.no_accounts_textview);
-        noAccountsTextView.setVisibility(TextView.INVISIBLE);
-
+        noAccountsTextView.setVisibility(TextView.VISIBLE);
+        addAccount = (Button) rootView.findViewById(R.id.add_account_button);
+        addAccount.setVisibility(Button.VISIBLE);
 
         listView = (ListView) rootView.findViewById(R.id.list);
 
-        addAccount = (Button) rootView.findViewById(R.id.add_account_button);
-        addAccount.setOnClickListener(mClickListener);
-        addAccount.setVisibility(Button.INVISIBLE);
-
         fillData();
-        if (noAccountsTextView.getVisibility()==TextView.VISIBLE){
-            addAccount.setVisibility(Button.VISIBLE);
-        }
 
         registerForContextMenu(listView);
 
@@ -129,7 +120,6 @@ public class DisplayAccountFragment extends Fragment
                 Uri uri2 = Uri.parse(Accounts.CONTENT_URI + "/" + info2.id);
                 long accountId = info2.id;
 
-
                 Intent intent = new Intent(getActivity(),AddAccountActivity.class);
                 intent.putExtra("uri",uri2.toString());
                 intent.putExtra("accountId",accountId);
@@ -139,6 +129,7 @@ public class DisplayAccountFragment extends Fragment
         }
         return super.onContextItemSelected(item);
     }
+
 
     private void fillData(){
         String[] list_from = {Accounts.COLUMN_NAME,Accounts.COLUMN_BALANCE, Accounts.COLUMN_LAST_UPDATE};
@@ -183,10 +174,6 @@ public class DisplayAccountFragment extends Fragment
         listView.setAdapter(accountsListAdapter);
     }
 
-
-
-
-
     View.OnClickListener mClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -204,7 +191,6 @@ public class DisplayAccountFragment extends Fragment
 
         if (id==0){
             String[] projection = { Accounts._ID, Accounts.COLUMN_NAME, Accounts.COLUMN_BALANCE, Accounts.COLUMN_TYPE, Accounts.COLUMN_LAST_UPDATE};
-
             String sortOrder = "name collate nocase asc";
             CursorLoader cursorLoader = new CursorLoader(getActivity(), Accounts.CONTENT_URI,projection,null,null,sortOrder);
             return cursorLoader;
@@ -221,16 +207,23 @@ public class DisplayAccountFragment extends Fragment
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        noAccountsTextView.setVisibility(TextView.INVISIBLE);
+
         if (loader.getId()==0) {
-            accountsListAdapter.swapCursor(data);
+            if (data.moveToFirst()){
+                noAccountsTextView.setVisibility(TextView.INVISIBLE);
+                addAccount.setVisibility(Button.INVISIBLE);
+                accountsListAdapter.swapCursor(data);
+            }
+            else {
+                noAccountsTextView.setVisibility(TextView.VISIBLE);
+                addAccount.setVisibility(Button.VISIBLE);
+                addAccount.setOnClickListener(mClickListener);
+            }
+
         }
         else if (loader.getId()==1){
-            try{
-                data.moveToFirst();
 
-                Log.v("Cursor after move", DatabaseUtils.dumpCursorToString(data));
-
+            if (data.moveToFirst()){
                 sum_assets = data.getDouble(1)/100;
                 sum_debts = data.getDouble(2)/100;
                 networth = sum_assets - sum_debts;
@@ -238,17 +231,13 @@ public class DisplayAccountFragment extends Fragment
                 String formattedSumDebts = NumberFormat.getCurrencyInstance().format(sum_debts);
                 String formattedNetworth = NumberFormat.getCurrencyInstance().format(networth);
 
-                Log.v("Sum assets", formattedSumAssets);
                 totalAssetsTextView.setText("+" + formattedSumAssets);
                 totalDebtsTextView.setText("-" + formattedSumDebts);
                 networthTextView.setText(formattedNetworth);
-            } catch (CursorIndexOutOfBoundsException e){
+            } else {
                 totalAssetsTextView.setText("+$0.00");
                 totalDebtsTextView.setText("-$0.00");
                 networthTextView.setText("$0.00");
-                noAccountsTextView.setVisibility(TextView.VISIBLE);
-                addAccount.setVisibility(Button.VISIBLE);
-
             }
         }
     }
