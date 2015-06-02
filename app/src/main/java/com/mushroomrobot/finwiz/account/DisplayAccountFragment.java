@@ -36,12 +36,12 @@ public class DisplayAccountFragment extends Fragment
         implements LoaderManager.LoaderCallbacks<Cursor> {
 
 
-    private static double sum_assets,sum_debts,networth;
+    private double sum_assets,sum_debts,networth;
 
-    private static final int ACTIVITY_CREATE = 0;
-    private static final int ACTIVITY_EDIT = 1;
-    private static final int UPDATE_ID = 1;
-    private static final int DELETE_ID = 2;
+    private final int ACTIVITY_CREATE = 0;
+    private final int ACTIVITY_EDIT = 1;
+    private final int UPDATE_ID = 1;
+    private final int DELETE_ID = 2;
 
     TextView totalAssetsTextView, totalDebtsTextView, networthTextView, noAccountsTextView;
     ListView listView;
@@ -78,7 +78,7 @@ public class DisplayAccountFragment extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(R.layout.fragment_account, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_account_draftv2, container, false);
 
         totalAssetsTextView = (TextView) rootView.findViewById(R.id.total_assets_textview);
         totalDebtsTextView = (TextView) rootView.findViewById(R.id.total_debts_textview);
@@ -204,7 +204,9 @@ public class DisplayAccountFragment extends Fragment
 
         if (id==0){
             String[] projection = { Accounts._ID, Accounts.COLUMN_NAME, Accounts.COLUMN_BALANCE, Accounts.COLUMN_TYPE, Accounts.COLUMN_LAST_UPDATE};
-            CursorLoader cursorLoader = new CursorLoader(getActivity(), Accounts.CONTENT_URI,projection,null,null,null);
+
+            String sortOrder = "name collate nocase asc";
+            CursorLoader cursorLoader = new CursorLoader(getActivity(), Accounts.CONTENT_URI,projection,null,null,sortOrder);
             return cursorLoader;
         }
         else if (id==1){

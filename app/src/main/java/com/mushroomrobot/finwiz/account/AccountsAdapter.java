@@ -3,8 +3,6 @@ package com.mushroomrobot.finwiz.account;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Color;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.SimpleCursorAdapter;
 
 /**
@@ -18,6 +16,8 @@ public class AccountsAdapter extends SimpleCursorAdapter {
         super(context, layout, c, from, to, flags);
     }
 
+    //Override to have alternating row background colors
+    /*
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
@@ -27,6 +27,6 @@ public class AccountsAdapter extends SimpleCursorAdapter {
 
         return view;
     }
-
+*/
 
 }

@@ -135,12 +135,14 @@ public class NavDrawerActivity extends Activity {
 
                                     }
                                 }, 250);
+                                finish();
                                 break;
                             case REPORTS_OPTION:
                                 intent = new Intent(NavDrawerActivity.this, ReportsActivity.class);
                                 mDrawerList.setItemChecked(position, true);
                                 mDrawerLayout.closeDrawer(mDrawerList);
                                 startActivity(intent);
+                                finish();
                                 break;
 
                             case ACCOUNTS_OPTION:
@@ -148,6 +150,7 @@ public class NavDrawerActivity extends Activity {
                                 mDrawerList.setItemChecked(position, true);
                                 mDrawerLayout.closeDrawer(mDrawerList);
                                 startActivity(intent);
+                                finish();
                                 break;
 
                             case DEMO_OPTION:

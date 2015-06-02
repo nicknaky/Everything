@@ -45,8 +45,8 @@
 
         <activity android:name="com.mushroomrobot.finwiz.reports.ReportsActivity"
             android:screenOrientation="portrait"
-            android:label="Report"
-            android:parentActivityName=".budget.DisplayBudgetActivity"
+            android:label="Reports"
+            android:noHistory="true"
             />
 
 

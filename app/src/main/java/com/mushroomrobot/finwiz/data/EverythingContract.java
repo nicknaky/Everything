@@ -72,6 +72,8 @@ public class EverythingContract {
         public static final Uri CONTENT_URI_HISTORY = CONTENT_URI.buildUpon().appendPath("HISTORY").build();
         public static final Uri CONTENT_URI_AMOUNT_BY_MONTH = CONTENT_URI.buildUpon().appendPath("BY_MONTH").build();
 
+        public static final Uri CONTENT_URI_TOP_THREE = CONTENT_URI.buildUpon().appendPath("TOP_THREE").build();
+
         //WARNING "transaction" is a SQLite keyword, thus make sure the "transactions" table name is referenced correctly!
         public static final String TABLE_NAME = "transactions";
         public static final String COLUMN_CATEGORY = "category";

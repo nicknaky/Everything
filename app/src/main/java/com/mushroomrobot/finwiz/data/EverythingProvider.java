@@ -42,21 +42,22 @@ public class EverythingProvider extends ContentProvider {
     //wtf is this
     private static final int CATEGORY_WITH_TRANSACTIONS_ID = 25;
 
+    private static final int CATEGORY_OVERVIEW = 26;
+    private static final int CATEGORY_FREQUENCY = 27;
+
     //All transactions
     private static final int TRANSACTIONS = 30;
 
-    private static final int TRANSACTIONS_HISTORY = 65;
-    private static final int TRANSACTIONS_BY_DAY = 35;
-    private static final int TRANSACTIONS_BY_MONTH = 45;
+    private static final int TRANSACTIONS_HISTORY = 31;
+    private static final int TRANSACTIONS_BY_DAY = 32;
+    private static final int TRANSACTIONS_BY_MONTH = 33;
+    private static final int TRANSACTIONS_TOP_THREE = 34;
 
     //Transaction details
-    private static final int TRANSACTIONS_ID = 31;
+    private static final int TRANSACTIONS_ID = 35;
 
     private static final String AUTHORITY = "com.mushroomrobot.finwiz.data";
 
-
-    private static final int CATEGORY_OVERVIEW = 255;
-    private static final int CATEGORY_FREQUENCY = 355;
 
     public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/accounts";
     public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/accounts";
@@ -66,25 +67,18 @@ public class EverythingProvider extends ContentProvider {
     static {
         sUriMatcher.addURI(AUTHORITY, EverythingContract.PATH_ACCOUNTS, ACCOUNTS);
         sUriMatcher.addURI(AUTHORITY, EverythingContract.PATH_ACCOUNTS + "/#", ACCOUNTS_ID);
-
         sUriMatcher.addURI(AUTHORITY, EverythingContract.PATH_CATEGORY, CATEGORY);
-
         sUriMatcher.addURI(AUTHORITY, EverythingContract.PATH_CATEGORY + "/#", CATEGORY_ID);
-
         sUriMatcher.addURI(AUTHORITY, EverythingContract.PATH_CATEGORY + "/#/*", CATEGORY_WITH_TRANSACTIONS_ID);
-
         sUriMatcher.addURI(AUTHORITY, EverythingContract.PATH_TRANSACTIONS, TRANSACTIONS);
         sUriMatcher.addURI(AUTHORITY, EverythingContract.PATH_TRANSACTIONS + "/BY_DAY", TRANSACTIONS_BY_DAY);
         sUriMatcher.addURI(AUTHORITY, EverythingContract.PATH_TRANSACTIONS + "/BY_MONTH", TRANSACTIONS_BY_MONTH);
         sUriMatcher.addURI(AUTHORITY, EverythingContract.PATH_TRANSACTIONS + "/HISTORY", TRANSACTIONS_HISTORY);
-
         sUriMatcher.addURI(AUTHORITY, EverythingContract.PATH_TRANSACTIONS + "/#", TRANSACTIONS_ID);
-
         sUriMatcher.addURI(AUTHORITY, EverythingContract.PATH_CATEGORY + "/OVERVIEW", CATEGORY_OVERVIEW);
         sUriMatcher.addURI(AUTHORITY, EverythingContract.PATH_CATEGORY + "/FREQUENCY", CATEGORY_FREQUENCY);
+        sUriMatcher.addURI(AUTHORITY, EverythingContract.PATH_TRANSACTIONS + "/TOP_THREE", TRANSACTIONS_TOP_THREE);
     }
-
-
 
 
     public boolean onCreate() {
@@ -101,38 +95,45 @@ public class EverythingProvider extends ContentProvider {
     */
 
 
-
-    private Cursor getAccounts(Uri uri, String[] projection,String selection,String[] selectionArgs, String sortOrder){
+    private Cursor getAccounts(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
 
         SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
         queryBuilder.setTables(Accounts.TABLE_NAME);
 
         int uriType = sUriMatcher.match(uri);
-        switch(uriType){
-            case ACCOUNTS: break;
-            case ACCOUNTS_ID: queryBuilder.appendWhere(Accounts._ID + "=" + uri.getLastPathSegment());
+        switch (uriType) {
+            case ACCOUNTS:
                 break;
-            default: throw new IllegalArgumentException("Unknown URI: " + uri);
+            case ACCOUNTS_ID:
+                queryBuilder.appendWhere(Accounts._ID + "=" + uri.getLastPathSegment());
+                break;
+            default:
+                throw new IllegalArgumentException("Unknown URI: " + uri);
         }
         SQLiteDatabase db = database.getWritableDatabase();
-        Cursor cursor = queryBuilder.query(db,projection,selection,selectionArgs,null,null,sortOrder);
+        Cursor cursor = queryBuilder.query(db, projection, selection, selectionArgs, null, null, sortOrder);
         return cursor;
     }
 
-    private Cursor getAllTransactions(){
+    private Cursor getTopThreeTransactions() {
 
-        SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
-        queryBuilder.setTables(Transactions.TABLE_NAME);
-
-        String[] projection = {Transactions._ID,Transactions.COLUMN_CATEGORY,Transactions.COLUMN_AMOUNT,Transactions.COLUMN_DATE,Transactions.COLUMN_DESCRIPTION};
+        Calendar myCalendar = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM", Locale.US);
+        String monthYear = sdf.format(myCalendar.getTime());
 
         SQLiteDatabase db = database.getWritableDatabase();
-        Cursor cursor = queryBuilder.query(db,projection,null,null,null,null,null);
+
+        Cursor cursor = db.rawQuery("select category, description, amount, date " +
+                "from transactions " +
+                "where strftime('%Y-%m', date/1000, 'unixepoch', 'localtime') = '" + monthYear + "' " +
+                "order by amount desc, category asc " +
+                "limit 3", null, null);
 
         return cursor;
     }
 
-    private Cursor getBudgets(String selection, String sort){
+
+    private Cursor getBudgets(String selection, String sort) {
 
         SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
 
@@ -141,7 +142,7 @@ public class EverythingProvider extends ContentProvider {
         String monthYear = sdf.format(myCalendar.getTime());
 
         String sortOrder = null;
-        if (sort != null){
+        if (sort != null) {
             sortOrder = sort;
         }
 
@@ -158,7 +159,7 @@ public class EverythingProvider extends ContentProvider {
 
         //To prevent ambigious column name error since transactions table has _id column as well.
         String categoryID = "category._id";
-        String[] projection = {categoryID,Category.COLUMN_NAME,Category.COLUMN_BUDGET,sum_amount, sum_remaining,sum_percent};
+        String[] projection = {categoryID, Category.COLUMN_NAME, Category.COLUMN_BUDGET, sum_amount, sum_remaining, sum_percent};
         String groupBy = "category.name";
 
         Cursor cursor = queryBuilder.query(db, projection, selection, null, groupBy, null, sortOrder);
@@ -169,19 +170,20 @@ public class EverythingProvider extends ContentProvider {
         return cursor;
     }
 
-    public Budget getBudgetById(int budgetId){
+    public Budget getBudgetById(int budgetId) {
 
         SQLiteDatabase db = database.getWritableDatabase();
-        Cursor cursor = db.query(Category.TABLE_NAME,null,Category._ID + "=?",new String[] {String.valueOf(budgetId)},null,null,null);
-        if (cursor.moveToFirst()){
+        Cursor cursor = db.query(Category.TABLE_NAME, null, Category._ID + "=?", new String[]{String.valueOf(budgetId)}, null, null, null);
+        if (cursor.moveToFirst()) {
             Log.v("getBudgetById method", "works");
-            return new Budget(cursor.getInt(0),cursor.getString(1),cursor.getDouble(2));
+            return new Budget(cursor.getInt(0), cursor.getString(1), cursor.getDouble(2));
 
         }
         return null;
     }
 
-    private Cursor getCategoryTransactions(String selection, String[]selectionArgs){
+
+    private Cursor getCategoryTransactions(String selection, String[] selectionArgs) {
 
         //Remember, the selectionArgs is not the category name but rather the category ID, which transaction table does not have.
         int categoryId = Integer.valueOf(selectionArgs[0]);
@@ -193,7 +195,7 @@ public class EverythingProvider extends ContentProvider {
         String[] parsedArgs = {budget.getName()};
 
         SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
-        queryBuilder.setTables(Transactions.TABLE_NAME );
+        queryBuilder.setTables(Transactions.TABLE_NAME);
 
         Calendar myCalendar = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM", Locale.US);
@@ -201,7 +203,7 @@ public class EverythingProvider extends ContentProvider {
         queryBuilder.appendWhere("strftime('%Y-%m', date/1000, 'unixepoch', 'localtime') = '" + monthYear + "'");
 
 
-        String[] projection = {Transactions._ID,Transactions.COLUMN_CATEGORY,Transactions.COLUMN_AMOUNT,Transactions.COLUMN_DATE,Transactions.COLUMN_DESCRIPTION};
+        String[] projection = {Transactions._ID, Transactions.COLUMN_CATEGORY, Transactions.COLUMN_AMOUNT, Transactions.COLUMN_DATE, Transactions.COLUMN_DESCRIPTION};
         String orderBy = Transactions.COLUMN_DATE + " desc, " + Transactions._ID + " desc";
 
         SQLiteDatabase db = database.getWritableDatabase();
@@ -211,7 +213,7 @@ public class EverythingProvider extends ContentProvider {
     }
 
     // For specific category
-    private Cursor getCategoryTransactionsAmountByDay(String selection, String[] selectionArgs){
+    private Cursor getCategoryTransactionsAmountByDay(String selection, String[] selectionArgs) {
         int categoryId = Integer.valueOf(selectionArgs[0]);
         Budget budget = getBudgetById(categoryId);
 
@@ -238,7 +240,7 @@ public class EverythingProvider extends ContentProvider {
     }
 
     //For all categories
-    private Cursor getCategoryTransactionsAmountByDay(){
+    private Cursor getCategoryTransactionsAmountByDay() {
 
         SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
         queryBuilder.setTables(Transactions.TABLE_NAME);
@@ -258,7 +260,7 @@ public class EverythingProvider extends ContentProvider {
         return cursor;
     }
 
-    public Cursor getBudgetsOverview(){
+    public Cursor getBudgetsOverview() {
 
         Calendar myCalendar = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM", Locale.US);
@@ -280,61 +282,75 @@ public class EverythingProvider extends ContentProvider {
         Cursor retCursor;
         int uriType = sUriMatcher.match(uri);
 
-        switch (uriType){
-            case ACCOUNTS: retCursor = getAccounts(uri,projection,selection,selectionArgs,sortOrder);
+        switch (uriType) {
+            case ACCOUNTS:
+                retCursor = getAccounts(uri, projection, selection, selectionArgs, sortOrder);
                 break;
-            case ACCOUNTS_ID: retCursor = getAccounts(uri,projection,selection,selectionArgs,sortOrder);
+            case ACCOUNTS_ID:
+                retCursor = getAccounts(uri, projection, selection, selectionArgs, sortOrder);
                 break;
-            case CATEGORY: retCursor = getBudgets(selection, sortOrder);
+            case CATEGORY:
+                retCursor = getBudgets(selection, sortOrder);
                 break;
-            case CATEGORY_ID: retCursor = getBudgets(selection, sortOrder);
-                break;
-
-            case CATEGORY_OVERVIEW: retCursor = getBudgetsOverview();
-                break;
-
-            case CATEGORY_FREQUENCY: retCursor = getCategoryFrequency();
+            case CATEGORY_ID:
+                retCursor = getBudgets(selection, sortOrder);
                 break;
 
-            case TRANSACTIONS: retCursor = getCategoryTransactions(selection, selectionArgs);
+            case CATEGORY_OVERVIEW:
+                retCursor = getBudgetsOverview();
+                break;
+
+            case CATEGORY_FREQUENCY:
+                retCursor = getCategoryFrequency();
+                break;
+
+            case TRANSACTIONS:
+                retCursor = getCategoryTransactions(selection, selectionArgs);
+                break;
+            case TRANSACTIONS_TOP_THREE:
+                retCursor = getTopThreeTransactions();
                 break;
             case TRANSACTIONS_ID:
                 SQLiteDatabase db = database.getWritableDatabase();
-                retCursor =  db.query(Transactions.TABLE_NAME,null,selection,null,null,null,null);
+                retCursor = db.query(Transactions.TABLE_NAME, null, selection, null, null, null, null);
                 break;
             case TRANSACTIONS_BY_DAY:
-                if (selection != null){
+                if (selection != null) {
                     retCursor = getCategoryTransactionsAmountByDay(selection, selectionArgs);
-                }else retCursor = getCategoryTransactionsAmountByDay();
+                } else retCursor = getCategoryTransactionsAmountByDay();
                 break;
-            case TRANSACTIONS_BY_MONTH: retCursor = getHistoryTransactionsAmountByMonth(selection);
+            case TRANSACTIONS_BY_MONTH:
+                retCursor = getHistoryTransactionsAmountByMonth(selection);
                 break;
-            case TRANSACTIONS_HISTORY: retCursor = getHistoryTransactions(selection);
+            case TRANSACTIONS_HISTORY:
+                retCursor = getHistoryTransactions(selection);
                 break;
 
-            default: throw new IllegalArgumentException("Unknown URI: " + uri);
+            default:
+                throw new IllegalArgumentException("Unknown URI: " + uri);
         }
         String getRetCursor = retCursor.getColumnName(1);
         Log.v("getRetCursor", getRetCursor);
         //Make sure that potential listeners are getting notified
-        retCursor.setNotificationUri(getContext().getContentResolver(),uri);
+        retCursor.setNotificationUri(getContext().getContentResolver(), uri);
 
         return retCursor;
     }
 
-    private Cursor getHistoryTransactions(String selection){
+    private Cursor getHistoryTransactions(String selection) {
 
         SQLiteDatabase db = database.getWritableDatabase();
 
         SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
         builder.setTables(Transactions.TABLE_NAME);
 
-        String orderBy = Transactions.COLUMN_DATE + " desc, " + Transactions._ID + " desc" ;
-        Cursor cursor = builder.query(db,null,selection,null,null,null,orderBy);
+        String orderBy = Transactions.COLUMN_DATE + " desc, " + Transactions._ID + " desc";
+        Cursor cursor = builder.query(db, null, selection, null, null, null, orderBy);
 
         return cursor;
     }
-    private Cursor getHistoryTransactionsAmountByMonth(String selection){
+
+    private Cursor getHistoryTransactionsAmountByMonth(String selection) {
 
         SQLiteDatabase db = database.getWritableDatabase();
 
@@ -345,7 +361,7 @@ public class EverythingProvider extends ContentProvider {
 
         String groupBy = "year_month";
         String orderBy = "year_month asc";
-        Cursor cursor = builder.query(db,projections,selection,null,groupBy,null,orderBy);
+        Cursor cursor = builder.query(db, projections, selection, null, groupBy, null, orderBy);
         return cursor;
     }
 
@@ -362,39 +378,37 @@ public class EverythingProvider extends ContentProvider {
 
         Uri returnUri;
         long id;
-        switch (uriType){
+        switch (uriType) {
             case ACCOUNTS:
-                id = sqlDB.insert(Accounts.TABLE_NAME,null,values);
+                id = sqlDB.insert(Accounts.TABLE_NAME, null, values);
                 if (id > 0)
                     returnUri = Accounts.buildAccountsUri(id);
                 else
                     throw new SQLException("Failed to insert account into row: " + uri);
                 break;
             case CATEGORY:
-                id = sqlDB.insertOrThrow(Category.TABLE_NAME,null,values);
-                if (id > 0){
+                id = sqlDB.insertOrThrow(Category.TABLE_NAME, null, values);
+                if (id > 0) {
                     returnUri = Category.buildCategoryUri(id);
-                    getContext().getContentResolver().notifyChange(Transactions.CONTENT_URI_AMOUNT_BY_DAY,null);
-                }
-                else
+                    getContext().getContentResolver().notifyChange(Transactions.CONTENT_URI_AMOUNT_BY_DAY, null);
+                } else
                     throw new SQLException("Failed to insert category into row: " + uri);
                 break;
             case TRANSACTIONS:
-                id = sqlDB.insert(Transactions.TABLE_NAME,null,values);
+                id = sqlDB.insert(Transactions.TABLE_NAME, null, values);
                 if (id > 0) {
                     returnUri = Transactions.buildTransactionsUri(id);
                     getContext().getContentResolver().notifyChange(Category.CONTENT_URI, null);
-                    getContext().getContentResolver().notifyChange(Transactions.CONTENT_URI_AMOUNT_BY_DAY,null);
-                    getContext().getContentResolver().notifyChange(Transactions.CONTENT_URI_AMOUNT_BY_MONTH,null);
-                    getContext().getContentResolver().notifyChange(Transactions.CONTENT_URI_HISTORY,null);
-                }
-                else
+                    getContext().getContentResolver().notifyChange(Transactions.CONTENT_URI_AMOUNT_BY_DAY, null);
+                    getContext().getContentResolver().notifyChange(Transactions.CONTENT_URI_AMOUNT_BY_MONTH, null);
+                    getContext().getContentResolver().notifyChange(Transactions.CONTENT_URI_HISTORY, null);
+                } else
                     throw new SQLException("Failed to insert transaction into row: " + uri);
                 break;
             default:
                 throw new IllegalArgumentException("Unknown URI: " + uri);
         }
-        getContext().getContentResolver().notifyChange(uri,null);
+        getContext().getContentResolver().notifyChange(uri, null);
         return returnUri;
     }
 
@@ -403,41 +417,41 @@ public class EverythingProvider extends ContentProvider {
 
         int uriType = sUriMatcher.match(uri);
         SQLiteDatabase sqlDB = database.getWritableDatabase();
-        int rowsDeleted =0;
+        int rowsDeleted = 0;
         String id;
 
-        switch (uriType){
+        switch (uriType) {
             case ACCOUNTS:
-                rowsDeleted = sqlDB.delete(Accounts.TABLE_NAME,selection,selectionArgs);
-                getContext().getContentResolver().notifyChange(uri,null);
+                rowsDeleted = sqlDB.delete(Accounts.TABLE_NAME, selection, selectionArgs);
+                getContext().getContentResolver().notifyChange(uri, null);
                 break;
             case ACCOUNTS_ID:
                 id = uri.getLastPathSegment();
-                if (TextUtils.isEmpty(selection)){
-                    rowsDeleted = sqlDB.delete(Accounts.TABLE_NAME,Accounts._ID + "=" + id,null);
-                }else {
-                    rowsDeleted = sqlDB.delete(Accounts.TABLE_NAME,Accounts._ID + "=" + id + " and " + selection,selectionArgs);
+                if (TextUtils.isEmpty(selection)) {
+                    rowsDeleted = sqlDB.delete(Accounts.TABLE_NAME, Accounts._ID + "=" + id, null);
+                } else {
+                    rowsDeleted = sqlDB.delete(Accounts.TABLE_NAME, Accounts._ID + "=" + id + " and " + selection, selectionArgs);
                 }
-                getContext().getContentResolver().notifyChange(uri,null);
+                getContext().getContentResolver().notifyChange(uri, null);
                 break;
 
             case CATEGORY_ID:
                 id = uri.getLastPathSegment();
                 rowsDeleted = sqlDB.delete(Category.TABLE_NAME, Category._ID + "=" + id, null);
-                rowsDeleted += sqlDB.delete(Transactions.TABLE_NAME,Transactions.COLUMN_CATEGORY + "=" + selection,null);
+                rowsDeleted += sqlDB.delete(Transactions.TABLE_NAME, Transactions.COLUMN_CATEGORY + "=" + selection, null);
                 //Do not notify.
                 //getContext().getContentResolver().notifyChange(uri,null);
                 break;
             case TRANSACTIONS_ID:
                 id = uri.getLastPathSegment();
                 rowsDeleted = sqlDB.delete(Transactions.TABLE_NAME, Transactions._ID + "=" + id, null);
-                getContext().getContentResolver().notifyChange(uri,null);
-                getContext().getContentResolver().notifyChange(Category.CONTENT_URI,null);
+                getContext().getContentResolver().notifyChange(uri, null);
+                getContext().getContentResolver().notifyChange(Category.CONTENT_URI, null);
                 //Might be unnecessary as Category.CONTENT_URI should be enough, double check.
                 //getContext().getContentResolver().notifyChange(Uri.parse(Category.CONTENT_URI + "/#"),null);
-                getContext().getContentResolver().notifyChange(Transactions.CONTENT_URI_AMOUNT_BY_DAY,null);
-                getContext().getContentResolver().notifyChange(Transactions.CONTENT_URI_AMOUNT_BY_MONTH,null);
-                getContext().getContentResolver().notifyChange(Transactions.CONTENT_URI_HISTORY,null);
+                getContext().getContentResolver().notifyChange(Transactions.CONTENT_URI_AMOUNT_BY_DAY, null);
+                getContext().getContentResolver().notifyChange(Transactions.CONTENT_URI_AMOUNT_BY_MONTH, null);
+                getContext().getContentResolver().notifyChange(Transactions.CONTENT_URI_HISTORY, null);
                 break;
             default:
                 throw new IllegalArgumentException("Unknown URI: " + uri);
@@ -456,20 +470,20 @@ public class EverythingProvider extends ContentProvider {
         int rowsUpdated = 0;
         String id;
 
-        switch (uriType){
+        switch (uriType) {
             case ACCOUNTS:
                 rowsUpdated = sqlDB.update(Accounts.TABLE_NAME, values, selection, selectionArgs);
                 break;
             case ACCOUNTS_ID:
                 id = uri.getLastPathSegment();
-                if (TextUtils.isEmpty(selection)){
-                    rowsUpdated = sqlDB.update(Accounts.TABLE_NAME,values, Accounts._ID + "=" + id, null);
-                }else{
+                if (TextUtils.isEmpty(selection)) {
+                    rowsUpdated = sqlDB.update(Accounts.TABLE_NAME, values, Accounts._ID + "=" + id, null);
+                } else {
                     rowsUpdated = sqlDB.update(Accounts.TABLE_NAME, values, Accounts._ID + "=" + id + " and " + selection, selectionArgs);
                 }
                 break;
             case CATEGORY:
-                rowsUpdated = sqlDB.update(Category.TABLE_NAME,values,selection,selectionArgs);
+                rowsUpdated = sqlDB.update(Category.TABLE_NAME, values, selection, selectionArgs);
                 updateCategoryTransactions(values, selectionArgs);
                 getContext().getContentResolver().notifyChange(Transactions.CONTENT_URI_AMOUNT_BY_DAY, null);
                 break;
@@ -481,28 +495,29 @@ public class EverythingProvider extends ContentProvider {
                 id = uri.getLastPathSegment();
                 rowsUpdated = sqlDB.update(Category.TABLE_NAME, values, selection, selectionArgs);
 
-                getContext().getContentResolver().notifyChange(Transactions.CONTENT_URI,null);
-                getContext().getContentResolver().notifyChange(Transactions.CONTENT_URI_AMOUNT_BY_DAY,null);
+                getContext().getContentResolver().notifyChange(Transactions.CONTENT_URI, null);
+                getContext().getContentResolver().notifyChange(Transactions.CONTENT_URI_AMOUNT_BY_DAY, null);
                 break;
 
             case TRANSACTIONS_ID:
                 id = uri.getLastPathSegment();
                 rowsUpdated = sqlDB.update(Transactions.TABLE_NAME, values, Transactions._ID + "=" + id, null);
 
-                getContext().getContentResolver().notifyChange(Category.CONTENT_URI,null);
-                getContext().getContentResolver().notifyChange(Transactions.CONTENT_URI_AMOUNT_BY_DAY,null);
-                getContext().getContentResolver().notifyChange(Transactions.CONTENT_URI_AMOUNT_BY_MONTH,null);
-                getContext().getContentResolver().notifyChange(Transactions.CONTENT_URI_HISTORY,null);
+                getContext().getContentResolver().notifyChange(Category.CONTENT_URI, null);
+                getContext().getContentResolver().notifyChange(Transactions.CONTENT_URI_AMOUNT_BY_DAY, null);
+                getContext().getContentResolver().notifyChange(Transactions.CONTENT_URI_AMOUNT_BY_MONTH, null);
+                getContext().getContentResolver().notifyChange(Transactions.CONTENT_URI_HISTORY, null);
 
                 break;
             default:
                 throw new IllegalArgumentException("Unknown URI: " + uri);
         }
-        getContext().getContentResolver().notifyChange(uri,null);
+        getContext().getContentResolver().notifyChange(uri, null);
 
         return rowsUpdated;
     }
-    public void updateCategoryTransactions(ContentValues values, String[] selectionArgs){
+
+    public void updateCategoryTransactions(ContentValues values, String[] selectionArgs) {
 
         String newCategory = values.getAsString(Category.COLUMN_NAME);
         String oldCategory = selectionArgs[0];
@@ -510,12 +525,12 @@ public class EverythingProvider extends ContentProvider {
         SQLiteDatabase db = database.getWritableDatabase();
 
         ContentValues contentValues = new ContentValues();
-        contentValues.put(Transactions.COLUMN_CATEGORY,newCategory);
-        db.update(Transactions.TABLE_NAME,contentValues,Transactions.COLUMN_CATEGORY + " = ?",new String[]{oldCategory});
-        getContext().getContentResolver().notifyChange(Transactions.CONTENT_URI,null);
+        contentValues.put(Transactions.COLUMN_CATEGORY, newCategory);
+        db.update(Transactions.TABLE_NAME, contentValues, Transactions.COLUMN_CATEGORY + " = ?", new String[]{oldCategory});
+        getContext().getContentResolver().notifyChange(Transactions.CONTENT_URI, null);
     }
 
-    private Cursor getCategoryFrequency(){
+    private Cursor getCategoryFrequency() {
 
         Calendar myCalendar = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM", Locale.US);
@@ -527,7 +542,7 @@ public class EverythingProvider extends ContentProvider {
                 "where strftime('%Y-%m', date/1000, 'unixepoch', 'localtime') = '" + monthYear + "' " +
                 "group by transactions.category " +
                 "order by number_transactions desc " +
-                "limit 5", null);
+                "limit 3", null);
 
         return cursor;
     }

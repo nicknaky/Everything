@@ -42,11 +42,11 @@
 
 
     <!-- Display Accounts -->
-    <string name="assets_label">Assets</string>
+    <string name="assets_label">ASSETS</string>
     <string name="assets_value">+$0.00</string>
-    <string name="debts_label">Debts</string>
+    <string name="debts_label">DEBTS</string>
     <string name="debts_value">-$0.00</string>
-    <string name="networth_label">Net Worth</string>
+    <string name="networth_label">NET WORTH</string>
     <string name="networth_value">$0.00</string>
     <string name="no_accounts_msg">No accounts detected. Please add an account.</string>
     <string name="add_account">Add Account</string>
