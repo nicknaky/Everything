@@ -19,13 +19,15 @@ public class NavDrawerAdapter extends ArrayAdapter<Item> {
     private Context context;
     private ArrayList<Item> items;
     private LayoutInflater vi;
+    private int selectedPosition;
 
     private String[] navOptions = new String[]{"Budgets", "Reports", "Accounts", "Settings"};
 
-    public NavDrawerAdapter(Context context, ArrayList<Item> items) {
+    public NavDrawerAdapter(Context context, ArrayList<Item> items, int selectedPosition) {
         super(context, 0, items);
         this.context = context;
         this.items = items;
+        this.selectedPosition = selectedPosition;
         vi = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
@@ -47,10 +49,15 @@ public class NavDrawerAdapter extends ArrayAdapter<Item> {
                 final TextView text =
                         (TextView)v.findViewById(R.id.drawer_li_labels);
                 if (text != null) text.setText(ei.text);
+                if (position == selectedPosition){
+                    text.setTextColor(context.getResources().getColor(R.color.theme));
+                } else text.setTextColor(context.getResources().getColor(R.color.textview));
             }
         }
         return v;
     }
+
+
 
 
 }

@@ -28,8 +28,9 @@ import com.mushroomrobot.finwiz.reports.ReportsActivity;
 import java.util.ArrayList;
 
 /**
- * Created by NLam on 5/28/2015.
+ * Created by NLam.
  */
+//http://stackoverflow.com/questions/24524331/android-navigation-drawer-on-multiple-activities
 public class NavDrawerActivity extends Activity {
 
     static DrawerLayout mDrawerLayout;
@@ -47,7 +48,7 @@ public class NavDrawerActivity extends Activity {
 
     String savedTitle;
 
-    protected static int currentOption;
+    protected static int currentOption = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,7 +108,7 @@ public class NavDrawerActivity extends Activity {
         items.add(new EntryItem("Demo"));
 
 
-        NavDrawerAdapter adapter = new NavDrawerAdapter(NavDrawerActivity.this, items);
+        NavDrawerAdapter adapter = new NavDrawerAdapter(NavDrawerActivity.this, items, currentOption);
         mDrawerList.setAdapter(adapter);
 
         mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
