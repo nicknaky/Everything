@@ -1,6 +1,5 @@
 package com.mushroomrobot.finwiz.navigation;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -13,6 +12,7 @@ import android.os.Handler;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -22,8 +22,10 @@ import android.widget.ListView;
 import com.mushroomrobot.finwiz.R;
 import com.mushroomrobot.finwiz.account.DisplayAccountActivity;
 import com.mushroomrobot.finwiz.budget.DisplayBudgetActivity;
+import com.mushroomrobot.finwiz.common.BaseActivity;
 import com.mushroomrobot.finwiz.data.Demo;
 import com.mushroomrobot.finwiz.reports.ReportsActivity;
+import com.mushroomrobot.finwiz.settings.SettingsActivityDraft;
 
 import java.util.ArrayList;
 
@@ -31,7 +33,7 @@ import java.util.ArrayList;
  * Created by NLam.
  */
 //http://stackoverflow.com/questions/24524331/android-navigation-drawer-on-multiple-activities
-public class NavDrawerActivity extends Activity {
+public class NavDrawerActivity extends BaseActivity {
 
     static DrawerLayout mDrawerLayout;
     protected ActionBarDrawerToggle mDrawerToggle;
@@ -170,6 +172,26 @@ public class NavDrawerActivity extends Activity {
 
                                 break;
 
+                            case SETTINGS_OPTION:
+                                Log.v("Settings option pressed", "Settings option pressed");
+
+                                intent = new Intent(NavDrawerActivity.this, SettingsActivityDraft.class);
+                                mDrawerList.setItemChecked(position, true);
+                                mDrawerLayout.closeDrawer(mDrawerList);
+                                handler.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        // Do something after 5s = 5000ms
+                                        startActivity(intent);
+
+                                    }
+                                }, 250);
+
+
+                                //getFragmentManager().beginTransaction().replace(android.R.id.content,new SettingsFragment(), "Settings").commit();
+
+                                break;
+
                             case DEMO_OPTION:
                                 if (currentOption == 0) {
                                     FragmentManager fm = getFragmentManager();
@@ -186,37 +208,6 @@ public class NavDrawerActivity extends Activity {
             }
         });
 
-
-/*
-        mDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.drawer_list_item, R.id.drawer_li_labels, navOptions));
-        mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent;
-
-                if (position == currentOption) {
-                    mDrawerLayout.closeDrawer(mDrawerList);
-                } else {
-                    switch (position) {
-                        case 0:
-                            intent = new Intent(NavDrawerActivity.this, DisplayBudgetActivity.class);
-                            mDrawerList.setItemChecked(position, true);
-                            mDrawerLayout.closeDrawer(mDrawerList);
-
-                            startActivity(intent);
-                            break;
-                        case 2:
-                            intent = new Intent(NavDrawerActivity.this, DisplayAccountActivity.class);
-                            mDrawerList.setItemChecked(position, true);
-                            mDrawerLayout.closeDrawer(mDrawerList);
-                            startActivity(intent);
-                            break;
-                    }
-                }
-            }
-        });
-*/
-
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.drawer_open, R.string.drawer_close) {
             @Override
             public void onDrawerOpened(View drawerView) {
@@ -232,9 +223,7 @@ public class NavDrawerActivity extends Activity {
             }
         };
 
-
         mDrawerLayout.setDrawerListener(mDrawerToggle);
-
 
         getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setHomeButtonEnabled(true);

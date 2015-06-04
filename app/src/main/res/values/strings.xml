@@ -40,6 +40,17 @@
     <string name="configure_update_title">Update Account</string>
     <string name="submit">Submit</string>
 
+    <!-- Preferences -->
+    <string name="pref_security_title">Security</string>
+    <string name="pref_pinMode">Use PIN</string>
+    <string name="pref_pinMode_key">key</string>
+    <string name="pref_pin_key">key</string>
+
+<!-- Settings -->
+    <string name="settings_label">Settings</string>
+    <string name="create_pin_dialog">Create 4-digit PIN</string>
+    <string name="confirm_pin_dialog">Confirm 4-digit PIN</string>
+    <string name="pin_message_dialog">PIN doesn't match. Please try again.</string>
 
     <!-- Display Accounts -->
     <string name="assets_label">ASSETS</string>
