@@ -56,11 +56,8 @@
 
         <activity android:name=".settings.SettingsActivity"
             android:screenOrientation="portrait"
-            android:label="@string/settings_label" />
-
-        <activity android:name=".settings.SettingsActivityDraft"
-            android:screenOrientation="portrait"
-            android:label="@string/settings_label" />
+            android:label="@string/settings_label"
+            android:parentActivityName=".budget.DisplayBudgetActivity"/>
 
         <provider
             android:name="com.mushroomrobot.finwiz.data.EverythingProvider"

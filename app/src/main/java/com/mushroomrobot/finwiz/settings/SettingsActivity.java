@@ -1,17 +1,26 @@
 package com.mushroomrobot.finwiz.settings;
 
 import android.app.Activity;
-import android.app.ActivityManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.view.MenuItem;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 
 import com.mushroomrobot.finwiz.R;
+import com.mushroomrobot.finwiz.budget.DisplayBudgetActivity;
 
 /**
  * Created by NLam.
  */
 public class SettingsActivity extends Activity {
+
+    Switch pinModeSwitch;
+    SharedPreferences sharedPreferences;
+
+    int pin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,24 +28,64 @@ public class SettingsActivity extends Activity {
 
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
-        Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher);
-        ActivityManager.TaskDescription td = new ActivityManager.TaskDescription(null, bm, getResources().getColor(R.color.white));
-        setTaskDescription(td);
-        bm.recycle();
+        setContentView(R.layout.activity_settings);
+        pinModeSwitch = (Switch) findViewById(R.id.pin_switch);
 
-        getFragmentManager().beginTransaction().replace(android.R.id.content, new SettingsFragment(), "Settings").commit();
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        checkPin();
+
+        pinModeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                if (isChecked){
+
+
+                    android.os.Handler handler = new android.os.Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            getFragmentManager().beginTransaction().replace(R.id.container_settings, new PinFragment(),"PinFrag")
+                                    .addToBackStack(null).commit();
+                            checkPin();
+                        }
+                    }, 250);
+
+                }
+                if (!isChecked){
+                    sharedPreferences.edit().putInt(getResources().getString(R.string.pref_pin_key), 0).commit();
+                }
+
+            }
+        });
+
+    }
+    private void checkPin(){
+        pin = sharedPreferences.getInt(getResources().getString(R.string.pref_pin_key), 0);
+
+        if (pin == 0){
+            pinModeSwitch.setChecked(false);
+        } else if (pin != 0) {
+            pinModeSwitch.setChecked(true);
+        }
     }
 
     @Override
-    public boolean onNavigateUp () {
-        onBackPressed();
-        finish();
-        return true;
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            default:return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        finish();
+
+        Intent intent = new Intent(this, DisplayBudgetActivity.class);
+        startActivity(intent);
     }
 }

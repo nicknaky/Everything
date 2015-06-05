@@ -25,7 +25,7 @@ import com.mushroomrobot.finwiz.budget.DisplayBudgetActivity;
 import com.mushroomrobot.finwiz.common.BaseActivity;
 import com.mushroomrobot.finwiz.data.Demo;
 import com.mushroomrobot.finwiz.reports.ReportsActivity;
-import com.mushroomrobot.finwiz.settings.SettingsActivityDraft;
+import com.mushroomrobot.finwiz.settings.SettingsActivity;
 
 import java.util.ArrayList;
 
@@ -107,7 +107,7 @@ public class NavDrawerActivity extends BaseActivity {
         items.add(new EntryItem("Accounts"));
         items.add(new DividerItem());
         items.add(new EntryItem("Settings"));
-        items.add(new EntryItem("Demo"));
+        //items.add(new EntryItem("Demo"));
 
 
         NavDrawerAdapter adapter = new NavDrawerAdapter(NavDrawerActivity.this, items, currentOption);
@@ -175,7 +175,7 @@ public class NavDrawerActivity extends BaseActivity {
                             case SETTINGS_OPTION:
                                 Log.v("Settings option pressed", "Settings option pressed");
 
-                                intent = new Intent(NavDrawerActivity.this, SettingsActivityDraft.class);
+                                intent = new Intent(NavDrawerActivity.this, SettingsActivity.class);
                                 mDrawerList.setItemChecked(position, true);
                                 mDrawerLayout.closeDrawer(mDrawerList);
                                 handler.postDelayed(new Runnable() {

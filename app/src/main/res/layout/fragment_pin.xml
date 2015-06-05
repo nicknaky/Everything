@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:orientation="vertical">
 
     <TextView
@@ -11,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/create_pin_dialog"
-        android:layout_marginLeft="30dp"
+        android:layout_centerHorizontal="true"
         android:textSize="24sp"
         android:textStyle="bold" />
 
@@ -19,26 +20,26 @@
         android:id="@+id/pinEditBox2"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="40dp"
-        android:layout_marginTop="58dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="60dp"
         android:inputType="numberPassword"
         android:editable="true"
         android:focusable="true"
         android:maxLength="4"
-        android:textSize="20sp"
-        android:visibility="gone"/>
+        android:textSize="30sp"
+        android:visibility="invisible"/>
 
     <EditText
         android:id="@+id/pinEditBox1"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="40dp"
-        android:layout_marginTop="50dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="60dp"
         android:inputType="numberPassword"
         android:editable="true"
         android:focusable="true"
         android:maxLength="4"
-        android:textSize="20sp"
+        android:textSize="30sp"
         />
 
     <TextView
@@ -47,10 +48,9 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/pinEditBox1"
         android:layout_marginTop="2dp"
-        android:layout_alignLeft="@id/pinEditBox1"
+        android:layout_centerHorizontal="true"
         android:text="@string/pin_message_dialog"
-        android:textColor="@color/red_money"/>
-
-    <include layout="@layout/dialog_buttons"/>
+        android:textColor="@color/red_money"
+        android:visibility="invisible"/>
 
 </RelativeLayout>
