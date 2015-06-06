@@ -83,9 +83,18 @@ public class SettingsActivity extends Activity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        //super.onBackPressed();
 
-        Intent intent = new Intent(this, DisplayBudgetActivity.class);
-        startActivity(intent);
+        PinFragment pinFragment = (PinFragment)getFragmentManager().findFragmentByTag("PinFrag");
+        if (pinFragment !=null && pinFragment.isVisible()){
+            Intent intent = new Intent(SettingsActivity.this, SettingsActivity.class);
+            finish();
+            startActivity(intent);
+        } else {
+            Intent intent = new Intent(this, DisplayBudgetActivity.class);
+            finish();
+            startActivity(intent);
+        }
+
     }
 }

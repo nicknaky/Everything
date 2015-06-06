@@ -7,7 +7,9 @@ import android.content.Loader;
 import android.database.Cursor;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,6 +56,7 @@ public class ReportsFragment extends Fragment implements LoaderManager.LoaderCal
     HorizontalBarChart barChart;
 
     LinearLayout expensiveLinearLayout;
+    CardView barChartCardView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -63,6 +66,7 @@ public class ReportsFragment extends Fragment implements LoaderManager.LoaderCal
         pieChart = (PieChart) rootView.findViewById(R.id.reports_pichart);
         pieChart.setDescription("");
 
+        barChartCardView = (CardView) rootView.findViewById(R.id.bar_graph_cardview);
         barChart = (HorizontalBarChart) rootView.findViewById(R.id.reports_barchart);
         barChart.setDrawValueAboveBar(true);
         barChart.setDescription("");
@@ -177,6 +181,21 @@ public class ReportsFragment extends Fragment implements LoaderManager.LoaderCal
                 barData.setValueTypeface(Typeface.SANS_SERIF);
                 barData.setValueFormatter(new MPCustomNumberFormatter());
 
+                switch (labels.size()) {
+
+                    case 1:
+                        barChartCardView.getLayoutParams().height = (int) TypedValue.applyDimension(
+                                TypedValue.COMPLEX_UNIT_DIP, 110, getActivity().getResources().getDisplayMetrics());
+                        barChartCardView.requestLayout();
+                        break;
+                    case 2:
+                        barChartCardView.getLayoutParams().height = (int) TypedValue.applyDimension(
+                                TypedValue.COMPLEX_UNIT_DIP, 140, getActivity().getResources().getDisplayMetrics());
+                        barChartCardView.requestLayout();
+                        break;
+                    default:
+                        break;
+                }
 
                 barChart.setDrawBarShadow(false);
                 barChart.setTouchEnabled(false);
@@ -208,7 +227,7 @@ public class ReportsFragment extends Fragment implements LoaderManager.LoaderCal
 
                 data.moveToLast();
                 data.moveToNext();
-                while (data.moveToPrevious()){
+                while (data.moveToPrevious()) {
 
 
                     int i = 0;
@@ -230,7 +249,7 @@ public class ReportsFragment extends Fragment implements LoaderManager.LoaderCal
                     SimpleDateFormat sdf = new SimpleDateFormat("EEE\ndd", Locale.US);
                     String date = sdf.format(calendar.getTime());
 
-                    double amount = data.getDouble(data.getColumnIndex(Transactions.COLUMN_AMOUNT)) /100;
+                    double amount = data.getDouble(data.getColumnIndex(Transactions.COLUMN_AMOUNT)) / 100;
                     String category = data.getString(data.getColumnIndex(Transactions.COLUMN_CATEGORY));
                     String description = data.getString(data.getColumnIndex(Transactions.COLUMN_DESCRIPTION));
 
