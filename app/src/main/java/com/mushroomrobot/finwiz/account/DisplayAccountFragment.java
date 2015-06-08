@@ -35,8 +35,9 @@ public class DisplayAccountFragment extends Fragment
 
     private double sum_assets,sum_debts,networth;
 
-    private final int ACTIVITY_CREATE = 0;
-    private final int ACTIVITY_EDIT = 1;
+    private final int LOADER_OVERVIEW = 0;
+    private final int LOADER_ACCOUNTS = 1;
+
     private final int UPDATE_ID = 1;
     private final int DELETE_ID = 2;
 
@@ -75,7 +76,7 @@ public class DisplayAccountFragment extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(R.layout.fragment_account_draftv2, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_account, container, false);
 
         totalAssetsTextView = (TextView) rootView.findViewById(R.id.total_assets_textview);
         totalDebtsTextView = (TextView) rootView.findViewById(R.id.total_debts_textview);
@@ -136,8 +137,8 @@ public class DisplayAccountFragment extends Fragment
         int[] list_to = {R.id.list_item_account_name_textview,R.id.list_item_account_balance_textview,R.id.list_item_account_date};
 
 
-        getLoaderManager().initLoader(0,null,this);
-        getLoaderManager().initLoader(1,null,this);
+        getLoaderManager().initLoader(LOADER_OVERVIEW,null,this);
+        getLoaderManager().initLoader(LOADER_ACCOUNTS,null,this);
 
 
         accountsListAdapter = new AccountsAdapter(getActivity(),R.layout.list_item_account,null,list_from, list_to,0);
@@ -189,13 +190,13 @@ public class DisplayAccountFragment extends Fragment
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
-        if (id==0){
+        if (id==LOADER_ACCOUNTS){
             String[] projection = { Accounts._ID, Accounts.COLUMN_NAME, Accounts.COLUMN_BALANCE, Accounts.COLUMN_TYPE, Accounts.COLUMN_LAST_UPDATE};
             String sortOrder = "name collate nocase asc";
             CursorLoader cursorLoader = new CursorLoader(getActivity(), Accounts.CONTENT_URI,projection,null,null,sortOrder);
             return cursorLoader;
         }
-        else if (id==1){
+        else if (id==LOADER_OVERVIEW){
             String sum_assets = "(Select sum(balance) from accounts where type like 'asset') sum_assets";
             String sum_debts = "(Select sum(balance) from accounts where type like 'debt') sum_debts";
             String[] projection = {Accounts._ID,sum_assets,sum_debts};
@@ -208,7 +209,7 @@ public class DisplayAccountFragment extends Fragment
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 
-        if (loader.getId()==0) {
+        if (loader.getId()==LOADER_ACCOUNTS) {
             if (data.moveToFirst()){
                 noAccountsTextView.setVisibility(TextView.INVISIBLE);
                 addAccount.setVisibility(Button.INVISIBLE);
@@ -221,12 +222,19 @@ public class DisplayAccountFragment extends Fragment
             }
 
         }
-        else if (loader.getId()==1){
+        else if (loader.getId()==LOADER_OVERVIEW){
 
             if (data.moveToFirst()){
                 sum_assets = data.getDouble(1)/100;
                 sum_debts = data.getDouble(2)/100;
                 networth = sum_assets - sum_debts;
+                if (networth < 0){
+                    networthTextView.setTextColor(getActivity().getResources().getColor(R.color.red_money));
+                } else if (networth > 0) {
+                    networthTextView.setTextColor(getActivity().getResources().getColor(R.color.green_money));
+                } else if (networth == 0) {
+                    networthTextView.setTextColor(getActivity().getResources().getColor(R.color.textview));
+                }
                 String formattedSumAssets = NumberFormat.getCurrencyInstance().format(sum_assets);
                 String formattedSumDebts = NumberFormat.getCurrencyInstance().format(sum_debts);
                 String formattedNetworth = NumberFormat.getCurrencyInstance().format(networth);

@@ -109,6 +109,7 @@ public class ReportsFragment extends Fragment implements LoaderManager.LoaderCal
                 labels = new ArrayList<>();
                 int i = 0;
                 String name = "";
+
                 while (data.moveToNext()) {
 
                     if (i < 5) {

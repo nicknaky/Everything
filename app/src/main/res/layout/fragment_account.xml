@@ -111,7 +111,7 @@
                 android:layout_below="@id/networth_label"
                 android:gravity="center"
                 android:fontFamily="sans-serif"
-                android:textColor="@color/green_money"
+                android:textColor="@color/textview"
                 tools:text="@string/networth_value"
                 android:textSize="32sp"
                 />
