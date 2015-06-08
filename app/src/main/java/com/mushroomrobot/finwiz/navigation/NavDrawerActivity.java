@@ -1,10 +1,7 @@
 package com.mushroomrobot.finwiz.navigation;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.FragmentManager;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -23,7 +20,7 @@ import com.mushroomrobot.finwiz.R;
 import com.mushroomrobot.finwiz.account.DisplayAccountActivity;
 import com.mushroomrobot.finwiz.budget.DisplayBudgetActivity;
 import com.mushroomrobot.finwiz.common.BaseActivity;
-import com.mushroomrobot.finwiz.data.Demo;
+import com.mushroomrobot.finwiz.data.DemoDialog;
 import com.mushroomrobot.finwiz.reports.ReportsActivity;
 import com.mushroomrobot.finwiz.settings.SettingsActivity;
 
@@ -232,31 +229,5 @@ public class NavDrawerActivity extends BaseActivity {
 
         super.setContentView(fullLayout);
     }
-    public static class DemoDialog extends DialogFragment {
 
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            builder.setMessage("Initiate demo?");
-            builder.setPositiveButton(R.string.close_yes, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    Demo demo = new Demo();
-                    demo.demoSetUp(getActivity());
-                    dialog.dismiss();
-                    mDrawerLayout.closeDrawers();
-                }
-            });
-            builder.setNegativeButton(R.string.close_no, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                }
-            });
-
-            return builder.create();
-
-        }
-    }
 }

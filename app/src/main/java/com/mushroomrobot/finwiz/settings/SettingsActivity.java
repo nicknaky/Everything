@@ -1,26 +1,33 @@
 package com.mushroomrobot.finwiz.settings;
 
 import android.app.Activity;
+import android.app.DialogFragment;
+import android.app.FragmentManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.CompoundButton;
+import android.widget.RelativeLayout;
 import android.widget.Switch;
 
 import com.mushroomrobot.finwiz.R;
 import com.mushroomrobot.finwiz.budget.DisplayBudgetActivity;
+import com.mushroomrobot.finwiz.data.DemoDialog;
 
 /**
  * Created by NLam.
  */
 public class SettingsActivity extends Activity {
 
-    Switch pinModeSwitch;
     SharedPreferences sharedPreferences;
 
+    Switch pinModeSwitch;
     int pin;
+
+    RelativeLayout demoView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,11 +36,21 @@ public class SettingsActivity extends Activity {
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
         setContentView(R.layout.activity_settings);
-        pinModeSwitch = (Switch) findViewById(R.id.pin_switch);
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-
+        pinModeSwitch = (Switch) findViewById(R.id.pin_switch);
         checkPin();
+
+        demoView = (RelativeLayout) findViewById(R.id.demo_view);
+        demoView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fm = getFragmentManager();
+                DialogFragment dialog = new DemoDialog();
+                dialog.show(fm, "Demo");
+            }
+        });
+
 
         pinModeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -61,6 +78,7 @@ public class SettingsActivity extends Activity {
         });
 
     }
+
     private void checkPin(){
         pin = sharedPreferences.getInt(getResources().getString(R.string.pref_pin_key), 0);
 

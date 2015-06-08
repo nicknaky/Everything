@@ -72,24 +72,33 @@
         android:layout_marginTop="2dp"
         android:background="@color/textview" />
 
-    <TextView
-        android:id="@+id/dummydata"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="25dp"
-        android:layout_below="@id/demo_header"
-        android:layout_marginTop="10dp"
-        android:text="Initialize Dummy Data"
-        android:textSize="18sp" />
+       <RelativeLayout
+           android:id="@+id/demo_view"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_below="@id/demo_header">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="25dp"
-        android:layout_below="@id/dummydata"
-        android:layout_marginTop="0dp"
-        android:text="For testing purposes only. To be removed in official release."
-        android:textSize="12sp" />
+           <TextView
+               android:id="@+id/dummydata"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_marginLeft="25dp"
+               android:layout_marginTop="10dp"
+               android:text="Initialize Dummy Data"
+               android:textSize="18sp" />
+
+           <TextView
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_marginLeft="25dp"
+               android:layout_below="@id/dummydata"
+               android:layout_marginTop="0dp"
+               android:text="For testing purposes only. To be removed in official release."
+               android:textSize="12sp" />
+
+
+       </RelativeLayout>
+
 
 </RelativeLayout>
 

@@ -23,6 +23,7 @@ public class Demo {
 
         db.delete(EverythingContract.Category.TABLE_NAME, null, null);
         db.delete(EverythingContract.Transactions.TABLE_NAME, null, null);
+        db.delete(EverythingContract.Accounts.TABLE_NAME, null, null);
 
         ArrayList<ContentValues> cvList = new ArrayList<>();
         ContentValues cv = new ContentValues();
@@ -74,15 +75,15 @@ public class Demo {
         "Eating Out", "Eating Out", "Eating Out", "Eating Out", "Eating Out", "Eating Out", "Eating Out",
         "Gas",
         "Groceries", "Groceries", "Groceries", "Groceries",
-        "Health", "Health", "Health",
-        "Misc",
+        "Health", "Health",
+        "Misc", "Misc",
         "Monthly Bills"};
         int[] amount = {1079, 1000, 4200, 2000, 2300, 900,
         389, 271, 324, 684, 1533, 336, 389,
         3781,
         1249, 799, 900, 3300,
-        1072, 4759, 1000,
-        1000,
+        1072, 1000,
+        1000, 7489,
         11400};
 
         Calendar calendar = Calendar.getInstance();
@@ -92,8 +93,8 @@ public class Demo {
                 month + "/12/15",month + "/13/15",month + "/13/15",month + "/15/15",month + "/17/15",month + "/22/15",month + "/28/15",
         month + "/19/15",
                 month + "/09/15",month + "/16/15",month + "/22/15",month + "/23/15",
-                month + "/06/15",month + "/08/15",month + "/08/15",
-        month + "/16/15",
+                month + "/06/15",month + "/08/15",
+        month + "/16/15", month + "/01/15",
         month + "/09/15"};
         Date[] dates = new Date[stringDate.length];
         try {
@@ -111,8 +112,8 @@ public class Demo {
         "McDonald's work lunch", "McDonald's work lunch", "McDonald's work breakfast", "El maguey taqueria", "Chipotle with Jenny", "McDonald's", "Mcdonald's work lunch",
         "No Description",
                 "Safeway lasanga and salad","Safeway milk and salad","Safeway fried chicken and ice cream","Safeway beer cheese",
-                "L-theanine","Grossie","Caffeine",
-        "Haircut",
+                "L-theanine","Caffeine",
+        "Haircut", "Car repairs",
         "Caltrain"};
 
         ArrayList<ContentValues> contentValuesList = new ArrayList<>();
@@ -136,6 +137,36 @@ public class Demo {
             context.getContentResolver().notifyChange(EverythingContract.Transactions.CONTENT_URI_AMOUNT_BY_DAY,null);
             context.getContentResolver().notifyChange(EverythingContract.Transactions.CONTENT_URI_AMOUNT_BY_MONTH, null);
             context.getContentResolver().notifyChange(EverythingContract.Transactions.CONTENT_URI_HISTORY,null);
+        } finally {
+            db.endTransaction();
+        }
+
+        String[] accountNames = {"Checkings", "Savings", "Vanguard Brokerage", "Employer 401k", "Roth IRA", "Mortgage", "Student Loans", "Auto Loan"};
+        String[] accountTypes = {"Asset", "Asset", "Asset", "Asset", "Asset", "Debt", "Debt", "Debt"};
+        int[] accountBalances = {61386, 540912, 364250, 173685, 550000, 237500, 908612, 430017};
+
+        SimpleDateFormat dateName = new SimpleDateFormat("MMMM d, yyyy", Locale.US);
+        String dateString = dateName.format(calendar.getTime());
+
+        String[] accountDates = {dateString, dateString, dateString, dateString, dateString, dateString, dateString, dateString};
+
+        ArrayList<ContentValues> accountCVList = new ArrayList<>();
+        for (int i=0; i<accountNames.length; i++){
+            ContentValues accountCV = new ContentValues();
+            accountCV.put("name", accountNames[i]);
+            accountCV.put("type", accountTypes[i]);
+            accountCV.put("last_date", accountDates[i]);
+            accountCV.put("balance", accountBalances[i]);
+            accountCV.put("budget_flag", 0);
+            accountCVList.add(accountCV);
+        }
+
+        db.beginTransaction();
+        try {
+            for (ContentValues contentValues : accountCVList){
+                db.insertOrThrow(EverythingContract.Accounts.TABLE_NAME,null,contentValues);
+            }
+            db.setTransactionSuccessful();
         } finally {
             db.endTransaction();
         }
