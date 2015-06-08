@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <DatePicker
+        android:id="@+id/month_year_picker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:datePickerMode="spinner"
+        android:calendarViewShown="false"
+        android:paddingBottom="7dp"
+        >
+    </DatePicker>
+
+    <Button
+        android:id="@+id/month_year_save_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/month_year_picker"
+        android:layout_alignRight="@id/month_year_picker"
+        android:layout_marginRight="8dp"
+        android:text="@string/button_save"
+        />
+
+    <Button
+        android:id="@+id/month_year_cancel_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@id/month_year_save_button"
+        android:layout_alignBaseline="@id/month_year_save_button"
+        android:layout_marginRight="25dp"
+        android:text="@string/button_cancel" />
+
+</RelativeLayout>

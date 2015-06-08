@@ -1,6 +1,7 @@
 package com.mushroomrobot.finwiz.reports;
 
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.app.LoaderManager;
 import android.content.CursorLoader;
 import android.content.Loader;
@@ -52,6 +53,8 @@ public class ReportsFragment extends Fragment implements LoaderManager.LoaderCal
     ArrayList<Entry> entries;
     ArrayList<String> labels;
 
+    TextView monthTextView;
+
     PieChart pieChart;
     HorizontalBarChart barChart;
 
@@ -62,6 +65,13 @@ public class ReportsFragment extends Fragment implements LoaderManager.LoaderCal
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_reports, container, false);
+
+        monthTextView = (TextView) rootView.findViewById(R.id.reports_month_value);
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("MMMM yyyy");
+        String monthYear = sdf.format(calendar.getTime());
+        monthTextView.setText(monthYear);
+        monthTextView.setOnClickListener(mClickListener);
 
         pieChart = (PieChart) rootView.findViewById(R.id.reports_pichart);
         pieChart.setDescription("");
@@ -80,6 +90,22 @@ public class ReportsFragment extends Fragment implements LoaderManager.LoaderCal
         return rootView;
     }
 
+    View.OnClickListener mClickListener = new View.OnClickListener(){
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()){
+                case R.id.reports_month_value:
+                    //initiate date picker dialog with just month and year, hide day
+                    FragmentManager fm = getFragmentManager();
+                    MonthYearDialog monthYearDialog = new MonthYearDialog();
+                    monthYearDialog.show(fm,"");
+
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {

@@ -25,6 +25,7 @@
             <TextView
                 android:id="@+id/reports_month_value"
                 style="@android:style/Widget.Material.EditText"
+                android:focusable="false"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignBaseline="@id/reports_month_label"
