@@ -74,7 +74,7 @@ public class ReportsFragment extends Fragment implements LoaderManager.LoaderCal
 
         monthTextView = (TextView) rootView.findViewById(R.id.reports_month_value);
         Calendar calendar = Calendar.getInstance();
-        SimpleDateFormat sdf = new SimpleDateFormat("MMMM yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("MMMM yyyy", Locale.US);
         String monthYear = sdf.format(calendar.getTime());
         monthTextView.setText(monthYear);
         monthTextView.setOnClickListener(mClickListener);
@@ -96,6 +96,8 @@ public class ReportsFragment extends Fragment implements LoaderManager.LoaderCal
                 selectedDate = monthTextView.getText().toString();
                 Log.v("selectedDate", selectedDate);
                 getLoaderManager().restartLoader(LOADER_PIE, null, ReportsFragment.this);
+                getLoaderManager().restartLoader(LOADER_BAR, null, ReportsFragment.this);
+                getLoaderManager().restartLoader(LOADER_EXPENSIVE, null, ReportsFragment.this);
             }
         });
 
@@ -137,15 +139,13 @@ public class ReportsFragment extends Fragment implements LoaderManager.LoaderCal
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
         if (id == LOADER_PIE) {
-            selectedDate = monthTextView.getText().toString();
-            Log.v("row141 LOADER PIE", selectedDate);
             CursorLoader cursorLoader = new CursorLoader(getActivity(), Category.CONTENT_URI_PIE, null, selectedDate, null, null);
             return cursorLoader;
         } else if (id == LOADER_BAR) {
-            CursorLoader cursorLoader = new CursorLoader(getActivity(), Category.CONTENT_URI_FREQUENCY, null, null, null, null);
+            CursorLoader cursorLoader = new CursorLoader(getActivity(), Category.CONTENT_URI_FREQUENCY, null, selectedDate, null, null);
             return cursorLoader;
         } else if (id == LOADER_EXPENSIVE) {
-            CursorLoader cursorLoader = new CursorLoader(getActivity(), Transactions.CONTENT_URI_TOP_THREE, null, null, null, null);
+            CursorLoader cursorLoader = new CursorLoader(getActivity(), Transactions.CONTENT_URI_TOP_THREE, null, selectedDate, null, null);
             return cursorLoader;
         } else return null;
     }
@@ -153,79 +153,94 @@ public class ReportsFragment extends Fragment implements LoaderManager.LoaderCal
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 
-        if (data.moveToFirst()) {
+        // if (data.moveToFirst()) {
 
-            data.moveToPrevious();
+        //    data.moveToPrevious();
 
-            if (loader.getId() == LOADER_PIE) {
+        if (loader.getId() == LOADER_PIE) {
+            //pieChart.invalidate();
 
-                pieChart.invalidate();
+            entries = new ArrayList<>();
+            labels = new ArrayList<>();
+            unusedLabels = new ArrayList<>();
+            int i = 0;
+            String name = "";
 
-                entries = new ArrayList<>();
-                labels = new ArrayList<>();
-                unusedLabels = new ArrayList<>();
-                int i = 0;
-                String name = "";
+            while (i < 5 && data.moveToNext()) {
 
-                while (i < 5 && data.moveToNext()) {
-
+                double value = data.getDouble(data.getColumnIndex(Category.COLUMN_SPENT)) / 100;
+                if (value > 0) {
                     name = data.getString(data.getColumnIndex(Category.COLUMN_NAME));
                     labels.add(name);
 
-                    double value = data.getDouble(data.getColumnIndex(Category.COLUMN_SPENT)) / 100;
                     entries.add(new Entry((float) value, i));
-
                     i++;
                 }
-                double otherValue = 0;
-                while (data.moveToNext()){
+
+            }
+            if (entries.size() > 0) {
+                pieChart.setDrawHoleEnabled(true);
+            } else {
+                pieChart.setDrawHoleEnabled(false);
+            }
+
+            double sumOtherValue = 0;
+            while (data.moveToNext()) {
+                double otherValue = data.getDouble(data.getColumnIndex(Category.COLUMN_SPENT)) / 100;
+                //We check to see if these categories have any spend on them, if not then pass over them.
+                if (otherValue > 0) {
                     name = data.getString(data.getColumnIndex(Category.COLUMN_NAME));
                     unusedLabels.add(name);
 
-                    otherValue += data.getDouble(data.getColumnIndex(Category.COLUMN_SPENT)) / 100;
+                    sumOtherValue += otherValue;
                 }
-                otherTextView.setVisibility(TextView.INVISIBLE);
-                //Check to see if there's any leftover spend, if so, then add an "Other" category
-                if (otherValue > 0){
-                    labels.add("Other");
-                    entries.add(new Entry((float) otherValue, i));
-                    otherTextView.setVisibility(TextView.VISIBLE);
-                    String printOthers = "includes ";
-                    for (String s : unusedLabels){
-                        printOthers += s + ", ";
-                    }
-                    Log.v("printOthers", printOthers);
-                    String trimPrint = printOthers.substring(0, printOthers.length() - 2);
-                    otherLabelsTextView.setText(trimPrint);
+            }
+            otherTextView.setVisibility(TextView.INVISIBLE);
+            otherLabelsTextView.setText("");
+            //Check to see if there's any leftover spend, if so, then add an "Other" category
+            if (sumOtherValue > 0) {
+                labels.add("Other");
+                entries.add(new Entry((float) sumOtherValue, i));
+                otherTextView.setVisibility(TextView.VISIBLE);
+                String printOthers = "includes ";
+                for (String s : unusedLabels) {
+                    printOthers += s + ", ";
                 }
+                Log.v("printOthers", printOthers);
+                String trimPrint = printOthers.substring(0, printOthers.length() - 2);
+                otherLabelsTextView.setText(trimPrint);
+            }
 
-                data.moveToFirst();
+            data.moveToFirst();
 
-                String description = "";
-                PieDataSet dataSet = new PieDataSet(entries, description);
-                dataSet.setSliceSpace(3f);
-                dataSet.setSelectionShift(5f);
+            String description = "";
+            PieDataSet dataSet = new PieDataSet(entries, description);
+            dataSet.setSliceSpace(3f);
+            dataSet.setSelectionShift(5f);
 
-                ArrayList<Integer> colors = new ArrayList<>();
-                for (int c : CustomValues.VORDIPLOM_COLORS) {
-                    colors.add(c);
-                }
-                dataSet.setColors(colors);
+            ArrayList<Integer> colors = new ArrayList<>();
+            for (int c : CustomValues.VORDIPLOM_COLORS) {
+                colors.add(c);
+            }
+            dataSet.setColors(colors);
 
-                PieData pieData = new PieData(labels, dataSet);
-                pieData.setValueFormatter(new PercentFormatter());
-                pieData.setValueTextSize(12f);
-                pieData.setValueTextColor(getActivity().getResources().getColor(R.color.textview));
-                pieData.setValueTypeface(Typeface.SANS_SERIF);
+            PieData pieData = new PieData(labels, dataSet);
+            pieData.setValueFormatter(new PercentFormatter());
+            pieData.setValueTextSize(12f);
+            pieData.setValueTextColor(getActivity().getResources().getColor(R.color.textview));
+            pieData.setValueTypeface(Typeface.SANS_SERIF);
 
-                pieChart.setUsePercentValues(true);
-                pieChart.setDrawSliceText(true);
-                pieChart.setData(pieData);
-                pieChart.animateX(1800);
+            pieChart.setUsePercentValues(true);
+            pieChart.setDrawSliceText(true);
+            pieChart.setData(pieData);
+            pieChart.animateX(1800);
 
-                pieChart.getLegend().setPosition(Legend.LegendPosition.BELOW_CHART_CENTER);
+            pieChart.getLegend().setPosition(Legend.LegendPosition.BELOW_CHART_CENTER);
 
-            } else if (loader.getId() == LOADER_BAR) {
+        } else if (loader.getId() == LOADER_BAR) {
+
+            if (data.moveToFirst()) {
+
 
                 ArrayList<String> labels = new ArrayList<>();
                 ArrayList<BarEntry> entries = new ArrayList<>();
@@ -297,12 +312,20 @@ public class ReportsFragment extends Fragment implements LoaderManager.LoaderCal
                 barChart.setData(barData);
                 barChart.animateY(3000);
 
-            } else if (loader.getId() == LOADER_EXPENSIVE) {
+            } else {
+                barChart.clear();
+                barChart.invalidate();
+            }
+
+        } else if (loader.getId() == LOADER_EXPENSIVE) {
+
+            expensiveLinearLayout.removeAllViews();
+
+            if (data.moveToFirst()) {
 
                 data.moveToLast();
                 data.moveToNext();
                 while (data.moveToPrevious()) {
-
 
                     int i = 0;
 
@@ -332,9 +355,13 @@ public class ReportsFragment extends Fragment implements LoaderManager.LoaderCal
                     categoryTextView.setText(category);
                     descTextView.setText(description);
                 }
-
             }
+
         }
+        //  } else {
+
+
+        // }
     }
 
 

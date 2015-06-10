@@ -51,6 +51,7 @@
         <activity android:name="com.mushroomrobot.finwiz.reports.ReportsActivity"
             android:screenOrientation="portrait"
             android:label="Reports"
+            android:theme="@style/NoShadow"
             android:noHistory="true"
             />
 

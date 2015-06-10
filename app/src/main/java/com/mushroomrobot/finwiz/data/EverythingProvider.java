@@ -120,9 +120,19 @@ public class EverythingProvider extends ContentProvider {
         return cursor;
     }
 
-    private Cursor getTopThreeTransactions() {
+    private Cursor getTopThreeTransactions(String selectedDate) {
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMMM yyyy", Locale.US);
+        Date date = new Date();
+        try {
+            date = simpleDateFormat.parse(selectedDate);
+        } catch (ParseException e) {
+            Toast.makeText(getContext(), "Error parsing date.", Toast.LENGTH_SHORT).show();
+        }
 
         Calendar myCalendar = Calendar.getInstance();
+        myCalendar.setTime(date);
+
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM", Locale.US);
         String monthYear = sdf.format(myCalendar.getTime());
 
@@ -339,14 +349,14 @@ public class EverythingProvider extends ContentProvider {
                 break;
 
             case CATEGORY_FREQUENCY:
-                retCursor = getCategoryFrequency();
+                retCursor = getCategoryFrequency(selection);
                 break;
 
             case TRANSACTIONS:
                 retCursor = getCategoryTransactions(selection, selectionArgs);
                 break;
             case TRANSACTIONS_TOP_THREE:
-                retCursor = getTopThreeTransactions();
+                retCursor = getTopThreeTransactions(selection);
                 break;
             case TRANSACTIONS_ID:
                 SQLiteDatabase db = database.getWritableDatabase();
@@ -568,9 +578,20 @@ public class EverythingProvider extends ContentProvider {
         getContext().getContentResolver().notifyChange(Transactions.CONTENT_URI, null);
     }
 
-    private Cursor getCategoryFrequency() {
+    private Cursor getCategoryFrequency(String selectedDate) {
+        Log.v("barChart query", "query");
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMMM yyyy", Locale.US);
+        Date date = new Date();
+        try {
+            date = simpleDateFormat.parse(selectedDate);
+        } catch (ParseException e){
+            Toast.makeText(getContext(), "Error parsing date", Toast.LENGTH_SHORT).show();
+        }
 
         Calendar myCalendar = Calendar.getInstance();
+        myCalendar.setTime(date);
+
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM", Locale.US);
         String monthYear = sdf.format(myCalendar.getTime());
 

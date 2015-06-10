@@ -23,7 +23,7 @@
         android:layout_below="@id/month_year_picker"
         android:layout_alignRight="@id/month_year_picker"
         android:layout_marginRight="8dp"
-        android:text="@string/button_save"
+        android:text="@string/button_select"
         />
 
     <Button
