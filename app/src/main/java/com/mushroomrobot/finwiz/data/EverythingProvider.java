@@ -11,14 +11,17 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.mushroomrobot.finwiz.budget.Budget;
 import com.mushroomrobot.finwiz.data.EverythingContract.Accounts;
 import com.mushroomrobot.finwiz.data.EverythingContract.Category;
 import com.mushroomrobot.finwiz.data.EverythingContract.Transactions;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 /**
@@ -44,6 +47,7 @@ public class EverythingProvider extends ContentProvider {
 
     private static final int CATEGORY_OVERVIEW = 26;
     private static final int CATEGORY_FREQUENCY = 27;
+    private static final int CATEGORY_PIE = 28;
 
     //All transactions
     private static final int TRANSACTIONS = 30;
@@ -78,6 +82,7 @@ public class EverythingProvider extends ContentProvider {
         sUriMatcher.addURI(AUTHORITY, EverythingContract.PATH_CATEGORY + "/OVERVIEW", CATEGORY_OVERVIEW);
         sUriMatcher.addURI(AUTHORITY, EverythingContract.PATH_CATEGORY + "/FREQUENCY", CATEGORY_FREQUENCY);
         sUriMatcher.addURI(AUTHORITY, EverythingContract.PATH_TRANSACTIONS + "/TOP_THREE", TRANSACTIONS_TOP_THREE);
+        sUriMatcher.addURI(AUTHORITY, EverythingContract.PATH_CATEGORY + "/PIE", CATEGORY_PIE);
     }
 
 
@@ -166,6 +171,34 @@ public class EverythingProvider extends ContentProvider {
 
         String getBudgetCursor = cursor.getColumnName(1);
         Log.v("getBudgetCursor", getBudgetCursor);
+
+        return cursor;
+    }
+
+    private Cursor getBudgetsPie(String selectedDate) {
+        Log.v("budgetsPie selectedDate", selectedDate);
+        Calendar myCalendar = Calendar.getInstance();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMMM yyyy", Locale.US);
+        Date date = new Date();
+        try{
+            date = simpleDateFormat.parse(selectedDate);
+        } catch (ParseException e){
+            Toast.makeText(getContext(), "Error parsing date", Toast.LENGTH_SHORT).show();
+        }
+        myCalendar.setTime(date);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM", Locale.US);
+        String monthYear = sdf.format(myCalendar.getTime());
+        Log.v("monthYear LOADER PIE", monthYear);
+        SQLiteDatabase db = database.getWritableDatabase();
+
+        Cursor cursor = db.rawQuery("select category._ID, category.name, category.budget, (total(transactions.amount)) as spent from " +
+                //"(select total(transactions.amount) from transactions) as total_spent from " +
+                "category LEFT JOIN transactions " +
+                "on (category.name = transactions.category) " +
+                "and (strftime('%Y-%m', transactions.date/1000, 'unixepoch', 'localtime') = '" + monthYear + "') " +
+                "group by category.name " +
+                "order by spent desc", null);
 
         return cursor;
     }
@@ -294,6 +327,11 @@ public class EverythingProvider extends ContentProvider {
                 break;
             case CATEGORY_ID:
                 retCursor = getBudgets(selection, sortOrder);
+                break;
+            case CATEGORY_PIE:
+                Log.v("category pie query", "before query");
+                retCursor = getBudgetsPie(selection);
+                Log.v("category pie query", "queried");
                 break;
 
             case CATEGORY_OVERVIEW:

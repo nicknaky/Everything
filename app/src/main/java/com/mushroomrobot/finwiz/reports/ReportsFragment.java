@@ -9,6 +9,8 @@ import android.database.Cursor;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -28,11 +30,11 @@ import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
-import com.github.mikephil.charting.utils.ColorTemplate;
 import com.github.mikephil.charting.utils.PercentFormatter;
 import com.mushroomrobot.finwiz.R;
 import com.mushroomrobot.finwiz.data.EverythingContract.Category;
 import com.mushroomrobot.finwiz.data.EverythingContract.Transactions;
+import com.mushroomrobot.finwiz.utils.CustomValues;
 import com.mushroomrobot.finwiz.utils.MPCustomNumberFormatter;
 
 import java.text.NumberFormat;
@@ -52,8 +54,10 @@ public class ReportsFragment extends Fragment implements LoaderManager.LoaderCal
 
     ArrayList<Entry> entries;
     ArrayList<String> labels;
+    ArrayList<String> unusedLabels;
 
-    TextView monthTextView;
+    TextView monthTextView, otherTextView, otherLabelsTextView;
+    String selectedDate;
 
     PieChart pieChart;
     HorizontalBarChart barChart;
@@ -65,6 +69,8 @@ public class ReportsFragment extends Fragment implements LoaderManager.LoaderCal
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_reports, container, false);
+        otherTextView = (TextView) rootView.findViewById(R.id.pie_other_label);
+        otherLabelsTextView = (TextView) rootView.findViewById(R.id.pie_other_textview);
 
         monthTextView = (TextView) rootView.findViewById(R.id.reports_month_value);
         Calendar calendar = Calendar.getInstance();
@@ -72,6 +78,26 @@ public class ReportsFragment extends Fragment implements LoaderManager.LoaderCal
         String monthYear = sdf.format(calendar.getTime());
         monthTextView.setText(monthYear);
         monthTextView.setOnClickListener(mClickListener);
+        selectedDate = monthTextView.getText().toString();
+
+        monthTextView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                selectedDate = monthTextView.getText().toString();
+                Log.v("selectedDate", selectedDate);
+                getLoaderManager().restartLoader(LOADER_PIE, null, ReportsFragment.this);
+            }
+        });
 
         pieChart = (PieChart) rootView.findViewById(R.id.reports_pichart);
         pieChart.setDescription("");
@@ -90,15 +116,15 @@ public class ReportsFragment extends Fragment implements LoaderManager.LoaderCal
         return rootView;
     }
 
-    View.OnClickListener mClickListener = new View.OnClickListener(){
+    View.OnClickListener mClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            switch (v.getId()){
+            switch (v.getId()) {
                 case R.id.reports_month_value:
                     //initiate date picker dialog with just month and year, hide day
                     FragmentManager fm = getFragmentManager();
                     MonthYearDialog monthYearDialog = new MonthYearDialog();
-                    monthYearDialog.show(fm,"");
+                    monthYearDialog.show(fm, "");
 
                     break;
                 default:
@@ -111,7 +137,9 @@ public class ReportsFragment extends Fragment implements LoaderManager.LoaderCal
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
         if (id == LOADER_PIE) {
-            CursorLoader cursorLoader = new CursorLoader(getActivity(), Category.CONTENT_URI, null, null, null, "spent desc");
+            selectedDate = monthTextView.getText().toString();
+            Log.v("row141 LOADER PIE", selectedDate);
+            CursorLoader cursorLoader = new CursorLoader(getActivity(), Category.CONTENT_URI_PIE, null, selectedDate, null, null);
             return cursorLoader;
         } else if (id == LOADER_BAR) {
             CursorLoader cursorLoader = new CursorLoader(getActivity(), Category.CONTENT_URI_FREQUENCY, null, null, null, null);
@@ -131,28 +159,47 @@ public class ReportsFragment extends Fragment implements LoaderManager.LoaderCal
 
             if (loader.getId() == LOADER_PIE) {
 
+                pieChart.invalidate();
+
                 entries = new ArrayList<>();
                 labels = new ArrayList<>();
+                unusedLabels = new ArrayList<>();
                 int i = 0;
                 String name = "";
 
-                while (data.moveToNext()) {
+                while (i < 5 && data.moveToNext()) {
 
-                    if (i < 5) {
-                        name = data.getString(data.getColumnIndex(Category.COLUMN_NAME));
-                        labels.add(name);
-                    } else {
-                        name = "";
-                        labels.add(name);
-                    }
+                    name = data.getString(data.getColumnIndex(Category.COLUMN_NAME));
+                    labels.add(name);
 
                     double value = data.getDouble(data.getColumnIndex(Category.COLUMN_SPENT)) / 100;
                     entries.add(new Entry((float) value, i));
-                    i++;
 
-                    String logIt = name + ": " + String.valueOf(value);
-                    Log.v("Log", logIt);
+                    i++;
                 }
+                double otherValue = 0;
+                while (data.moveToNext()){
+                    name = data.getString(data.getColumnIndex(Category.COLUMN_NAME));
+                    unusedLabels.add(name);
+
+                    otherValue += data.getDouble(data.getColumnIndex(Category.COLUMN_SPENT)) / 100;
+                }
+                otherTextView.setVisibility(TextView.INVISIBLE);
+                //Check to see if there's any leftover spend, if so, then add an "Other" category
+                if (otherValue > 0){
+                    labels.add("Other");
+                    entries.add(new Entry((float) otherValue, i));
+                    otherTextView.setVisibility(TextView.VISIBLE);
+                    String printOthers = "includes ";
+                    for (String s : unusedLabels){
+                        printOthers += s + ", ";
+                    }
+                    Log.v("printOthers", printOthers);
+                    String trimPrint = printOthers.substring(0, printOthers.length() - 2);
+                    otherLabelsTextView.setText(trimPrint);
+                }
+
+                data.moveToFirst();
 
                 String description = "";
                 PieDataSet dataSet = new PieDataSet(entries, description);
@@ -160,7 +207,7 @@ public class ReportsFragment extends Fragment implements LoaderManager.LoaderCal
                 dataSet.setSelectionShift(5f);
 
                 ArrayList<Integer> colors = new ArrayList<>();
-                for (int c : ColorTemplate.VORDIPLOM_COLORS) {
+                for (int c : CustomValues.VORDIPLOM_COLORS) {
                     colors.add(c);
                 }
                 dataSet.setColors(colors);

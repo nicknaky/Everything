@@ -17,23 +17,27 @@
                 android:id="@+id/reports_month_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
+                android:layout_marginLeft="20dp"
                 android:layout_marginTop="16dp"
-                android:text="Month:"
+                android:text="Report Month:"
+                android:fontFamily="sans-serif-medium"
                 android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/reports_month_value"
                 style="@android:style/Widget.Material.EditText"
                 android:focusable="false"
-                android:layout_width="wrap_content"
+                android:layout_width="172dp"
                 android:layout_height="wrap_content"
                 android:layout_alignBaseline="@id/reports_month_label"
                 android:layout_marginLeft="10dp"
+                android:layout_marginRight="16dp"
                 android:layout_toRightOf="@id/reports_month_label"
+                android:gravity="start"
                 android:textSize="20sp"
                 android:textColor="@color/textview"
-                tools:text="June 2015" />
+                android:fontFamily="sans-serif-medium"
+                tools:text="November 2015" />
 
 
             <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
@@ -42,7 +46,7 @@
                 android:layout_height="300dp"
                 android:layout_centerHorizontal="true"
                 android:layout_below="@id/reports_month_label"
-                android:layout_marginTop="7dp"
+                android:layout_marginTop="17dp"
                 card_view:cardCornerRadius="0dp"
                 card_view:cardElevation="4sp"
                 card_view:cardUseCompatPadding="true">
@@ -61,6 +65,35 @@
                     android:text="Top Spend by Category"
                     android:textColor="@color/white"
                     android:textSize="20sp" />
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/pie_other_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="25dp"
+                        android:layout_marginTop="270dp"
+                        android:textStyle="bold"
+                        android:textSize="12sp"
+                        android:text="Other "
+                        android:visibility="invisible"/>
+
+                    <TextView
+                        android:id="@+id/pie_other_textview"
+                        android:layout_width="270dp"
+                        android:layout_height="16dp"
+                        android:layout_toRightOf="@id/pie_other_label"
+                        android:layout_alignBaseline="@id/pie_other_label"
+                        android:textSize="12sp"
+                        android:singleLine="true"
+                        android:ellipsize="end"
+                        tools:text="includes: Entertainment, Gas, Health"/>
+
+                </RelativeLayout>
+
             </android.support.v7.widget.CardView>
 
             <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
