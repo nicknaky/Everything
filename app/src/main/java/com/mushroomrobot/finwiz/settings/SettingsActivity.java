@@ -12,7 +12,6 @@ import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
-import android.widget.Toast;
 
 import com.mushroomrobot.finwiz.R;
 import com.mushroomrobot.finwiz.budget.DisplayBudgetActivity;
@@ -59,7 +58,9 @@ public class SettingsActivity extends Activity {
             public void onClick(View v) {
                 ExportCsv exportCsv = new ExportCsv();
                 exportCsv.write();
-                Toast.makeText(SettingsActivity.this, "Write Success", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(SettingsActivity.this, "Write Success", Toast.LENGTH_SHORT).show();
+                startActivity(exportCsv.getEmailIntent());
+
             }
         });
 
