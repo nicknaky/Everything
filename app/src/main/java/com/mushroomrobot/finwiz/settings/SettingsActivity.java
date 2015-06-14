@@ -56,10 +56,8 @@ public class SettingsActivity extends Activity {
         dataView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ExportCsv exportCsv = new ExportCsv();
-                exportCsv.write();
-                //Toast.makeText(SettingsActivity.this, "Write Success", Toast.LENGTH_SHORT).show();
-                startActivity(exportCsv.getEmailIntent());
+                (new Thread(new ExportCsv(SettingsActivity.this))).start();
+
 
             }
         });

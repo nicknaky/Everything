@@ -12,6 +12,7 @@
             <option value="$PROJECT_DIR$/androidplot-core-0.6.1" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/mpandroidchartlibrary-2-1-0" />
+            <option value="$PROJECT_DIR$/opencsv-3.4" />
           </set>
         </option>
       </GradleProjectSettings>

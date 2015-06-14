@@ -60,6 +60,7 @@ public class EverythingProvider extends ContentProvider {
     //Transaction details
     private static final int TRANSACTIONS_ID = 35;
 
+
     private static final String AUTHORITY = "com.mushroomrobot.finwiz.data";
 
 
