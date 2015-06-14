@@ -115,7 +115,7 @@ public class DisplayBudgetFragment extends Fragment
         getActivity().getActionBar().setTitle("Budgets - " + monthYear);
 
 
-        headerView = inflater.inflate(R.layout.list_item_budget_graph, null, false);
+        headerView = inflater.inflate(R.layout.li_budget_graph_header, null, false);
         transTrendingPlot = (XYPlot) headerView.findViewById(R.id.list_item_plot_cardview);
         budgetSetTextView = (TextView) headerView.findViewById(R.id.budget_header_value);
         spentTextView = (TextView) headerView.findViewById(R.id.spent_header_value);

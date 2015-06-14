@@ -52,16 +52,56 @@
 
 
     <TextView
-        android:id="@+id/demo_header"
+        android:id="@+id/data_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="25dp"
         android:layout_below="@id/security_view"
         android:layout_marginTop="16dp"
         android:fontFamily="sans-serif-medium"
+        android:text="DATA"
+        android:textSize="12sp"
+        android:textStyle="bold" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_below="@id/data_header"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="2dp"
+        android:background="@color/textview" />
+
+    <RelativeLayout
+        android:id="@+id/data_view"
+        android:layout_width="220dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/data_header">
+
+        <TextView
+            android:id="@+id/exportdata"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25dp"
+            android:layout_marginTop="10dp"
+            android:text="Export Data to CSV"
+            android:textSize="18sp" />
+
+    </RelativeLayout>
+
+
+    <TextView
+        android:id="@+id/demo_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="25dp"
+        android:layout_below="@id/data_view"
+        android:layout_marginTop="16dp"
+        android:fontFamily="sans-serif-medium"
         android:text="DEMO"
         android:textSize="12sp"
         android:textStyle="bold" />
+
 
     <View
         android:layout_width="match_parent"

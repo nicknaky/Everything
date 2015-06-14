@@ -44,6 +44,8 @@
             android:layout_alignLeft="@id/expensive_category_textview"
             android:layout_below="@id/expensive_category_textview"
             android:textStyle="italic"
+            android:singleLine="true"
+            android:ellipsize="end"
             tools:text="Hakkasan bottle service" />
 
     </RelativeLayout>

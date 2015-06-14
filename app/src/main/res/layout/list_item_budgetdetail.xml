@@ -21,6 +21,8 @@
         android:layout_marginLeft="16dp"
         android:layout_toRightOf="@id/bd_list_date"
         android:textStyle="italic"
+        android:singleLine="true"
+        android:ellipsize="end"
         tools:text="Dinner with Jenny" />
 
     <TextView

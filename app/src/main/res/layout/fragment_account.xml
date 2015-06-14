@@ -2,187 +2,39 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
-
-    <android.support.v7.widget.CardView
-        xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/networth_cardview"
-        android:layout_width="340dp"
-        android:layout_height="200dp"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="7dp"
-        card_view:cardCornerRadius="0dp"
-        card_view:cardElevation="4sp"
-        card_view:cardUseCompatPadding="true">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/theme"
-            android:gravity="center_horizontal"
-            android:text="Net Worth"
-            android:textColor="@color/white"
-            android:textSize="20sp" />
-
-            <LinearLayout
-
-                android:paddingTop="15dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:orientation="horizontal">
+    android:layout_height="match_parent">
 
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:layout_weight="1">
+    <ListView
+        android:id="@+id/list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:choiceMode="singleChoice"
+        android:divider="@null"
+        android:dividerHeight="0dp" />
 
-                    <TextView
-                        android:id="@+id/assets_textview"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/assets_label"
-                        android:textSize="14sp"/>
-
-                    <TextView
-                        android:id="@+id/total_assets_textview"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/green_money"
-                        tools:text="@string/assets_value"
-                        android:textSize="20sp"/>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:gravity="center"
-                    android:layout_gravity="center"
-                    android:layout_weight="1">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/debts_label"
-                        android:textSize="14sp"/>
-
-                    <TextView
-                        android:id="@+id/total_debts_textview"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/red_money"
-                        tools:text="@string/debts_value"
-                        android:textSize="20sp"/>
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-        <RelativeLayout
-            android:id="@+id/networth_bar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="35dp"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/networth_label"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="sans-serif"
-                android:gravity="center"
-                android:text="@string/networth_label"
-                tools:text="NET WORTH"
-                android:textSize="18sp" />
-
-            <TextView
-                android:id="@+id/networth_textview"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/networth_label"
-                android:gravity="center"
-                android:fontFamily="sans-serif"
-                android:textColor="@color/textview"
-                tools:text="@string/networth_value"
-                android:textSize="32sp"
-                />
-
-        </RelativeLayout>
-
-    </android.support.v7.widget.CardView>
-
-    <android.support.v7.widget.CardView
-        xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/accounts_list_cardview"
-        android:layout_width="340dp"
+    <TextView
+        android:id="@+id/no_accounts_textview"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:gravity="center_horizontal"
+        android:text="@string/no_accounts_msg"
+        android:textSize="18sp" />
+
+    <Button
+        android:id="@+id/add_account_button"
+        android:layout_width="240dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/no_accounts_textview"
         android:layout_centerHorizontal="true"
-        android:layout_below="@id/networth_cardview"
-        android:layout_marginTop="7dp"
-        card_view:cardCornerRadius="0dp"
-        card_view:cardElevation="4sp"
-        card_view:cardUseCompatPadding="true">
-
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:id="@+id/accounts_label"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/theme"
-                android:gravity="center_horizontal"
-                android:text="Accounts"
-                android:textColor="@color/white"
-                android:textSize="20sp" />
-
-            <ListView
-                android:id="@+id/list"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_below="@id/accounts_label"
-                android:choiceMode="singleChoice"
-                android:divider="@null"
-                android:dividerHeight="0dp"
-                />
-
-            <TextView
-                android:id="@+id/no_accounts_textview"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="40dp"
-                android:gravity="center_horizontal"
-                android:text="@string/no_accounts_msg"
-                android:textSize="18sp" />
-
-            <Button
-                android:id="@+id/add_account_button"
-                android:layout_width="240dp"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_below="@id/no_accounts_textview"
-                android:layout_marginTop="16dp"
-                android:paddingBottom="25dp"
-                android:background="#00C8C8"
-                android:text="@string/add_account"
-                android:textColor="#ffffff"
-                android:textSize="22sp" />
-        </RelativeLayout>
+        android:layout_marginTop="16dp"
+        android:background="#00C8C8"
+        android:paddingBottom="25dp"
+        android:text="@string/add_account"
+        android:textColor="#ffffff"
+        android:textSize="22sp" />
 
 
-        </android.support.v7.widget.CardView>
-
-
-
-    </RelativeLayout>
+</RelativeLayout>
 

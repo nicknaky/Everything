@@ -12,10 +12,12 @@ import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
+import android.widget.Toast;
 
 import com.mushroomrobot.finwiz.R;
 import com.mushroomrobot.finwiz.budget.DisplayBudgetActivity;
 import com.mushroomrobot.finwiz.data.DemoDialog;
+import com.mushroomrobot.finwiz.data.ExportCsv;
 
 /**
  * Created by NLam.
@@ -27,7 +29,7 @@ public class SettingsActivity extends Activity {
     Switch pinModeSwitch;
     int pin;
 
-    RelativeLayout demoView;
+    RelativeLayout dataView, demoView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +50,16 @@ public class SettingsActivity extends Activity {
                 FragmentManager fm = getFragmentManager();
                 DialogFragment dialog = new DemoDialog();
                 dialog.show(fm, "Demo");
+            }
+        });
+
+        dataView = (RelativeLayout) findViewById(R.id.data_view);
+        dataView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ExportCsv exportCsv = new ExportCsv();
+                exportCsv.write();
+                Toast.makeText(SettingsActivity.this, "Write Success", Toast.LENGTH_SHORT).show();
             }
         });
 

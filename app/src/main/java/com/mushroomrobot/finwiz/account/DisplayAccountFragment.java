@@ -78,16 +78,20 @@ public class DisplayAccountFragment extends Fragment
 
         View rootView = inflater.inflate(R.layout.fragment_account, container, false);
 
-        totalAssetsTextView = (TextView) rootView.findViewById(R.id.total_assets_textview);
-        totalDebtsTextView = (TextView) rootView.findViewById(R.id.total_debts_textview);
-        networthTextView = (TextView) rootView.findViewById(R.id.networth_textview);
-
         noAccountsTextView = (TextView) rootView.findViewById(R.id.no_accounts_textview);
         noAccountsTextView.setVisibility(TextView.VISIBLE);
         addAccount = (Button) rootView.findViewById(R.id.add_account_button);
         addAccount.setVisibility(Button.VISIBLE);
 
         listView = (ListView) rootView.findViewById(R.id.list);
+
+        View headerView = inflater.inflate(R.layout.li_account_networth_header, null, false);
+
+        totalAssetsTextView = (TextView) headerView.findViewById(R.id.total_assets_textview);
+        totalDebtsTextView = (TextView) headerView.findViewById(R.id.total_debts_textview);
+        networthTextView = (TextView) headerView.findViewById(R.id.networth_textview);
+
+        listView.addHeaderView(headerView, null, false);
 
         fillData();
 
