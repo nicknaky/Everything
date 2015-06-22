@@ -1,7 +1,7 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="android:Theme.Holo.Light">
+    <style name="AppTheme" parent="android:Theme.Material.Light.DarkActionBar">
         <!-- Customize your theme here. -->
 
         <item name="android:logo">@android:color/transparent</item>
@@ -11,6 +11,35 @@
         <item name="drawerArrowStyle">@style/MyDrawerArrowStyle</item>
         <item name="android:spinnerStyle">@style/MySpinnerStyle</item>
 
+
+        <item name="android:alertDialogTheme">@style/MyAlertDialogTheme</item>
+
+        <!-- http://scriptedpapers.com/2015/02/12/android-action-bar-and-overflow-menu-customization-with-theme-appcompat/ -->
+        <item name="android:dropDownListViewStyle">@style/MyDropDownListViewStyle</item>
+
+        <item name="android:colorPrimary">@color/theme</item>
+        <item name="android:colorPrimaryDark">@color/theme_darker</item>
+        <item name="android:colorAccent">@color/theme</item>
+
+<!-- http://stackoverflow.com/questions/28738089/change-datepicker-dialog-color-for-android-5-0 -->
+        <item name="android:datePickerDialogTheme">@style/MyDatePickerDialogTheme</item>
+
+    </style>
+
+
+
+    <style name="MyAlertDialogTheme" parent="android:Theme.Material.Light.Dialog.Alert">
+        <item name="android:colorAccent">@color/theme</item>
+        <item name="android:textColorPrimary">@color/textview</item>
+    </style>
+
+    <style name="MyDropDownListViewStyle" parent="android:style/Widget.Material.Light.ListView.DropDown">
+        <item name="android:background">#fafafa</item>
+    </style>
+
+
+    <style name="MyDatePickerDialogTheme" parent="android:Theme.Material.Light.Dialog">
+        <item name="android:colorAccent">@color/theme</item>
     </style>
 
     <style name="MySpinnerStyle" parent="android:style/Widget.Holo.Spinner">
@@ -31,6 +60,7 @@
         <item name="android:minHeight">36dp</item>
         <item name="android:minWidth">64dp</item>
         <item name="android:padding">8dp</item>
+        <item name="android:textSize">14sp</item>
 
 
 
@@ -41,6 +71,7 @@
         <item name="android:background">@color/theme</item>
         <item name="android:titleTextStyle">@style/TitleTextStyle</item>
         <item name="titleTextStyle">@style/TitleTextStyle</item>
+
     </style>
 
     <style name="NoShadow" parent="style/AppTheme">
