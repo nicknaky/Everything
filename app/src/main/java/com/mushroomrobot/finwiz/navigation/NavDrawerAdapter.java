@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mushroomrobot.finwiz.R;
@@ -22,6 +23,12 @@ public class NavDrawerAdapter extends ArrayAdapter<Item> {
     private int selectedPosition;
 
     private String[] navOptions = new String[]{"Budgets", "Reports", "Accounts", "Settings"};
+    private int[] navIcons = new int[]{
+            R.drawable.ic_wallet_grey,
+            R.drawable.ic_w_graph_grey,
+            R.drawable.ic_bank_grey600_48dp,
+            R.drawable.ic_settings_grey600_48dp
+    };
 
     public NavDrawerAdapter(Context context, ArrayList<Item> items, int selectedPosition) {
         super(context, 0, items);
@@ -48,6 +55,8 @@ public class NavDrawerAdapter extends ArrayAdapter<Item> {
                 v = vi.inflate(R.layout.drawer_list_item, null);
                 final TextView text =
                         (TextView)v.findViewById(R.id.drawer_li_labels);
+                ImageView image = (ImageView)v.findViewById(R.id.drawer_li_icons);
+                if (image != null) image.setBackground(context.getDrawable(ei.icon));
                 if (text != null) text.setText(ei.text);
                 if (position == selectedPosition){
                     text.setTextColor(context.getResources().getColor(R.color.theme));

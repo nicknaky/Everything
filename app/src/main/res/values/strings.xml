@@ -10,10 +10,10 @@
     <string name="drawer_close">Close</string>
 
     <!-- Button Labels -->
-    <string name="button_select">Select</string>
-    <string name="button_save">Save</string>
-    <string name="button_delete">Delete</string>
-    <string name="button_cancel">Cancel</string>
+    <string name="button_select">SELECT</string>
+    <string name="button_save">SAVE</string>
+    <string name="button_delete">DELETE</string>
+    <string name="button_cancel">CANCEL</string>
 
     <!-- Delete Dialog -->
     <string name="delete_budget_dialog_desc">This will also permanently remove all transactions associated with this budget.</string>

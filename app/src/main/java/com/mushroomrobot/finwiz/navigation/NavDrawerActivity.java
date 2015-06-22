@@ -1,7 +1,5 @@
 package com.mushroomrobot.finwiz.navigation;
 
-import android.app.DialogFragment;
-import android.app.FragmentManager;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -15,12 +13,12 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 
 import com.mushroomrobot.finwiz.R;
 import com.mushroomrobot.finwiz.account.DisplayAccountActivity;
 import com.mushroomrobot.finwiz.budget.DisplayBudgetActivity;
 import com.mushroomrobot.finwiz.common.BaseActivity;
-import com.mushroomrobot.finwiz.data.DemoDialog;
 import com.mushroomrobot.finwiz.reports.ReportsActivity;
 import com.mushroomrobot.finwiz.settings.SettingsActivity;
 
@@ -38,12 +36,13 @@ public class NavDrawerActivity extends BaseActivity {
 
     private ArrayList<Item> items = new ArrayList<Item>();
 
+
     protected final int BUDGETS_OPTION = 0;
     protected final int REPORTS_OPTION = 1;
     protected final int ACCOUNTS_OPTION = 2;
     //protected final int DIVIDER = 3;
     protected final int SETTINGS_OPTION = 4;
-    protected final int DEMO_OPTION = 5;
+    //protected final int DEMO_OPTION = 5;
 
     String savedTitle;
 
@@ -98,12 +97,14 @@ public class NavDrawerActivity extends BaseActivity {
 
         mDrawerLayout = (DrawerLayout) fullLayout.findViewById(R.id.drawer_layout);
         final ListView mDrawerList = (ListView) fullLayout.findViewById(R.id.nav_drawer);
+        View headerView = (RelativeLayout) getLayoutInflater().inflate(R.layout.drawer_li_header, null);
+        mDrawerList.addHeaderView(headerView, null, false);
 
-        items.add(new EntryItem("Budgets"));
-        items.add(new EntryItem("Reports"));
-        items.add(new EntryItem("Accounts"));
+        items.add(new EntryItem("Budgets", R.drawable.ic_wallet_grey));
+        items.add(new EntryItem("Reports", R.drawable.ic_w_graph_grey));
+        items.add(new EntryItem("Accounts", R.drawable.ic_bank_grey600_48dp));
         items.add(new DividerItem());
-        items.add(new EntryItem("Settings"));
+        items.add(new EntryItem("Settings", R.drawable.ic_settings_grey600_48dp));
         //items.add(new EntryItem("Demo"));
 
 
@@ -114,17 +115,17 @@ public class NavDrawerActivity extends BaseActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 final Intent intent;
+                int adjustedPosition = position - mDrawerList.getHeaderViewsCount();
+                if (!items.get(adjustedPosition).isDivider()) {
 
-                if (!items.get(position).isDivider()) {
-
-                    if (position == currentOption) {
+                    if (adjustedPosition == currentOption) {
                         mDrawerLayout.closeDrawer(mDrawerList);
                     } else {
                         final Handler handler = new Handler();
-                        switch (position) {
+                        switch (adjustedPosition) {
                             case BUDGETS_OPTION:
                                 intent = new Intent(NavDrawerActivity.this, DisplayBudgetActivity.class);
-                                mDrawerList.setItemChecked(position, true);
+                                mDrawerList.setItemChecked(adjustedPosition, true);
                                 mDrawerLayout.closeDrawer(mDrawerList);
 
                                 handler.postDelayed(new Runnable() {
@@ -139,7 +140,7 @@ public class NavDrawerActivity extends BaseActivity {
                                 break;
                             case REPORTS_OPTION:
                                 intent = new Intent(NavDrawerActivity.this, ReportsActivity.class);
-                                mDrawerList.setItemChecked(position, true);
+                                mDrawerList.setItemChecked(adjustedPosition, true);
                                 mDrawerLayout.closeDrawer(mDrawerList);
 
                                 handler.postDelayed(new Runnable() {
@@ -155,7 +156,7 @@ public class NavDrawerActivity extends BaseActivity {
 
                             case ACCOUNTS_OPTION:
                                 intent = new Intent(NavDrawerActivity.this, DisplayAccountActivity.class);
-                                mDrawerList.setItemChecked(position, true);
+                                mDrawerList.setItemChecked(adjustedPosition, true);
                                 mDrawerLayout.closeDrawer(mDrawerList);
 
                                 handler.postDelayed(new Runnable() {
@@ -173,7 +174,7 @@ public class NavDrawerActivity extends BaseActivity {
                                 Log.v("Settings option pressed", "Settings option pressed");
 
                                 intent = new Intent(NavDrawerActivity.this, SettingsActivity.class);
-                                mDrawerList.setItemChecked(position, true);
+                                mDrawerList.setItemChecked(adjustedPosition, true);
                                 mDrawerLayout.closeDrawer(mDrawerList);
                                 handler.postDelayed(new Runnable() {
                                     @Override
@@ -189,12 +190,12 @@ public class NavDrawerActivity extends BaseActivity {
 
                                 break;
 
-                            case DEMO_OPTION:
+                            /*case DEMO_OPTION:
                                 if (currentOption == 0) {
                                     FragmentManager fm = getFragmentManager();
                                     DialogFragment dialog = new DemoDialog();
                                     dialog.show(fm, "Demo");
-                                }
+                                } */
                             default:
                                 break;
                         }

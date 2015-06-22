@@ -5,7 +5,6 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.ContentValues;
 import android.content.DialogInterface;
-import android.content.res.Resources;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -63,7 +62,7 @@ public class TransactionDialog extends DialogFragment {
         //AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.transaction_dialog, null);
+        View dialogView = inflater.inflate(R.layout.dialog_transaction, null);
 
         TextView titleView = (TextView) dialogView.findViewById(R.id.trans_dialog_title);
         final EditText transCatBox = (EditText) dialogView.findViewById(R.id.transaction_category_edit);
@@ -92,6 +91,10 @@ public class TransactionDialog extends DialogFragment {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 final String[] categoryArray = new String[categoryList.size()];
                 categoryList.toArray(categoryArray);
+                String editCategory = transCatBox.getText().toString();
+                if (editCategory != ""){
+                    checkedItem = categoryList.indexOf(editCategory);
+                }
                 builder.setTitle("Choose Budget").setSingleChoiceItems(categoryArray, checkedItem, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -153,11 +156,15 @@ public class TransactionDialog extends DialogFragment {
                 LayoutInflater inflater2 = getActivity().getLayoutInflater();
                 View view = inflater2.inflate(R.layout.datepicker, null);
                 final DatePicker datePicker = (DatePicker) view.findViewById(R.id.datepicker);
+
+                /* Change color of calendarView
                 ViewGroup childPicker = (ViewGroup)datePicker.findViewById(R.id.datepicker);
                 TextView month = (TextView)childPicker.findViewById(Resources.getSystem().getIdentifier("date_picker_month","id","android"));// month widget
                 TextView day = (TextView) childPicker.findViewById(Resources.getSystem().getIdentifier("date_picker_day","id","android"));
                 month.setTextColor(getActivity().getResources().getColor(R.color.theme));
                 day.setTextColor(getActivity().getResources().getColor(R.color.theme));
+                */
+
                 Button save = (Button) view.findViewById(R.id.save_button);
                 Button cancel = (Button) view.findViewById(R.id.cancel_button);
 

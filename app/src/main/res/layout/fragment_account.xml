@@ -17,7 +17,7 @@
         android:id="@+id/no_accounts_textview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="250dp"
         android:gravity="center_horizontal"
         android:text="@string/no_accounts_msg"
         android:textSize="18sp" />

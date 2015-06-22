@@ -123,7 +123,7 @@
         android:textStyle="bold"
         android:textColor="#00C8C8"
         android:fontFamily="sans-serif-light"
-        android:text="Cancel"/>
+        android:text="@string/button_cancel"/>
 
     <Button
         android:id="@+id/trans_save_button"
@@ -136,7 +136,7 @@
         android:textStyle="bold"
         android:textColor="#00C8C8"
         android:fontFamily="sans-serif-light"
-        android:text="Save"
+        android:text="@string/button_save"
         />
 
 </RelativeLayout>

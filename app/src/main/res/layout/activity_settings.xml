@@ -46,7 +46,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
-            android:layout_marginLeft="140dp" />
+            android:layout_marginLeft="155dp" />
 
     </LinearLayout>
 
@@ -57,7 +57,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="25dp"
         android:layout_below="@id/security_view"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="30dp"
         android:fontFamily="sans-serif-medium"
         android:text="DATA"
         android:textSize="12sp"
@@ -80,15 +80,35 @@
 
         <TextView
             android:id="@+id/exportdata"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="220dp"
+            android:layout_height="25dp"
             android:layout_marginLeft="25dp"
             android:layout_marginTop="10dp"
             android:text="Export Data to CSV"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            />
+
+        <TextView
+            android:id="@+id/clear_data"
+            android:layout_width="130dp"
+            android:layout_height="25dp"
+            android:layout_marginLeft="25dp"
+            android:layout_below="@id/exportdata"
+            android:layout_marginTop="20dp"
+            android:textSize="18sp"
+            android:text="Clear Data"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/clear_data"
+            android:layout_marginLeft="25dp"
+            android:layout_marginTop="-5dp"
+            android:text="Completely remove all existing data."
+            android:textSize="12sp"
+            />
 
     </RelativeLayout>
-
 
     <TextView
         android:id="@+id/demo_header"
@@ -96,7 +116,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="25dp"
         android:layout_below="@id/data_view"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="30dp"
         android:fontFamily="sans-serif-medium"
         android:text="DEMO"
         android:textSize="12sp"
@@ -120,20 +140,20 @@
 
            <TextView
                android:id="@+id/dummydata"
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
+               android:layout_width="200dp"
+               android:layout_height="25dp"
                android:layout_marginLeft="25dp"
                android:layout_marginTop="10dp"
                android:text="Initialize Dummy Data"
                android:textSize="18sp" />
 
            <TextView
-               android:layout_width="wrap_content"
+               android:layout_width="200dp"
                android:layout_height="wrap_content"
                android:layout_marginLeft="25dp"
                android:layout_below="@id/dummydata"
-               android:layout_marginTop="0dp"
-               android:text="For testing purposes only. To be removed in official release."
+               android:layout_marginTop="-5dp"
+               android:text="For testing purposes only."
                android:textSize="12sp" />
 
 

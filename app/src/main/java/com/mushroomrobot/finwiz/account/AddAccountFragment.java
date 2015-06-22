@@ -32,7 +32,11 @@ import com.mushroomrobot.finwiz.data.EverythingDbHelper;
 import java.math.BigDecimal;
 import java.text.DateFormatSymbols;
 import java.text.NumberFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by Nick on 4/27/2015.
@@ -247,6 +251,18 @@ public class AddAccountFragment extends Fragment {
         public Dialog onCreateDialog(Bundle savedInstanceState) {
 
             final Calendar c = Calendar.getInstance();
+
+            String editDate = accountDate.getText().toString();
+            if (editDate != ""){
+                SimpleDateFormat sdf = new SimpleDateFormat("MMMM d, yyyy", Locale.US);
+                Date date;
+                try{
+                    date = sdf.parse(editDate);
+                    c.setTime(date);
+                } catch (ParseException e){
+                    Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_SHORT);
+                }
+            }
             int year = c.get(Calendar.YEAR);
             int month = c.get(Calendar.MONTH);
             int day = c.get(Calendar.DAY_OF_MONTH);
@@ -260,7 +276,6 @@ public class AddAccountFragment extends Fragment {
             String month = new DateFormatSymbols().getMonths()[monthOfYear];
             String result = month + " " + dayOfMonth + ", " + year;
             accountDate.setText(result);
-
         }
     }
 

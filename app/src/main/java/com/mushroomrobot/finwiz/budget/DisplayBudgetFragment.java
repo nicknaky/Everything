@@ -124,7 +124,7 @@ public class DisplayBudgetFragment extends Fragment
         setUpChart();
 
         listView = (ListView) rootView.findViewById(R.id.budget_listview);
-        listView.addHeaderView(headerView);
+        listView.addHeaderView(headerView, null, false);
 
         headerView.setVisibility(View.INVISIBLE);
 
@@ -432,7 +432,7 @@ public class DisplayBudgetFragment extends Fragment
                 getActivity().getResources().getColor(R.color.theme),
                 getActivity().getResources().getColor(R.color.textview) );
         //currentDayMarker.getLinePaint().setPathEffect(dpe2);
-        currentDayMarker.getLinePaint().setStrokeWidth(1);
+        currentDayMarker.getLinePaint().setStrokeWidth(1.5f);
         transTrendingPlot.addMarker(currentDayMarker);
 
 

@@ -10,7 +10,9 @@
         android:id="@+id/container_content"
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></LinearLayout>
+        android:layout_height="match_parent">
+
+    </LinearLayout>
 
     <ListView
         android:id="@+id/nav_drawer"

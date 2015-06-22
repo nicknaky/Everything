@@ -12,9 +12,11 @@ import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
+import android.widget.TextView;
 
 import com.mushroomrobot.finwiz.R;
 import com.mushroomrobot.finwiz.budget.DisplayBudgetActivity;
+import com.mushroomrobot.finwiz.data.ClearDataDialog;
 import com.mushroomrobot.finwiz.data.DemoDialog;
 import com.mushroomrobot.finwiz.data.ExportCsv;
 
@@ -28,7 +30,9 @@ public class SettingsActivity extends Activity {
     Switch pinModeSwitch;
     int pin;
 
-    RelativeLayout dataView, demoView;
+    TextView exportView, clearView;
+
+    RelativeLayout demoView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,16 +56,23 @@ public class SettingsActivity extends Activity {
             }
         });
 
-        dataView = (RelativeLayout) findViewById(R.id.data_view);
-        dataView.setOnClickListener(new View.OnClickListener() {
+        exportView = (TextView) findViewById(R.id.exportdata);
+        exportView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 (new Thread(new ExportCsv(SettingsActivity.this))).start();
-
-
             }
         });
 
+        clearView = (TextView) findViewById(R.id.clear_data);
+        clearView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fm = getFragmentManager();
+                DialogFragment dialog = new ClearDataDialog();
+                dialog.show(fm, "Clear Data");
+            }
+        });
 
         pinModeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -84,10 +95,8 @@ public class SettingsActivity extends Activity {
                 if (!isChecked){
                     sharedPreferences.edit().putInt(getResources().getString(R.string.pref_pin_key), 0).commit();
                 }
-
             }
         });
-
     }
 
     private void checkPin(){
@@ -124,6 +133,6 @@ public class SettingsActivity extends Activity {
             finish();
             startActivity(intent);
         }
-
     }
+
 }
