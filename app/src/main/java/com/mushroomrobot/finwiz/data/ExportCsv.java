@@ -30,10 +30,6 @@ public class ExportCsv implements Runnable{
         this.context = context;
     }
 
-    public void write(){
-
-
-    }
 
     public Intent getEmailIntent(){
 
@@ -44,9 +40,7 @@ public class ExportCsv implements Runnable{
         //emailIntent.putExtra(Intent.EXTRA_TEXT, "Body Text");
         emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + filePath));
         return emailIntent;
-
     }
-
 
     @Override
     public void run() {
@@ -56,7 +50,11 @@ public class ExportCsv implements Runnable{
 
         try{
             FileWriter fileWriter = new FileWriter(f);
-            
+            //CSVWriter writer = new CSVWriter(fileWriter, ';');
+
+            //String[] entries = "data;category;description;amount".split(";");
+            //writer.writeNext(entries);
+
             fileWriter.write("date, category, description, amount");
             fileWriter.write("\n");
 
@@ -74,9 +72,16 @@ public class ExportCsv implements Runnable{
 
                 double amount = cursor.getDouble(cursor.getColumnIndex(Transactions.COLUMN_AMOUNT)) / 100;
 
-                fileWriter.write(date + ", " + category + ", " +  description + ", " +  String.valueOf(amount));
+                //String entriesString = date + ";" + category + ";" + description + ";" + String.valueOf(amount);
+                //entries = entriesString.split(";");
+                //writer.writeNext(entries);
+
+                String entry = date + "," + category + "," +  "\"" + description + "\"" + "," +  String.valueOf(amount) + ",";
+                fileWriter.write(entry);
                 fileWriter.write("\n");
             }
+
+            //writer.close();
 
             fileWriter.flush();
             fileWriter.close();

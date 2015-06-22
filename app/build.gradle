@@ -26,4 +26,5 @@ dependencies {
     compile 'com.android.support:appcompat-v7:22.1.+'
     compile 'com.github.lecho:hellocharts-library:1.5.5@aar'
     compile project(':mpandroidchartlibrary-2-1-0')
+    compile project(':opencsv-3.4')
 }
