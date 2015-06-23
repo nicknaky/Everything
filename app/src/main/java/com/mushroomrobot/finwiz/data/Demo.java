@@ -82,7 +82,7 @@ public class Demo {
         int[] amount = {1079, 1000, 4200, 2000, 2300, 900,
         389, 271, 324, 684, 1533, 336, 389,
         3781,
-        1249, 799, 900, 3300,
+        1249, 799, 4236, 3300,
         1072, 1000,
         1000, 7489,
         11400,
@@ -113,13 +113,13 @@ public class Demo {
         for (int i = 0; i<dateInMilis.length; i++){
             dateInMilis[i] = dates[i].getTime();
         }
-        String[] descrption = {"Drink with coworkers", "Bulliet shot", "2x Fireball, Bulliet, vodka soda", "Safeway", "Round of beers at Harry's Hofbrau", "Drinks at Paper Planes",
-        "McDonald's work lunch", "McDonald's work lunch", "McDonald's work breakfast", "El Maguey Taqueria", "Chipotle with Jenny", "McDonald's", "Mcdonald's work lunch",
+        String[] descrption = {"Drink with coworkers", "Bulliet shot", "2x Fireball, Bulliet, vodka soda", "Safeway beer run", "Round of beers at Barron's", "Drinks at Zen",
+        "McDonald's work lunch", "McDonald's work lunch", "McDonald's work breakfast", "Cali Taqueria", "Chipotle with Geo", "McDonald's", "Mcdonald's work lunch",
         "No Description",
-                "Safeway: lasanga and salad","Safeway: milk and cereal","Safeway: fried chicken and ice cream","Safeway: cheese and meats",
-                "L-theanine","Caffeine",
+                "Safeway: lasanga and salad","Safeway: milk and cereal","week's worth of work lunch","Safeway: cheese and meats",
+                "Cold medicine","Multi-vitamins",
         "Haircut", "Car repairs",
-        "Caltrain",
+        "Metro pass",
         "work lunch for the week", "pizza party", "weekly groceries", "weekly groceries", "weekly groceries", "weekly groceries"};
 
         ArrayList<ContentValues> contentValuesList = new ArrayList<>();

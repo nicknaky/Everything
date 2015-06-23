@@ -16,6 +16,7 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -327,17 +328,25 @@ public class ReportsFragment extends Fragment implements LoaderManager.LoaderCal
 
             if (data.moveToFirst()) {
 
-                data.moveToLast();
-                data.moveToNext();
-                while (data.moveToPrevious()) {
-
-                    int i = 0;
+                data.moveToPrevious();
+                int i = 0;
+                while (data.moveToNext()) {
 
                     View expensiveView = getActivity().getLayoutInflater().inflate(R.layout.list_item_expensive, expensiveLinearLayout, false);
                     expensiveLinearLayout.addView(expensiveView, i);
 
                     View view = expensiveLinearLayout.getChildAt(i);
                     i++;
+                    FrameLayout frameLayout = (FrameLayout) view.findViewById(R.id.date_chip_frame);
+                    Log.v("value of i", String.valueOf(i));
+                    switch (i){
+                        case 1: frameLayout.setBackground(getActivity().getDrawable(R.drawable.date_chip_red));
+                            break;
+                        case 2: frameLayout.setBackground(getActivity().getDrawable(R.drawable.date_chip_purple));
+                            break;
+                        case 3: frameLayout.setBackground(getActivity().getDrawable(R.drawable.date_chip_orange));
+                            break;
+                    }
 
                     TextView dateTextView = (TextView) view.findViewById(R.id.expensive_date_textview);
                     TextView amountTextView = (TextView) view.findViewById(R.id.expensive_amount_textview);

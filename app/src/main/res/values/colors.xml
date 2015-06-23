@@ -31,4 +31,14 @@
 
     <color name="light_blue">#8CEAFF</color>
 
+
+    <!-- VORDIPLOM_COLORS -->
+    <color name="vord_green">#C0FF8C</color>
+    <color name="vord_yellow">#FFF78C</color>
+    <color name="vord_orange">#FFD08C</color>
+    <color name="vord_blue">#8CEAFF</color>
+    <color name="vord_red">#FF8C9D</color>
+    <color name="vord_purple">#D8C9FF</color>
+
+
 </resources>

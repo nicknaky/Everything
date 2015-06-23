@@ -18,7 +18,7 @@
 
     <EditText
         android:id="@+id/pinEditBox2"
-        android:layout_width="150dp"
+        android:layout_width="85dp"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="60dp"
@@ -31,7 +31,7 @@
 
     <EditText
         android:id="@+id/pinEditBox1"
-        android:layout_width="150dp"
+        android:layout_width="85dp"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="60dp"
@@ -40,6 +40,7 @@
         android:focusable="true"
         android:maxLength="4"
         android:textSize="30sp"
+        tools:text="1234"
         />
 
     <TextView
