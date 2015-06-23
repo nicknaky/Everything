@@ -28,7 +28,7 @@ public class Demo {
         ArrayList<ContentValues> cvList = new ArrayList<>();
         ContentValues cv = new ContentValues();
 
-        cv.put(EverythingContract.Category.COLUMN_NAME, "Alcohol");
+        cv.put(EverythingContract.Category.COLUMN_NAME, "Drinks");
         cv.put(EverythingContract.Category.COLUMN_BUDGET, 7500);
         cvList.add(cv);
         cv = new ContentValues();
@@ -71,23 +71,27 @@ public class Demo {
             db.endTransaction();
         }
 
-        String[] category = {"Alcohol", "Alcohol", "Alcohol", "Alcohol", "Alcohol", "Alcohol",
+        String[] category = {"Drinks", "Drinks", "Drinks", "Drinks", "Drinks", "Drinks",
         "Eating Out", "Eating Out", "Eating Out", "Eating Out", "Eating Out", "Eating Out", "Eating Out",
         "Gas",
         "Groceries", "Groceries", "Groceries", "Groceries",
         "Health", "Health",
         "Misc", "Misc",
-        "Monthly Bills"};
+        "Monthly Bills",
+        "Groceries", "Groceries", "Groceries", "Groceries", "Groceries", "Groceries"};
         int[] amount = {1079, 1000, 4200, 2000, 2300, 900,
         389, 271, 324, 684, 1533, 336, 389,
         3781,
         1249, 799, 900, 3300,
         1072, 1000,
         1000, 7489,
-        11400};
+        11400,
+        2269, 8456, 3005, 7277, 6397, 4385};
 
         Calendar calendar = Calendar.getInstance();
         String month = String.valueOf(calendar.get(Calendar.MONTH) + 1);
+        String preMonth1 = String.valueOf(calendar.get(Calendar.MONTH));
+        String preMonth2 = String.valueOf(calendar.get(Calendar.MONTH) - 1);
 
         String[] stringDate = {month + "/15/15",month + "/21/15",month + "/21/15",month + "/25/15",month + "/28/15",month + "/28/15",
                 month + "/12/15",month + "/13/15",month + "/13/15",month + "/15/15",month + "/17/15",month + "/22/15",month + "/28/15",
@@ -95,7 +99,8 @@ public class Demo {
                 month + "/09/15",month + "/16/15",month + "/22/15",month + "/23/15",
                 month + "/06/15",month + "/08/15",
         month + "/16/15", month + "/01/15",
-        month + "/09/15"};
+        month + "/09/15",
+                preMonth1 + "/02/15", preMonth1 + "/06/15", preMonth1 + "/09/15", preMonth2 + "/01/15", preMonth2 + "/07/15", preMonth2 + "/16/15", };
         Date[] dates = new Date[stringDate.length];
         try {
             for (int i = 0; i < dates.length; i++) {
@@ -108,13 +113,14 @@ public class Demo {
         for (int i = 0; i<dateInMilis.length; i++){
             dateInMilis[i] = dates[i].getTime();
         }
-        String[] descrption = {"Drink with coworkers", "Bullet (cash)", "2x Fireball, bullet, vodka soda", "Safeway", "Round of beers harry hofbrau", "Paper planes",
-        "McDonald's work lunch", "McDonald's work lunch", "McDonald's work breakfast", "El maguey taqueria", "Chipotle with Jenny", "McDonald's", "Mcdonald's work lunch",
+        String[] descrption = {"Drink with coworkers", "Bulliet shot", "2x Fireball, Bulliet, vodka soda", "Safeway", "Round of beers at Harry's Hofbrau", "Drinks at Paper Planes",
+        "McDonald's work lunch", "McDonald's work lunch", "McDonald's work breakfast", "El Maguey Taqueria", "Chipotle with Jenny", "McDonald's", "Mcdonald's work lunch",
         "No Description",
-                "Safeway lasanga and salad","Safeway milk and salad","Safeway fried chicken and ice cream","Safeway beer cheese",
+                "Safeway: lasanga and salad","Safeway: milk and cereal","Safeway: fried chicken and ice cream","Safeway: cheese and meats",
                 "L-theanine","Caffeine",
         "Haircut", "Car repairs",
-        "Caltrain"};
+        "Caltrain",
+        "work lunch for the week", "pizza party", "weekly groceries", "weekly groceries", "weekly groceries", "weekly groceries"};
 
         ArrayList<ContentValues> contentValuesList = new ArrayList<>();
 

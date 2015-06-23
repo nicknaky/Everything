@@ -282,6 +282,10 @@ public class ReportsFragment extends Fragment implements LoaderManager.LoaderCal
                                 TypedValue.COMPLEX_UNIT_DIP, 140, getActivity().getResources().getDisplayMetrics());
                         barChartCardView.requestLayout();
                         break;
+                    case 3:
+                        barChartCardView.getLayoutParams().height = (int) TypedValue.applyDimension(
+                                TypedValue.COMPLEX_UNIT_DIP, 190, getActivity().getResources().getDisplayMetrics());
+                        barChartCardView.requestLayout();
                     default:
                         break;
                 }
