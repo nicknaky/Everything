@@ -13,6 +13,7 @@ import android.widget.CompoundButton;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mushroomrobot.finwiz.R;
 import com.mushroomrobot.finwiz.budget.DisplayBudgetActivity;
@@ -30,7 +31,7 @@ public class SettingsActivity extends Activity {
     Switch pinModeSwitch;
     int pin;
 
-    TextView exportView, clearView;
+    TextView exportView, clearView, contactView;
 
     RelativeLayout demoView;
 
@@ -78,25 +79,43 @@ public class SettingsActivity extends Activity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-                if (isChecked){
+                if (isChecked) {
 
 
                     android.os.Handler handler = new android.os.Handler();
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            getFragmentManager().beginTransaction().replace(R.id.container_settings, new PinFragment(),"PinFrag")
+                            getFragmentManager().beginTransaction().replace(R.id.container_settings, new PinFragment(), "PinFrag")
                                     .addToBackStack(null).commit();
                             checkPin();
                         }
                     }, 250);
 
                 }
-                if (!isChecked){
+                if (!isChecked) {
                     sharedPreferences.edit().putInt(getResources().getString(R.string.pref_pin_key), 0).commit();
                 }
             }
         });
+
+        contactView = (TextView) findViewById(R.id.contactus);
+        contactView.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
+                emailIntent.setType("message/rfc822");
+                emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[] {"nick@mushroomrobot.com"});
+                emailIntent.putExtra(Intent.EXTRA_SUBJECT, "FinWiz Support");
+                try {
+                    startActivity(emailIntent);
+                } catch (android.content.ActivityNotFoundException e){
+                    Toast.makeText(SettingsActivity.this, "No email clients installed.", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
+
     }
 
     private void checkPin(){

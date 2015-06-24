@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/trans_relative_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,20 +9,21 @@
 
     <TextView
         android:id="@+id/trans_dialog_title"
-        android:layout_margin="5dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginLeft="24dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
         android:text="@string/new_transaction_title"
-        android:textSize="24sp"
-        android:textStyle="bold" />
+        android:textSize="20sp"
+        android:fontFamily="sans-serif-medium" />
 
     <TextView
         android:id="@+id/trans_category_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginLeft="24dp"
+        android:layout_below="@id/trans_dialog_title"
+        android:layout_marginTop="20dp"
         android:text="Category:"
         android:textSize="18sp" />
 
@@ -29,6 +31,7 @@
         android:id="@+id/transaction_category_edit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:maxWidth="160dp"
         android:layout_alignBaseline="@+id/trans_category_label"
         android:layout_alignParentRight="true"
         android:layout_marginRight="16dp"
@@ -36,6 +39,10 @@
         android:editable="false"
         android:cursorVisible="false"
         android:focusable="true"
+        android:singleLine="true"
+        android:ellipsize="end"
+        android:gravity="end"
+        tools:text="Gas Ent"
         android:hint="Select Category"
         android:textSize="18sp" />
 
@@ -44,8 +51,9 @@
         android:id="@+id/trans_amount_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="105dp"
+        android:layout_alignStart="@id/trans_category_label"
+        android:layout_below="@id/trans_category_label"
+        android:layout_marginTop="30dp"
         android:text="Amount:"
         android:textSize="18sp" />
 
@@ -53,10 +61,14 @@
         android:id="@+id/transaction_amount_edit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:maxWidth="160dp"
         android:layout_alignBaseline="@id/trans_amount_label"
         android:layout_alignParentRight="true"
         android:layout_marginRight="16dp"
+        android:gravity="end"
         android:hint="$0.00"
+        android:singleLine="true"
+        android:ellipsize="end"
         android:imeOptions="actionDone"
         android:inputType="numberDecimal"
         android:textSize="22sp" />
@@ -65,8 +77,9 @@
         android:id="@+id/trans_date_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="160dp"
+        android:layout_alignLeft="@id/trans_category_label"
+        android:layout_below="@id/trans_amount_label"
+        android:layout_marginTop="30dp"
         android:text="Date:"
         android:textSize="18sp" />
 
@@ -75,11 +88,15 @@
         style="@android:style/Widget.EditText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:maxWidth="160dp"
         android:layout_alignBaseline="@id/trans_date_label"
         android:layout_alignParentRight="true"
         android:layout_marginRight="16dp"
         android:inputType="none"
         android:editable="false"
+        android:gravity="end"
+        android:singleLine="true"
+        android:ellipsize="end"
         android:cursorVisible="false"
         android:focusable="false"
         android:hint="01/01/15"
@@ -90,23 +107,26 @@
         android:id="@+id/trans_description_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="215dp"
-        android:layout_marginLeft="16dp"
+        android:layout_alignStart="@id/trans_category_label"
+        android:layout_below="@id/trans_date_label"
+        android:layout_marginTop="30dp"
         android:text="Description:"
         android:textSize="18sp"/>
 
     <EditText
         android:id="@+id/transaction_desc_edit"
-        android:layout_width="145dp"
+        android:layout_width="120dp"
         android:layout_height="wrap_content"
+        android:maxWidth="160dp"
         android:hint="Optional"
-        android:gravity="right"
+        android:gravity="end"
         android:textSize="18sp"
         android:layout_alignBaseline="@id/trans_description_label"
         android:layout_alignParentRight="true"
         android:inputType="textCapSentences"
         android:imeOptions="actionDone"
         android:singleLine="true"
+        android:ellipsize="end"
         android:textStyle="italic"
         android:layout_marginRight="16dp"/>
 
@@ -117,7 +137,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toLeftOf="@+id/trans_save_button"
-        android:layout_marginRight="25dp"
+        android:layout_marginRight="8dp"
         android:layout_alignBottom="@+id/trans_save_button"
         android:background="@null"
         android:textStyle="bold"

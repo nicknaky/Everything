@@ -30,6 +30,7 @@ public class AddBudgetDialog extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+
         final AlertDialog budgetDialog = new AlertDialog.Builder(getActivity()).create();
         //AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 

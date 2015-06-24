@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import android.widget.Toast;
 
 import com.mushroomrobot.finwiz.data.EverythingContract.Transactions;
 
@@ -86,7 +87,11 @@ public class ExportCsv implements Runnable{
             fileWriter.flush();
             fileWriter.close();
 
-            context.startActivity(getEmailIntent());
+            try {
+                context.startActivity(getEmailIntent());
+            } catch (android.content.ActivityNotFoundException e){
+                Toast.makeText(context, "No email clients installed.", Toast.LENGTH_SHORT).show();
+            }
 
         } catch (java.io.IOException e){
             System.err.print("Error with FileWriter");
