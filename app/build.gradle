@@ -6,9 +6,9 @@ android {
 
     defaultConfig {
         applicationId "com.mushroomrobot.finwiz"
-        minSdkVersion 21
+        minSdkVersion 19
         targetSdkVersion 22
-        versionCode 4
+        versionCode 5
         versionName "1.0"
     }
     buildTypes {

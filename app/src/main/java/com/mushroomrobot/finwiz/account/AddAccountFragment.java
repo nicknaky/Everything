@@ -53,13 +53,13 @@ public class AddAccountFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(R.layout.configure_account, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_addaccount, container, false);
 
         configureTitle = (TextView) rootView.findViewById(R.id.configure_title);
 
         accountName = (EditText) rootView.findViewById(R.id.account_name_edittext);
-        accountBalance = (EditText) rootView.findViewById(R.id.account_balance_edittext);
-        accountDate = (EditText) rootView.findViewById(R.id.account_date_edittext);
+        accountBalance = (EditText) rootView.findViewById(R.id.currentBalance_edit);
+        accountDate = (EditText) rootView.findViewById(R.id.accountDate_edit);
 
 
         asset = (RadioButton) rootView.findViewById(R.id.asset_button);
