@@ -1,53 +1,50 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="@style/Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
+        <item name="android:windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
 
-
-        <item name="logo">@android:color/transparent</item>
+        <item name="android:logo">@android:color/transparent</item>
         <item name="android:actionBarStyle">@style/MyActionBar</item>
         <item name="android:textViewStyle">@style/MyTextViewStyle</item>
-
         <item name="android:buttonStyle">@style/MyButtonStyle</item>
         <item name="drawerArrowStyle">@style/MyDrawerArrowStyle</item>
-        <item name="spinnerStyle">@style/MySpinnerStyle</item>
+        <item name="android:spinnerStyle">@style/MySpinnerStyle</item>
 
 
-        <item name="alertDialogTheme">@style/MyAlertDialogTheme</item>
+        <item name="android:alertDialogTheme">@style/MyAlertDialogTheme</item>
 
         <!-- http://scriptedpapers.com/2015/02/12/android-action-bar-and-overflow-menu-customization-with-theme-appcompat/ -->
-        <item name="dropDownListViewStyle">@style/MyDropDownListViewStyle</item>
+        <item name="android:dropDownListViewStyle">@style/MyDropDownListViewStyle</item>
 
-        <item name="colorPrimary">@color/theme</item>
-        <item name="colorPrimaryDark">@color/theme_darker</item>
-        <item name="colorAccent">@color/theme</item>
+        <item name="android:colorPrimary">@color/theme</item>
+        <item name="android:colorPrimaryDark">@color/theme_darker</item>
+        <item name="android:colorAccent">@color/theme</item>
 
 <!-- http://stackoverflow.com/questions/28738089/change-datepicker-dialog-color-for-android-5-0 -->
+        <item name="android:datePickerDialogTheme">@style/MyDatePickerDialogTheme</item>
 
     </style>
 
-    <style name="MyDatePickerDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
-        <item name="colorAccent">@color/theme</item>
+
+
+    <style name="MyAlertDialogTheme" parent="android:Theme.Material.Light.Dialog.Alert">
+        <item name="android:colorAccent">@color/theme</item>
         <item name="android:textColorPrimary">@color/textview</item>
     </style>
 
-
-
-    <style name="MyAlertDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
-        <item name="colorAccent">@color/theme</item>
-        <item name="android:textColorPrimary">@color/textview</item>
-
-    </style>
-
-    <style name="MyDropDownListViewStyle" parent="Widget.AppCompat.Light.ListView.DropDown">
+    <style name="MyDropDownListViewStyle" parent="android:style/Widget.Material.Light.ListView.DropDown">
         <item name="android:background">#fafafa</item>
     </style>
 
 
+    <style name="MyDatePickerDialogTheme" parent="android:Theme.Material.Light.Dialog">
+        <item name="android:colorAccent">@color/theme</item>
+    </style>
 
-
-    <style name="MySpinnerStyle" parent="style/Widget.AppCompat.Spinner">
+    <style name="MySpinnerStyle" parent="android:style/Widget.Holo.Spinner">
         <item name="background">@android:drawable/spinner_background</item>
         <item name="android:tint">@color/white</item>
     </style>
@@ -57,7 +54,7 @@
 
     </style>
 
-    <style name="MyButtonStyle" parent="@android:style/Widget.Holo.Button">
+    <style name="MyButtonStyle" parent="@android:style/Widget.Holo.Light.Button">
         <item name="android:textColor">@color/theme</item>
         <item name="android:background">@null</item>
         <item name="android:textStyle">bold</item>
@@ -72,7 +69,7 @@
 
     </style>
 
-    <style name="MyActionBar" parent="@android:style/Widget.Holo.Light.ActionBar">
+    <style name="MyActionBar" parent="@android:style/Widget.Holo.ActionBar">
         <item name="android:background">@color/theme</item>
         <item name="android:titleTextStyle">@style/TitleTextStyle</item>
         <item name="titleTextStyle">@style/TitleTextStyle</item>
@@ -83,7 +80,7 @@
         <item name="android:windowContentOverlay">@null</item>
     </style>
 
-    <style name="Material" parent="style/Widget.AppCompat.EditText">
+    <style name="Material" parent="@android:style/Widget.Material.EditText">
         <item name="android:editTextColor">@color/white</item>
         <item name="android:editTextBackground">@color/white</item>
         <item name="colorAccent">@color/white</item>
@@ -95,7 +92,7 @@
     </style>
 
 
-    <style name="MyTextViewStyle" parent="android:style/Widget.TextView">
+    <style name="MyTextViewStyle" parent="@android:style/Widget.TextView">
         <item name="android:textColor">@color/textview</item>
 
     </style>

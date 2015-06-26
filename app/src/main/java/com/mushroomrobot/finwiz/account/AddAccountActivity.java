@@ -1,11 +1,11 @@
 package com.mushroomrobot.finwiz.account;
 
-import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 
@@ -15,7 +15,7 @@ import com.mushroomrobot.finwiz.data.EverythingProvider;
 /**
  * Created by Nick.
  */
-public class AddAccountActivity extends Activity {
+public class AddAccountActivity extends AppCompatActivity {
 
     private int                     mFrameLayout = R.id.addaccount_frame;
 //    private ActionBar               mActionBar;
@@ -24,11 +24,15 @@ public class AddAccountActivity extends Activity {
     private FrameLayout             mFrame;
     private Context                 mContext;
 
+
+    android.support.v7.widget.Toolbar toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_addaccount);
 
+        toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar);
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
         Intent intent = getIntent();
