@@ -4,192 +4,189 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    >
-    <include android:id="@+id/toolbar"
-        android:layout="@layout/toolbar"/>
+    android:layout_marginTop="?android:actionBarSize">
 
-<ScrollView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_below="@id/toolbar">
-   <RelativeLayout
-       android:layout_width="match_parent"
-       android:layout_height="match_parent"
-       >
-
-
-    <TextView
-        android:id="@+id/configure_title"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:gravity="center"
-        android:text="@string/configure_add_title"
-        android:textSize="22sp" />
+        android:layout_below="@id/toolbar">
 
-
-    <EditText
-        android:id="@+id/account_name_edittext"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/configure_title"
-        android:layout_margin="16dp"
-        android:hint="Enter Account Name"
-        android:imeOptions="actionDone"
-        android:inputType="text|textCapWords"
-        android:textSize="18sp" />
-
-    <TextView
-        android:id="@+id/currentBalance_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/currentBalance_edit"
-        android:layout_alignStart="@id/account_name_edittext"
-        android:text="Current Balance:"
-        android:textSize="18sp" />
-
-    <EditText
-        android:id="@+id/currentBalance_edit"
-        android:layout_width="160dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_below="@id/account_name_edittext"
-        android:layout_marginBottom="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="16dp"
-        android:ellipsize="end"
-        android:gravity="end"
-        android:hint="$0.00"
-        android:imeOptions="actionDone"
-        android:inputType="numberDecimal"
-        android:singleLine="true"
-        android:textSize="18sp" />
-
-    <TextView
-        android:id="@+id/dateAsOf_Label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/accountDate_edit"
-        android:layout_marginStart="16dp"
-        android:text="Date as of:"
-        android:textSize="18sp" />
-
-    <EditText
-        android:id="@+id/accountDate_edit"
-        android:layout_width="220dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/currentBalance_edit"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_alignParentEnd="true"
-        android:cursorVisible="false"
-        android:editable="false"
-        android:focusable="false"
-        android:gravity="end"
-        android:hint="Select Date"
-        android:inputType="none"
-        android:textSize="18sp" />
-
-    <TextView
-        android:id="@+id/accountType_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/accountDate_edit"
-        android:layout_marginBottom="3dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
-        android:text="Account Type"
-        android:textSize="18sp" />
-
-    <View
-        android:id="@+id/border_top_radiogroup"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_below="@id/accountType_label"
-        android:layout_marginBottom="6dp"
-        android:background="#00C8C8" />
-
-
-    <RadioGroup
-        android:id="@+id/account_type_radiogroup"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/border_top_radiogroup"
-        android:layout_marginStart="12dp"
-        android:orientation="vertical"
-        >
-
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:layout_height="match_parent">
 
-            <RadioButton
-                android:id="@+id/asset_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="16sp" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/configure_title"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingStart="8dp"
-                android:paddingEnd="8dp"
-                android:text="@string/asset_desc"
-                android:textSize="16sp" />
+                android:layout_marginTop="16dp"
+                android:gravity="center"
+                android:text="@string/configure_add_title"
+                android:textSize="22sp" />
 
-        </LinearLayout>
 
-        <LinearLayout
-
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <RadioButton
-                android:id="@+id/debt_button"
-                android:layout_width="wrap_content"
+            <EditText
+                android:id="@+id/account_name_edittext"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="16sp" />
+                android:layout_below="@id/configure_title"
+                android:layout_margin="16dp"
+                android:hint="Enter Account Name"
+                android:imeOptions="actionDone"
+                android:inputType="text|textCapWords"
+                android:textSize="18sp" />
 
             <TextView
+                android:id="@+id/currentBalance_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingStart="8dp"
-                android:paddingEnd="8dp"
-                android:text="@string/debt_desc"
-                android:textSize="16sp" />
+                android:layout_alignBaseline="@+id/currentBalance_edit"
+                android:layout_alignStart="@id/account_name_edittext"
+                android:text="Current Balance:"
+                android:textSize="18sp" />
 
-        </LinearLayout>
+            <EditText
+                android:id="@+id/currentBalance_edit"
+                android:layout_width="160dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_below="@id/account_name_edittext"
+                android:layout_marginBottom="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="16dp"
+                android:ellipsize="end"
+                android:gravity="end"
+                android:hint="$0.00"
+                android:imeOptions="actionDone"
+                android:inputType="numberDecimal"
+                android:singleLine="true"
+                android:textSize="18sp" />
 
-    </RadioGroup>
+            <TextView
+                android:id="@+id/dateAsOf_Label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/accountDate_edit"
+                android:layout_marginStart="16dp"
+                android:text="Date as of:"
+                android:textSize="18sp" />
+
+            <EditText
+                android:id="@+id/accountDate_edit"
+                android:layout_width="220dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_below="@id/currentBalance_edit"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="16dp"
+                android:cursorVisible="false"
+                android:editable="false"
+                android:focusable="false"
+                android:gravity="end"
+                android:hint="Select Date"
+                android:inputType="none"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/accountType_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/accountDate_edit"
+                android:layout_marginBottom="3dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="32dp"
+                android:text="Account Type"
+                android:textSize="18sp" />
+
+            <View
+                android:id="@+id/border_top_radiogroup"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@id/accountType_label"
+                android:layout_marginBottom="6dp"
+                android:background="#00C8C8" />
 
 
-    <View
-        android:id="@+id/border_bottom_radiogroup"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_below="@id/account_type_radiogroup"
-        android:layout_marginTop="6dp"
-        android:background="#00C8C8" />
+            <RadioGroup
+                android:id="@+id/account_type_radiogroup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/border_top_radiogroup"
+                android:layout_marginStart="12dp"
+                android:orientation="vertical">
 
-    <Button
-        android:id="@+id/create_account_button"
-        android:layout_width="240dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/border_bottom_radiogroup"
-        android:layout_marginTop="32dp"
-        android:layout_centerHorizontal="true"
-        android:background="#00C8C8"
-        android:text="@string/submit"
-        android:textColor="#ffffff"
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
-        android:textSize="20sp" />
+                    <RadioButton
+                        android:id="@+id/asset_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingEnd="8dp"
+                        android:paddingStart="8dp"
+                        android:text="@string/asset_desc"
+                        android:textSize="16sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:id="@+id/debt_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingEnd="8dp"
+                        android:paddingStart="8dp"
+                        android:text="@string/debt_desc"
+                        android:textSize="16sp" />
+
+                </LinearLayout>
+
+            </RadioGroup>
 
 
-</RelativeLayout>
-</ScrollView>
+            <View
+                android:id="@+id/border_bottom_radiogroup"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@id/account_type_radiogroup"
+                android:layout_marginTop="6dp"
+                android:background="#00C8C8" />
+
+            <Button
+                android:id="@+id/create_account_button"
+                android:layout_width="240dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/border_bottom_radiogroup"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="32dp"
+                android:background="#00C8C8"
+                android:text="@string/submit"
+                android:textColor="#ffffff"
+
+                android:textSize="20sp" />
+
+
+        </RelativeLayout>
+    </ScrollView>
 </RelativeLayout>

@@ -1,9 +1,6 @@
 package com.mushroomrobot.finwiz.budget;
 
-import android.app.ActivityManager;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
@@ -24,10 +21,13 @@ public class DisplayBudgetActivity extends NavDrawerActivity {
         currentOption = BUDGETS_OPTION;
         setContentView(R.layout.activity_budget);
 
-        Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher);
-        ActivityManager.TaskDescription td = new ActivityManager.TaskDescription(null, bm, getResources().getColor(R.color.white));
-        setTaskDescription(td);
-        bm.recycle();
+        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        //setSupportActionBar(toolbar);
+
+        //Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher);
+        //ActivityManager.TaskDescription td = new ActivityManager.TaskDescription(null, bm, getResources().getColor(R.color.white));
+        //setTaskDescription(td);
+        //bm.recycle();
 
         Intent intent = getIntent();
         //deleteUri is Category.CONTENT_URI/CATEGORY_ID
@@ -42,7 +42,7 @@ public class DisplayBudgetActivity extends NavDrawerActivity {
         }catch (NullPointerException e){
 
         }
-        getFragmentManager().beginTransaction().add(R.id.container_budget,new DisplayBudgetFragment(),"Budget").commit();
+        getSupportFragmentManager().beginTransaction().add(R.id.container_budget,new DisplayBudgetFragment(),"Budget").commit();
     }
 
 

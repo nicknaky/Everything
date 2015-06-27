@@ -15,7 +15,7 @@ public class DisplayAccountActivity extends NavDrawerActivity {
         super.onCreate(savedInstanceState);
         currentOption = ACCOUNTS_OPTION;
         setContentView(R.layout.activity_account);
-        getFragmentManager().beginTransaction().add(R.id.container_account,new DisplayAccountFragment(), "Account").commit();
+        getSupportFragmentManager().beginTransaction().add(R.id.container_account,new DisplayAccountFragment(), "Account").commit();
     }
 
 

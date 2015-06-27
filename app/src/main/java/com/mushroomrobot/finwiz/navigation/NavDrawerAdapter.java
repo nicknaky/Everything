@@ -56,7 +56,7 @@ public class NavDrawerAdapter extends ArrayAdapter<Item> {
                 final TextView text =
                         (TextView)v.findViewById(R.id.drawer_li_labels);
                 ImageView image = (ImageView)v.findViewById(R.id.drawer_li_icons);
-                if (image != null) image.setBackground(context.getDrawable(ei.icon));
+                if (image != null) image.setBackground(context.getResources().getDrawable(ei.icon));
                 if (text != null) text.setText(ei.text);
                 if (position == selectedPosition){
                     text.setTextColor(context.getResources().getColor(R.color.theme));

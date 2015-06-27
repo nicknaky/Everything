@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -36,6 +37,7 @@ public class NavDrawerActivity extends BaseActivity {
 
     private ArrayList<Item> items = new ArrayList<Item>();
 
+    public Toolbar toolbar;
 
     protected final int BUDGETS_OPTION = 0;
     protected final int REPORTS_OPTION = 1;
@@ -51,6 +53,7 @@ public class NavDrawerActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
     }
 
     @Override
@@ -93,7 +96,13 @@ public class NavDrawerActivity extends BaseActivity {
     public void setContentView(int layoutResID) {
         DrawerLayout fullLayout = (DrawerLayout) getLayoutInflater().inflate(R.layout.activity_drawer, null);
 
+
+
         LinearLayout activityContent = (LinearLayout) fullLayout.findViewById(R.id.container_content);
+        View view = getLayoutInflater().inflate(layoutResID, activityContent, true);
+
+        toolbar = (Toolbar) view.findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         mDrawerLayout = (DrawerLayout) fullLayout.findViewById(R.id.drawer_layout);
         final ListView mDrawerList = (ListView) fullLayout.findViewById(R.id.nav_drawer);
@@ -206,27 +215,27 @@ public class NavDrawerActivity extends BaseActivity {
             }
         });
 
-        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.drawer_open, R.string.drawer_close) {
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close) {
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-                savedTitle = getActionBar().getTitle().toString();
-                getActionBar().setTitle(R.string.app_name);
+                savedTitle = getSupportActionBar().getTitle().toString();
+                getSupportActionBar().setTitle(R.string.app_name);
             }
 
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
-                getActionBar().setTitle(savedTitle);
+                getSupportActionBar().setTitle(savedTitle);
             }
         };
 
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
-        getActionBar().setDisplayHomeAsUpEnabled(true);
-        getActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
 
-        getLayoutInflater().inflate(layoutResID, activityContent, true);
+
 
         super.setContentView(fullLayout);
     }

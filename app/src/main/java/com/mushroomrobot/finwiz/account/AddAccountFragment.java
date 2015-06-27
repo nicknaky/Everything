@@ -2,9 +2,6 @@ package com.mushroomrobot.finwiz.account;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.app.DialogFragment;
-import android.app.Fragment;
-import android.app.FragmentManager;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
@@ -12,6 +9,9 @@ import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -138,7 +138,7 @@ public class AddAccountFragment extends Fragment {
             debt.setChecked(true);
         }
         configureTitle.setText(R.string.configure_update_title);
-        getActivity().getActionBar().setTitle("Update Account");
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Update Account");
 
     }
 
@@ -146,7 +146,7 @@ public class AddAccountFragment extends Fragment {
         @Override
         public void onClick(View v) {
             if (v == accountDate) {
-                FragmentManager fm = getFragmentManager();
+                android.support.v4.app.FragmentManager fm = getFragmentManager();
                 DialogFragment newFragment = new DateFragment();
                 newFragment.show(fm, "date");
             }

@@ -16,8 +16,8 @@ public class ReportsActivity extends NavDrawerActivity {
 
         currentOption = REPORTS_OPTION;
         setContentView(R.layout.activity_reports);
-
-        getFragmentManager().beginTransaction().add(R.id.container_reports, new ReportsFragment()).commit();
+        getSupportActionBar().setElevation(0);
+        getSupportFragmentManager().beginTransaction().add(R.id.container_reports, new ReportsFragment()).commit();
 
     }
 }

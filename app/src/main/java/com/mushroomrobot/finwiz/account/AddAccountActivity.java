@@ -1,13 +1,13 @@
 package com.mushroomrobot.finwiz.account;
 
-import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
-import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 
 import com.mushroomrobot.finwiz.R;
 import com.mushroomrobot.finwiz.data.EverythingProvider;
@@ -18,10 +18,9 @@ import com.mushroomrobot.finwiz.data.EverythingProvider;
 public class AddAccountActivity extends AppCompatActivity {
 
     private int                     mFrameLayout = R.id.addaccount_frame;
-//    private ActionBar               mActionBar;
     private Fragment                mAddAccount;
     private EverythingProvider      mProvider;
-    private FrameLayout             mFrame;
+    private RelativeLayout          mFrame;
     private Context                 mContext;
 
 
@@ -33,7 +32,9 @@ public class AddAccountActivity extends AppCompatActivity {
         setContentView(R.layout.activity_addaccount);
 
         toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar);
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        setSupportActionBar(toolbar);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Intent intent = getIntent();
         long temp = -1;
@@ -47,12 +48,12 @@ public class AddAccountActivity extends AppCompatActivity {
         mAddAccount = new AddAccountFragment();
         mAddAccount.setArguments(b);
 
-        FragmentTransaction mFragMan = getFragmentManager().beginTransaction();
+        FragmentTransaction mFragMan = getSupportFragmentManager().beginTransaction();
         mFragMan.add(mFrameLayout, mAddAccount);
         mFragMan.commit();
 
         mProvider = new EverythingProvider();
-        mFrame = (FrameLayout) findViewById(R.id.addaccount_frame);
+        mFrame = (RelativeLayout) findViewById(R.id.addaccount_frame);
         mContext = this;
     }
 

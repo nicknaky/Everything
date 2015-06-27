@@ -1,16 +1,17 @@
 package com.mushroomrobot.finwiz.budget;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.LoaderManager;
-import android.content.CursorLoader;
 import android.content.Intent;
-import android.content.Loader;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -422,7 +423,7 @@ public class BudgetDetailsFragment extends Fragment
                 Calendar myCalendar = Calendar.getInstance();
                 SimpleDateFormat sdf =  new SimpleDateFormat("MMMM yyyy");
                 String monthYear = sdf.format(myCalendar.getTime());
-                getActivity().getActionBar().setTitle(budgetName + " Budget - " + monthYear);
+                ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(budgetName + " Budget - " + monthYear);
 
 
                 rawBudgetAmount = data.getInt(data.getColumnIndex(Category.COLUMN_BUDGET));

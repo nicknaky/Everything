@@ -1,22 +1,26 @@
 package com.mushroomrobot.finwiz.budget;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 
 import com.mushroomrobot.finwiz.R;
 
 /**
  * Created by Nick.
  */
-public class BudgetHistoryActivity extends Activity {
+public class BudgetHistoryActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_budgethistory);
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
@@ -24,7 +28,7 @@ public class BudgetHistoryActivity extends Activity {
         BudgetHistoryFragment historyFragment = new BudgetHistoryFragment();
         historyFragment.setArguments(bundle);
 
-        getFragmentManager().beginTransaction().add(R.id.container_budgethistory, historyFragment, "history").commit();
+        getSupportFragmentManager().beginTransaction().add(R.id.container_budgethistory, historyFragment, "history").commit();
     }
 
     @Override

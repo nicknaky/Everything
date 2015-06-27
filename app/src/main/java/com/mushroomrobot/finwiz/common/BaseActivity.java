@@ -1,12 +1,12 @@
 package com.mushroomrobot.finwiz.common;
 
-import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
 /**
  * Created by NLam.
  */
-public class BaseActivity extends Activity {
+public class BaseActivity extends AppCompatActivity{
 
     private static final int NOT_SET = 78912;
 
@@ -26,4 +26,5 @@ public class BaseActivity extends Activity {
         view.setPadding(padding, 0, padding, 0);
         */
     }
+
 }

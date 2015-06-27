@@ -1,12 +1,13 @@
 package com.mushroomrobot.finwiz.settings;
 
-import android.app.Activity;
-import android.app.DialogFragment;
-import android.app.FragmentManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
@@ -24,7 +25,7 @@ import com.mushroomrobot.finwiz.data.ExportCsv;
 /**
  * Created by NLam.
  */
-public class SettingsActivity extends Activity {
+public class SettingsActivity extends AppCompatActivity {
 
     SharedPreferences sharedPreferences;
 
@@ -39,9 +40,11 @@ public class SettingsActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        getActionBar().setDisplayHomeAsUpEnabled(true);
-
         setContentView(R.layout.activity_settings);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         pinModeSwitch = (Switch) findViewById(R.id.pin_switch);
@@ -51,7 +54,7 @@ public class SettingsActivity extends Activity {
         demoView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentManager fm = getFragmentManager();
+                FragmentManager fm = getSupportFragmentManager();
                 DialogFragment dialog = new DemoDialog();
                 dialog.show(fm, "Demo");
             }
@@ -69,7 +72,7 @@ public class SettingsActivity extends Activity {
         clearView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentManager fm = getFragmentManager();
+                FragmentManager fm = getSupportFragmentManager();
                 DialogFragment dialog = new ClearDataDialog();
                 dialog.show(fm, "Clear Data");
             }

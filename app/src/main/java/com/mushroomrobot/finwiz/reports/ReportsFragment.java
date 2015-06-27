@@ -1,10 +1,10 @@
 package com.mushroomrobot.finwiz.reports;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.LoaderManager;
-import android.content.CursorLoader;
-import android.content.Loader;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.database.Cursor;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -340,11 +340,11 @@ public class ReportsFragment extends Fragment implements LoaderManager.LoaderCal
                     FrameLayout frameLayout = (FrameLayout) view.findViewById(R.id.date_chip_frame);
                     Log.v("value of i", String.valueOf(i));
                     switch (i){
-                        case 1: frameLayout.setBackground(getActivity().getDrawable(R.drawable.date_chip_red));
+                        case 1: frameLayout.setBackground(getActivity().getResources().getDrawable(R.drawable.date_chip_red));
                             break;
-                        case 2: frameLayout.setBackground(getActivity().getDrawable(R.drawable.date_chip_purple));
+                        case 2: frameLayout.setBackground(getActivity().getResources().getDrawable(R.drawable.date_chip_purple));
                             break;
-                        case 3: frameLayout.setBackground(getActivity().getDrawable(R.drawable.date_chip_orange));
+                        case 3: frameLayout.setBackground(getActivity().getResources().getDrawable(R.drawable.date_chip_orange));
                             break;
                     }
 

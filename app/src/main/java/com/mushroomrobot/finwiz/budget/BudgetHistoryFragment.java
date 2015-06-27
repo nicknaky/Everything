@@ -2,18 +2,19 @@ package com.mushroomrobot.finwiz.budget;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.DialogFragment;
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.LoaderManager;
-import android.content.CursorLoader;
 import android.content.DialogInterface;
-import android.content.Loader;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -158,7 +159,7 @@ public class BudgetHistoryFragment extends Fragment implements LoaderManager.Loa
 
 
 
-        getActivity().getActionBar().setTitle(budgetName + " History");
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(budgetName + " History");
 
         historySpend = (TextView) rootView.findViewById(R.id.history_spend_value);
         numTrans = (TextView) rootView.findViewById(R.id.history_num_trans);
