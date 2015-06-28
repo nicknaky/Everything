@@ -112,33 +112,33 @@ public class AddAccountFragment extends Fragment {
 
 
         accountId = getArguments().getLong("accountId");
-        if (accountId!=-1){
+        if (accountId != -1) {
             Uri mUri = Uri.parse(getArguments().getString("uri"));
-            Log.v("accountId",String.valueOf(accountId));
+            Log.v("accountId", String.valueOf(accountId));
             populateWithAccountInfo(accountId, mUri);
         }
 
         return rootView;
     }
 
-    private void populateWithAccountInfo(long id, Uri uri){
+    private void populateWithAccountInfo(long id, Uri uri) {
 
         String mSelectionClause = Accounts._ID + " = ?";
         String[] mSelectionArgs = {Long.toString(id)};
 
-        Cursor cursor = getActivity().getContentResolver().query(uri,null,mSelectionClause,mSelectionArgs,null);
+        Cursor cursor = getActivity().getContentResolver().query(uri, null, mSelectionClause, mSelectionArgs, null);
         cursor.moveToFirst();
         accountName.setText(cursor.getString(cursor.getColumnIndex(Accounts.COLUMN_NAME)));
         accountBalance.setText(String.valueOf(cursor.getInt(cursor.getColumnIndex(Accounts.COLUMN_BALANCE))));
         accountDate.setText(cursor.getString(cursor.getColumnIndex(Accounts.COLUMN_LAST_UPDATE)));
         String accountType = cursor.getString(cursor.getColumnIndex(Accounts.COLUMN_TYPE));
-        if (accountType.equals("Asset")){
+        if (accountType.equals("Asset")) {
             asset.setChecked(true);
-        }else if (accountType.equals("Debt")){
+        } else if (accountType.equals("Debt")) {
             debt.setChecked(true);
         }
         configureTitle.setText(R.string.configure_update_title);
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Update Account");
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Update Account");
 
     }
 
@@ -165,14 +165,11 @@ public class AddAccountFragment extends Fragment {
             if (v == createAccount) {
                 try {
                     saveAccount();
-                }
-                catch (SQLiteConstraintException e) {
+                } catch (SQLiteConstraintException e) {
                     Toast.makeText(getActivity(), "Account name already in use.", Toast.LENGTH_SHORT).show();
-                }
-                catch (NullPointerException e) {
+                } catch (NullPointerException e) {
                     Toast.makeText(getActivity(), "Could not create the account, please make sure all fields are valid.", Toast.LENGTH_SHORT).show();
-                }
-                catch (NumberFormatException e) {
+                } catch (NumberFormatException e) {
                     Toast.makeText(getActivity(), "Please enter a valid balance.", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -184,7 +181,7 @@ public class AddAccountFragment extends Fragment {
         //TODO: Need to implement try catch to show missing fields error
 
         String saveName = accountName.getText().toString();
-        if (saveName.equals("")){
+        if (saveName.equals("")) {
             saveName = null;
         }
         Log.v("Saved name: ", saveName);
@@ -194,7 +191,7 @@ public class AddAccountFragment extends Fragment {
         int saveBalance = Integer.valueOf(cleanedBalance);
 
         String saveDate = accountDate.getText().toString();
-        if (saveDate.equals("")){
+        if (saveDate.equals("")) {
             saveDate = null;
         }
         Log.v("Saved Date: ", saveDate);
@@ -230,10 +227,9 @@ public class AddAccountFragment extends Fragment {
         //TODO: This is reserved for future implementations of Budget Feature
         contentValues.put(Accounts.COLUMN_BUDGET_FLAG, 0);
 
-        if (accountId!=-1){
-            db.update(Accounts.TABLE_NAME,contentValues,"_ID = " + accountId,null);
-        }
-        else {
+        if (accountId != -1) {
+            db.update(Accounts.TABLE_NAME, contentValues, "_ID = " + accountId, null);
+        } else {
             db.insertOrThrow(Accounts.TABLE_NAME, null, contentValues);
         }
         startActivity(new Intent(getActivity(), DisplayAccountActivity.class));
@@ -251,15 +247,14 @@ public class AddAccountFragment extends Fragment {
         public Dialog onCreateDialog(Bundle savedInstanceState) {
 
             final Calendar c = Calendar.getInstance();
-
             String editDate = accountDate.getText().toString();
-            if (editDate != ""){
+            if (editDate != "") {
                 SimpleDateFormat sdf = new SimpleDateFormat("MMMM d, yyyy", Locale.US);
                 Date date;
-                try{
+                try {
                     date = sdf.parse(editDate);
                     c.setTime(date);
-                } catch (ParseException e){
+                } catch (ParseException e) {
                     Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_SHORT);
                 }
             }

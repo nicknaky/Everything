@@ -32,14 +32,11 @@ public class BudgetDetailsActivity extends AppCompatActivity {
         Intent intent = getIntent();
         long temp = -1;
         long categoryId = intent.getLongExtra("categoryId",temp);
-        //At this stage we still don't need the actual parsed Uri just yet, since it's going to be passed again to the fragment.
-        String uri = intent.getStringExtra("uri");
 
         ArrayList<String> categoryList = intent.getStringArrayListExtra("categoryList");
 
         Bundle b = new Bundle();
         b.putLong("categoryId",categoryId);
-        b.putString("uri",uri);
         b.putStringArrayList("categoryList",categoryList);
 
         mBudgetDetails = new BudgetDetailsFragment();

@@ -94,14 +94,14 @@ public class NavDrawerActivity extends BaseActivity {
 
     @Override
     public void setContentView(int layoutResID) {
-        DrawerLayout fullLayout = (DrawerLayout) getLayoutInflater().inflate(R.layout.activity_drawer, null);
+        RelativeLayout fullLayout = (RelativeLayout) getLayoutInflater().inflate(R.layout.activity_drawer, null);
 
 
 
         LinearLayout activityContent = (LinearLayout) fullLayout.findViewById(R.id.container_content);
         View view = getLayoutInflater().inflate(layoutResID, activityContent, true);
 
-        toolbar = (Toolbar) view.findViewById(R.id.toolbar);
+        toolbar = (Toolbar) fullLayout.findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         mDrawerLayout = (DrawerLayout) fullLayout.findViewById(R.id.drawer_layout);
@@ -234,7 +234,6 @@ public class NavDrawerActivity extends BaseActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
-
 
 
         super.setContentView(fullLayout);

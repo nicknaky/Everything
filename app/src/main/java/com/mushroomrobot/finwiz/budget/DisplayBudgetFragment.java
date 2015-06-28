@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -152,7 +151,6 @@ public class DisplayBudgetFragment extends Fragment
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 if (position > 0) {
-                    Uri uri = Uri.parse(Category.CONTENT_URI + "/" + id);
                     long categoryId = id;
 
                     Cursor cursor = getActivity().getContentResolver().query(Category.CONTENT_URI, new String[]{Category.COLUMN_NAME}, "category._id = " + String.valueOf(categoryId), null, null);
@@ -161,9 +159,6 @@ public class DisplayBudgetFragment extends Fragment
 
                     Intent intent = new Intent(getActivity(), BudgetDetailsActivity.class);
 
-                    //Remember, while putExtra allows passing in Uri's, we aren't able to retrieve them with getExtra.
-                    //Thus we'll need to pass in the Uri as a string, and then retrieve and parse it into a Uri later.
-                    intent.putExtra("uri", uri.toString());
                     intent.putExtra("categoryId", categoryId);
                     intent.putExtra("categoryName", categoryName);
                     intent.putExtra("categoryList", categoryList);

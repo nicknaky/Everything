@@ -41,4 +41,8 @@
     <color name="vord_purple">#D8C9FF</color>
 
 
+
+    <color name="mdtp_accent_color">@color/theme</color>
+    <color name="mdtp_accent_color_dark">@color/theme_darker</color>
+
 </resources>

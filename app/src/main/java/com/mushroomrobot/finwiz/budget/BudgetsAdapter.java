@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.mushroomrobot.finwiz.R;
 import com.mushroomrobot.finwiz.data.EverythingContract;
 
+import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
 /**
@@ -51,7 +52,8 @@ public class BudgetsAdapter extends SimpleCursorAdapter {
         else if (budgetRemaining > 0){
             remainingView.setTextColor(context.getResources().getColor(R.color.textview));
         }
-        String formatRemaining = NumberFormat.getCurrencyInstance().format(budgetRemaining);
+
+        String formatRemaining = DecimalFormat.getCurrencyInstance().format(budgetRemaining);
         //Optional balance format which removes cents.
         String formatRemainingV2 = formatRemaining.substring(0, formatRemaining.length() - 3);
         remainingView.setText(formatRemainingV2);

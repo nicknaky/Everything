@@ -54,7 +54,6 @@ public class BudgetDetailsFragment extends Fragment
 
     private static long categoryId;
     private static String categoryName;
-    //Uri mUri;
     private static ArrayList categoryList;
     private static String budgetName;
     private static double budgetAmount, budgetSpent, budgetRemaining;
@@ -110,6 +109,7 @@ public class BudgetDetailsFragment extends Fragment
                 Intent intent = new Intent(getActivity(),BudgetHistoryActivity.class);
                 intent.putExtra("budgetName", budgetName);
                 intent.putExtra("categoryList",categoryList);
+                intent.putExtra("categoryId", categoryId);
                 startActivity(intent);
                 break;
 
@@ -183,11 +183,6 @@ public class BudgetDetailsFragment extends Fragment
         drawPlot();
         //Loader to query for category trasnactions amount by day
         //getLoaderManager().initLoader(2,null,this);
-
-
-
-        //Retrieves CATEGORY_ID uri
-        //mUri = Uri.parse(getArguments().getString("uri"));
 
         verticalProgress = (ProgressBar) rootView.findViewById(R.id.bd_vertical_progressbar);
 
@@ -316,7 +311,6 @@ public class BudgetDetailsFragment extends Fragment
             String selection = "transactions.category = ?";
 
             String[] selectionArgs = {String.valueOf(categoryId)};
-            //mUri   Retrieves CATEGORY_ID uri
             CursorLoader cursorLoader = new CursorLoader(getActivity(), Transactions.CONTENT_URI, null, selection, selectionArgs, null);
             return cursorLoader;
         }
@@ -334,7 +328,6 @@ public class BudgetDetailsFragment extends Fragment
             String selection = "transactions.category = ?";
             String[] selectionArgs = {String.valueOf(categoryId)};
 
-            //mUri   Retrieves CATEGORY_ID uri
             CursorLoader cursorLoader = new CursorLoader(getActivity(), Transactions.CONTENT_URI_AMOUNT_BY_DAY, null, selection, selectionArgs, null);
             return cursorLoader;
         }
@@ -423,7 +416,7 @@ public class BudgetDetailsFragment extends Fragment
                 Calendar myCalendar = Calendar.getInstance();
                 SimpleDateFormat sdf =  new SimpleDateFormat("MMMM yyyy");
                 String monthYear = sdf.format(myCalendar.getTime());
-                ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(budgetName + " Budget - " + monthYear);
+                ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(budgetName + " - " + monthYear);
 
 
                 rawBudgetAmount = data.getInt(data.getColumnIndex(Category.COLUMN_BUDGET));

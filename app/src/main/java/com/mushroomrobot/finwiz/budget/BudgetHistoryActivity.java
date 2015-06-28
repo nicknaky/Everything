@@ -32,8 +32,26 @@ public class BudgetHistoryActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onNavigateUp () {
+    public boolean onSupportNavigateUp() {
         onBackPressed();
         return true;
     }
+/*
+    @Override
+    public boolean onNavigateUp () {
+        Intent originIntent = getIntent();
+        String budgetName = originIntent.getStringExtra("budgetName");
+        ArrayList<String> categoryList = originIntent.getStringArrayListExtra("categoryList");
+        long categoryId = originIntent.getLongExtra("categoryId", 0);
+
+        Intent backIntent = new Intent(this, BudgetDetailsActivity.class);
+        backIntent.putExtra("budgetName", budgetName);
+        backIntent.putExtra("categoryList", categoryList);
+        backIntent.putExtra("categoryId", categoryId);
+        startActivity(backIntent);
+        finish();
+
+        return true;
+    }
+    */
 }
