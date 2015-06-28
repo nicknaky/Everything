@@ -1,6 +1,6 @@
 package com.mushroomrobot.finwiz.budget;
 
-import android.app.AlertDialog;
+import android.support.v7.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.ContentValues;
@@ -22,7 +22,6 @@ import com.mushroomrobot.finwiz.R;
 import com.mushroomrobot.finwiz.data.EverythingContract.Transactions;
 import com.mushroomrobot.finwiz.utils.CurrencyFormatter;
 
-import java.text.DateFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -221,13 +220,16 @@ public class TransactionDialog extends DialogFragment {
 
     public static class DateFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
 
+        Calendar c;
+        SimpleDateFormat sdf;
+
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
-
-            final Calendar c = Calendar.getInstance();
+            sdf = new SimpleDateFormat("MM/dd/yy", Locale.US);
+            c = Calendar.getInstance();
             String editDate = transDateBox.getText().toString();
             if (editDate != "") {
-                SimpleDateFormat sdf = new SimpleDateFormat("MMMM d, yyyy", Locale.US);
+
                 Date date;
                 try {
                     date = sdf.parse(editDate);
@@ -246,9 +248,8 @@ public class TransactionDialog extends DialogFragment {
         @Override
         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
 
-            String month = new DateFormatSymbols().getMonths()[monthOfYear];
-            String result = month + " " + dayOfMonth + ", " + year;
-            transDateBox.setText(result);
+            c.set(year, monthOfYear, dayOfMonth);
+            transDateBox.setText(sdf.format(c.getTime()));
         }
     }
 }

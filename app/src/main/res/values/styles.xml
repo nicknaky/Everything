@@ -42,7 +42,7 @@
     <style name="MyDialogTheme" parent="Theme.AppCompat.Light.Dialog">
         <item name="colorAccent">@color/theme</item>
         <item name="android:textColorPrimary">@color/textview</item>
-        <item name="android:windowBackground">@android:color/transparent</item>
+
     </style>
 
     <style name="MyAlertDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
