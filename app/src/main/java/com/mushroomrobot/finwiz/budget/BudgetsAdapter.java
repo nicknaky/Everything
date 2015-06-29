@@ -53,11 +53,9 @@ public class BudgetsAdapter extends SimpleCursorAdapter {
             remainingView.setTextColor(context.getResources().getColor(R.color.textview));
         }
 
-        String formatRemaining = DecimalFormat.getCurrencyInstance().format(budgetRemaining);
-        //Optional balance format which removes cents.
-        String formatRemainingV2 = formatRemaining.substring(0, formatRemaining.length() - 3);
-        remainingView.setText(formatRemainingV2);
-        Log.v("budgetRemaining", String.valueOf(budgetRemaining));
+        DecimalFormat df = new DecimalFormat("$#,###;-$#,###");
+        String formatRemaining = df.format(budgetRemaining);
+        remainingView.setText(formatRemaining);
     }
 
     @Override
