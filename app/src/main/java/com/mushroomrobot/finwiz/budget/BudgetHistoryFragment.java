@@ -1,14 +1,9 @@
 package com.mushroomrobot.finwiz.budget;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.DialogInterface;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.LoaderManager;
@@ -83,13 +78,14 @@ public class BudgetHistoryFragment extends Fragment implements LoaderManager.Loa
 
         Bundle b = new Bundle();
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-        b.putLong("transId",info.id);
+        b.putLong("transactionId",info.id);
 
         FragmentManager fm = getFragmentManager();
 
         switch (item.getItemId()){
             case (DELETE_ID):
-                DeleteTransDialog dialog = new DeleteTransDialog();
+                b.putInt("deleteType",2);
+                DeleteDialog dialog = new DeleteDialog();
                 dialog.setArguments(b);
                 dialog.show(fm,null);
                 break;
@@ -104,40 +100,6 @@ public class BudgetHistoryFragment extends Fragment implements LoaderManager.Loa
                 break;
         }
         return super.onContextItemSelected(item);
-    }
-
-    public static class DeleteTransDialog extends DialogFragment {
-
-        long transactionId;
-
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            super.onCreateDialog(savedInstanceState);
-
-            transactionId = getArguments().getLong("transId");
-            Log.v("transId",String.valueOf(transactionId));
-
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-
-            builder.setMessage(R.string.delete_trans_msg);
-            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-
-                    Uri mUri = Uri.parse(Transactions.CONTENT_URI + "/" + transactionId);
-                    getActivity().getContentResolver().delete(mUri,null,null);
-                    Log.v("Uri",String.valueOf(mUri));
-                    dialog.dismiss();
-                }
-            });
-            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                }
-            });
-            return builder.create();
-        }
     }
 
     @Override

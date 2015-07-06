@@ -1,6 +1,6 @@
 package com.mushroomrobot.finwiz.data;
 
-import android.app.AlertDialog;
+import android.support.v7.app.AlertDialog;
 import android.app.Dialog;
 import android.support.v4.app.DialogFragment;
 import android.content.DialogInterface;
@@ -44,6 +44,6 @@ public class ClearDataDialog extends DialogFragment {
             }
         });
 
-        return builder.create();
+        return builder.show();
     }
 }

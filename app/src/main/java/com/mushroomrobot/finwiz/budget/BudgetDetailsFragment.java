@@ -46,6 +46,7 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Locale;
 
+
 /**
  * Created by Nick.
  */
@@ -135,6 +136,7 @@ public class BudgetDetailsFragment extends Fragment
         super.onCreateContextMenu(menu, v, menuInfo);
         menu.add(0, DELETE_ID, 1, R.string.menu_delete_trans);
         menu.add(0, EDIT_ID, 0, R.string.menu_edit_trans);
+
     }
 
 
@@ -434,7 +436,7 @@ public class BudgetDetailsFragment extends Fragment
 
                 if (budgetRemaining < 0){
                     budgetRemainingTextView.setTextColor(getResources().getColor(R.color.red_money));
-                }
+                } else budgetRemainingTextView.setTextColor(getResources().getColor(R.color.textview));
 
                 //Need to take the inverse of COLUMN_PERCENT since it calculates percent of spend / original budget amount
                 budgetPercentRemaining = 100 - (data.getInt(data.getColumnIndex(Category.COLUMN_PERCENT)));
